@@ -1,0 +1,28 @@
+- Get data from MovieDB api
+    https://api.themoviedb.org/3/movie/297761?api_key=02a6d79992ed3e3da1f638dec4c74770
+         http://api.themoviedb.org/3/discover/movie?primary_release_date.gte=2015-08-15&primary_release_date.lte=2016-08-22&api_key=02a6d79992ed3e3da1f638dec4c74770
+
+    key = 02a6d79992ed3e3da1f638dec4c74770
+     http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=02a6d79992ed3e3da1f638dec4c74770
+     http://api.themoviedb.org/3/discover/movie?primary_release_date.gte=2015-08-15&primary_release_date.lte=2016-08-22&api_key=02a6d79992ed3e3da1f638dec4c74770
+
+-Fetch image using picasso
+    base url will look like this: http://image.tmdb.org/t/p
+    Then you will need a 'size' recommend using w185
+    the poster path
+    Final URL: http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
+- Extract data
+- Create main UI (grid)
+- Create Detail View
+- Populate main UI with list of popular movies
+- Create a setting to change view order of main UI
+- Populate detail view with
+    original title
+    movie poster image thumbnail
+    a plot synopsis
+    user rating
+    release date
+
+
+
+On main activity reference PopularMovieFragement

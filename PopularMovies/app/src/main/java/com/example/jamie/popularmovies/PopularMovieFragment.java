@@ -1,7 +1,9 @@
 package com.example.jamie.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -109,11 +111,11 @@ public class PopularMovieFragment extends Fragment {
 
         mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
-        ///discover/movie?sort_by=popularity.desc
-        ///discover/movie/?certification_country=US&sort_by=vote_average.desc
         FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask();
+
         moviesTask.execute(mPopularUri.toString());
     }
+
 
     public class FetchPopularMoviesTask extends AsyncTask<String, Void, List<Movie>>{
 
@@ -121,6 +123,7 @@ public class PopularMovieFragment extends Fragment {
         protected void onPostExecute(List<Movie> movies) {
             super.onPostExecute(movies);
             if(movies != null){
+                mAdapter.clear();
                 for (Movie movie:movies) {
                     mAdapter.add(movie);
                 }

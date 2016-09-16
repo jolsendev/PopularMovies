@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
+
 public class MovieDetailView extends AppCompatActivity {
     private static Movie mMovie;
     private static ImageView imageItem;
@@ -54,10 +56,12 @@ public class MovieDetailView extends AppCompatActivity {
             mMovieTitle.setText(mMovie.getTitle());
 
             TextView mMovieRating = (TextView) rootView.findViewById(R.id.movie_rating);
-            mMovieRating.setText(Double.toString(mMovie.getPopularity()));
+            String rating = Double.parseDouble(String.format("%.1f",mMovie.getVoteAverage()))+"/10";
+            mMovieRating.setText(rating);
 
             TextView mReleaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
-            mReleaseDate.setText(mMovie.getReleaseDate());
+            String[] splitDate = mMovie.getReleaseDate().split("-");
+            mReleaseDate.setText(splitDate[0]);
 
             TextView mOverView = (TextView) rootView.findViewById(R.id.movie_overview);
             mOverView.setText(mMovie.getOverview());

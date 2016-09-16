@@ -87,7 +87,7 @@ public class PopularMovieFragment extends Fragment {
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
         String MOVIE_API_KEY = "api_key";
-        String API_KEY = "02a6d79992ed3e3da1f638dec4c74770";
+        String API_KEY = Utility.MOVIE_API_KEY;
 
         mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();

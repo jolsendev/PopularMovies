@@ -127,6 +127,14 @@ public class PopularMovieFragment extends Fragment {
 
         @Override
         protected List<Movie> doInBackground(String... params) {
+
+            //step 1 for refactoring
+                //create FetchRawData class to connect to the url and pull data
+            //step 2 for refactoring
+                //create ExtractJsonMovieData class
+                //send raw data to ExtractJsonMovieData class
+            //step 3 for refactoring
+                //return list of Movie objects from ExtractJsonMovieData
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 

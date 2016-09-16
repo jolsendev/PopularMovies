@@ -29,7 +29,6 @@ public class CustomMovieAdapter extends ArrayAdapter<Movie> {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-         if (view == null){
              Movie mMovie = getItem(position);
              view = mInflater.inflate(R.layout.gridview_image_item, null);
              ImageView imageItem = (ImageView) view.findViewById(R.id.thumbnail);
@@ -37,12 +36,12 @@ public class CustomMovieAdapter extends ArrayAdapter<Movie> {
                      .load(mMovie.getPosterPath())
                      .placeholder(R.drawable.popcorntime)
                      .into(imageItem);
-         }
         return view;
     }
 
     public void add(Movie movie){
         mMovieList.add(movie);
+
     }
 
 //    @Override

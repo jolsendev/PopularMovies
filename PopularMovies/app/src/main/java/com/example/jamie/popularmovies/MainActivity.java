@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //I got this from the stack overflow link that was in the project implementation guild. 
+    //I got this from the stack overflow link that was in the project implementation guild.
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

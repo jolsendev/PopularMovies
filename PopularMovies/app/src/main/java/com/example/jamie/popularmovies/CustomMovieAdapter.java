@@ -44,11 +44,11 @@ public class CustomMovieAdapter extends ArrayAdapter<Movie> {
         mMovieList.add(movie);
     }
 
-    @Override
-    public void clear() {
-        if(mMovieList!=null){
-            mMovieList.removeAll(mMovieList);
-        }
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void clear() {
+//        if(mMovieList!=null){
+//            mMovieList.removeAll(mMovieList);
+//        }
+//        notifyDataSetChanged();
+//    }
 }

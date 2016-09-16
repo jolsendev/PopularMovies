@@ -3,7 +3,7 @@ package com.example.jamie.popularmovies;
 import java.io.Serializable;
 import java.util.Arrays;
 
-enum MovieDetails{
+enum MovieContract {
     MOVIE_KEY {
         public String toString() {
             return "movie";

@@ -35,6 +35,7 @@ public class CustomMovieAdapter extends ArrayAdapter<Movie> {
              ImageView imageItem = (ImageView) view.findViewById(R.id.thumbnail);
              Picasso.with(mContext)
                      .load(mMovie.getPosterPath())
+                     .placeholder(R.drawable.popcorntime)
                      .into(imageItem);
          }
         return view;

@@ -1,9 +1,7 @@
 package com.example.jamie.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +56,7 @@ public class PopularMovieFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Movie myMovie = mAdapter.getItem(i);
                 Intent intent = new Intent(getActivity(), MovieDetailView.class);
-                intent.putExtra(String.valueOf(MovieDetails.MOVIE_KEY), myMovie);
+                intent.putExtra(String.valueOf(MovieContract.MOVIE_KEY), myMovie);
                 startActivity(intent);
             }
         });

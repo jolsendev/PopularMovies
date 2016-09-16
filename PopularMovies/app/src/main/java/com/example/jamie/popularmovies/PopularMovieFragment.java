@@ -105,10 +105,7 @@ public class PopularMovieFragment extends Fragment {
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
         String MOVIE_API_KEY = "api_key";
         String API_KEY = "02a6d79992ed3e3da1f638dec4c74770";
-
-        Toast.makeText(getActivity(), "I am here!", Toast.LENGTH_LONG).show();
-
-
+        
         mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
         FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask();

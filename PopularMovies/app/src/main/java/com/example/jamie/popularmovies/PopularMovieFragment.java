@@ -45,7 +45,7 @@ public class PopularMovieFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Movie myMovie = mAdapter.getItem(i);
                 Intent intent = new Intent(getActivity(), MovieDetailView.class);
-                intent.putExtra(String.valueOf(MovieContract.MOVIE_KEY), myMovie);
+                intent.putExtra(Utility.MOVIE_KEY, myMovie);
                 startActivity(intent);
             }
         });

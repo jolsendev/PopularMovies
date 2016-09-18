@@ -48,7 +48,7 @@ public class MovieDetailView extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
             imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
-            LinearLayout titleLayout = (LinearLayout) rootView.findViewById(R.id.title_layout);
+            LinearLayout titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
 
             TextView mMovieTitle = (TextView) titleLayout.findViewById(R.id.movie_title);
             mMovieTitle.setText(mMovie.getTitle());

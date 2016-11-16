@@ -1,12 +1,15 @@
 package com.example.jamie.popularmovies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Created by jamie on 8/29/16.
  */
-public class Movie implements Serializable {
+public class Movie implements Parcelable{//Serializable {
 
     private String posterPath;
     private boolean adult;
@@ -26,6 +29,26 @@ public class Movie implements Serializable {
 
 
 
+    public Movie(){
+        super();
+    }
+
+    public Movie(Parcel parcel){
+
+        this.posterPath = parcel.readString();
+        parcel.writeValue(adult);
+        this.overview= parcel.readString();
+        this.releaseDate = parcel.readString();
+        this.id = parcel.readInt();
+        this.originalTitle = parcel.readString();
+        this.originalLanguage = parcel.readString();
+        this.title = parcel.readString();
+        this.backdropPath = parcel.readString();
+        this.popularity = parcel.readDouble();
+        this.voteCount = parcel.readDouble();
+        parcel.writeValue(video);
+        this.voteAverage = parcel.readDouble();
+    }
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
@@ -158,4 +181,40 @@ public class Movie implements Serializable {
                 ", voteAverage=" + voteAverage +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+
+        parcel.writeString(this.posterPath);
+        parcel.writeValue(this.adult);
+        parcel.writeString(this.overview);
+        parcel.writeString(this.releaseDate);
+        parcel.writeInt(this.id);
+        parcel.writeString(this.originalTitle);
+        parcel.writeString(this.originalLanguage);
+        parcel.writeString(this.title);
+        parcel.writeString(this.backdropPath);
+        parcel.writeDouble(this.popularity);
+        parcel.writeDouble(this.voteCount);
+        parcel.writeValue(this.video);
+        parcel.writeDouble(this.voteAverage);
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int i) {
+            return new Movie[0];
+        }
+    };
 }

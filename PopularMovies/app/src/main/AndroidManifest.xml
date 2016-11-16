@@ -28,7 +28,11 @@
         </activity>
         <activity
             android:name=".MovieSettings"
-            android:label="@string/title_activity_movie_settings"></activity>
+            android:label="@string/title_activity_movie_settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jamie.popularmovies.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

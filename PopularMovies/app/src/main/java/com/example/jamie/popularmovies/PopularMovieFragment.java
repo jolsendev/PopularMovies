@@ -26,6 +26,7 @@ public class PopularMovieFragment extends Fragment {
     public GridView gridview;
     public CustomMovieAdapter mAdapter;
     private Uri mPopularUri;
+    private String sortValue;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -55,6 +56,8 @@ public class PopularMovieFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mAdapter = new CustomMovieAdapter(getActivity(), new ArrayList<Movie>());
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
@@ -72,13 +75,23 @@ public class PopularMovieFragment extends Fragment {
     }
     @Override
     public void onStart() {
+
         super.onStart();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateRawData();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+
+        if(mMovies == null || sortValue != sortBy ) {
+            updateRawData();
+        } else {
+            // do nothing
+        }
     }
 
 

@@ -29,7 +29,8 @@ public class MovieDetailView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_movie_detail_view);
         Intent intent = getIntent();
-        mMovie = (Movie) intent.getSerializableExtra(Utility.MOVIE_KEY);
+       // mMovie = (Movie) intent.getSerializableExtra(Utility.MOVIE_KEY);
+        mMovie = intent.getParcelableExtra(Utility.MOVIE_KEY);
 
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().add(R.id.movie_container, new MovieDetailFragment()).commit();

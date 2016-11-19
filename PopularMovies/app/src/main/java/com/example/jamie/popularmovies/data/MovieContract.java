@@ -17,6 +17,8 @@ public class MovieContract {
 
     //possible paths
     public static final String PATH_MOVIE = "movie";
+    public static final String VIDEO_PATH = "video";
+    public static final String REVIEW_PATH = "review";
 
     public static final class MovieEntry implements BaseColumns{
         public static final Uri CONTENT_URI =
@@ -25,20 +27,30 @@ public class MovieContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
 
 
-        //table name
+        //review foreign key
+        public static final String MOVIE_REVIEW_KEY = "review_id";
+
+        //video foreign key
+        public static final String MOVIE_VIDEO_KEY = "video_id";
+
+        //movie _id
+
+
+        //table name;
         public static final String TABLE_NAME = PATH_MOVIE;
+        public static final String MOVIE_ID = "_id";
         public static final String POSTER_PATH = "poster_path";
         public static final String IS_ADULT = "is_adult";
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
-        public static final String MOVIE_ID = "_id";
-        public static final String ORIGIONAL_TITLE = "original_title";
-        public static final String ORIGIONAL_LANGUAGE = "original_language";
+        public static final String ORIGINAL_TITLE = "original_title";
+        public static final String ORIGINAL_LANGUAGE = "original_language";
         public static final String TITLE = "title";
         public static final String BACKDROP_PATH = "backdrop_path";
         public static final String POPULARITY = "popularity";
         public static final String VOTE_COUNT = "vote_count";
         public static final String IS_VIDEO = "is_video";
+        public static final String IS_FAVORITE = "is_favorite";
         public static final String VOTE_AVERAGE = "vote_average";
 
 
@@ -48,10 +60,21 @@ public class MovieContract {
 
     }
 
-    public static final class MovieVideos implements BaseColumns{
+    public static final class VideoEntry implements BaseColumns{
+        public static final String TABLE_NAME = VIDEO_PATH;
+        public static final String VIDEO_KEY = "video_key";
+        public static final String VIDEO_NAME = "video_name";
+        public static final String VIDEO_SITE = "video_site";
+        public static final String VIDEO_SIZE= "video_size";
+        public static final String VIDEO_TYPE = "video_type";
 
     }
-    public static final class MovieReviews implements BaseColumns{
+    public static final class ReviewEntry implements BaseColumns{
 
+        public static final String TABLE_NAME = REVIEW_PATH;
+        public static final String REVIEW_KEY = "review_key";
+        public static final String REVIEW_ID = "review_id";
+        public static final String REVIEW_AUTHOR = "review_author";
+        public static final String REVIEW_CONTENT = "review_content";
     }
 }

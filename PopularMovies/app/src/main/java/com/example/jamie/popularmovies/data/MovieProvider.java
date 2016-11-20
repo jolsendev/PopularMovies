@@ -7,9 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-
-import com.example.jamie.popularmovies.Movie;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
+import com.example.jamie.popularmovies.data.MovieContract.VideoEntry;
+import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 
 /**
  * Created by jamie on 11/16/16.
@@ -19,9 +19,11 @@ public class MovieProvider extends ContentProvider{
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    static final int MOVIE = 100;
-    static final int MOVIE_WITH_VIDEO = 101;
-    static final int MOVIE_WITH_REVIEWS = 102;
+    static final int ALL_MOVIES = 100;
+    static final int MOVIE = 200;
+    static final int MOVIE_WITH_VIDEOS = 300;
+    static final int MOVIE_WITH_REVIEWS = 400;
+    //static final int FAVORITE_MOVIES = 500;
 
     public MovieDBHelper movieDBHelper;
 
@@ -38,12 +40,18 @@ public class MovieProvider extends ContentProvider{
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
-        // For each type of URI you want to add, create a corresponding code.
-        matcher.addURI(authority, MovieEntry.MOVIE_ID, MOVIE);
-        //matcher.addURI(authority, MovieEntry. + "/*", WEATHER_WITH_LOCATION);
-        //matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
+        final String PATH_TO_MOVIE = MovieEntry.TABLE_NAME+"/#";
+        final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.VIDEO_PATH;
+        final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.REVIEW_PATH;
+        //final String PATH_TO_FAVORITES = MovieEntry.TABLE_NAME+"/favorites";
 
-        //matcher.addURI(authority, WeatherContract.PATH_LOCATION, LOCATION);
+        // For each type of URI you want to add, create a corresponding code.
+        matcher.addURI(authority, MovieEntry.TABLE_NAME, ALL_MOVIES);
+        matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
+        matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_VIDEOS);
+        matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
+        //matcher.addURI(authority, PATH_TO_FAVORITES, FAVORITE_MOVIES);
+
         return matcher;
     }
 
@@ -58,7 +66,7 @@ public class MovieProvider extends ContentProvider{
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch(match){
-            case MOVIE:
+            case ALL_MOVIES:
                 return MovieEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");
@@ -72,7 +80,7 @@ public class MovieProvider extends ContentProvider{
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCurser = null;
         switch(sUriMatcher.match(uri)){
-            case MOVIE:{
+            case ALL_MOVIES:{
                 SQLiteQueryBuilder mbuilder = new SQLiteQueryBuilder();
                 retCurser = movieDBHelper.getReadableDatabase().query(
                         MovieEntry.TABLE_NAME,
@@ -99,7 +107,7 @@ public class MovieProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
         Uri returnUri = null;
         switch (match){
-            case MOVIE:{
+            case ALL_MOVIES:{
                 long _id = movieDBHelper.getWritableDatabase().insert(MovieEntry.TABLE_NAME, null, values);
                 if(_id > 0){
                     returnUri = MovieEntry.buildMovieUri(_id);
@@ -115,7 +123,7 @@ public class MovieProvider extends ContentProvider{
         int rowDeleted = 0;
         final int match = sUriMatcher.match(uri);
         switch (match){
-            case MOVIE: {
+            case ALL_MOVIES: {
                 rowDeleted = movieDBHelper.getWritableDatabase().delete(MovieEntry.TABLE_NAME, selection, selectionArgs);
             }
         }
@@ -128,7 +136,7 @@ public class MovieProvider extends ContentProvider{
         int rowUpdated = 0;
         final int match = sUriMatcher.match(uri);
         switch (match){
-            case MOVIE: {
+            case ALL_MOVIES: {
                 rowUpdated = movieDBHelper.getWritableDatabase().update(MovieEntry.TABLE_NAME,values, selection, selectionArgs);
             }
         }

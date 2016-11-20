@@ -12,15 +12,23 @@ import android.provider.BaseColumns;
 public class MovieContract {
 
 
+
     public static final String CONTENT_AUTHORITY = "com.example.jamie.popularmovies";
+
+    //BASE_CONTENT_URI = content://com.example.jamie.popularmovies
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://"+ CONTENT_AUTHORITY);
 
     //possible paths
     public static final String PATH_MOVIE = "movie";
-    public static final String VIDEO_PATH = "video";
-    public static final String REVIEW_PATH = "review";
+    public static final String VIDEO_PATH = "videos";
+    public static final String REVIEW_PATH = "reviews";
 
+    /************************
+    MovieEntry class
+     ************************/
     public static final class MovieEntry implements BaseColumns{
+
+        // MovieEntry.CONTENT_URI = content://com.example.jamie.popularmovies/movie
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
@@ -60,7 +68,15 @@ public class MovieContract {
 
     }
 
+    /*********************
+    VideoEntry Class
+     *********************/
     public static final class VideoEntry implements BaseColumns{
+
+        //CONTENT_URI = content://com.example.jamie.popularmovies/video
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(VIDEO_PATH).build();
+
         public static final String TABLE_NAME = VIDEO_PATH;
         public static final String VIDEO_KEY = "video_key";
         public static final String VIDEO_NAME = "video_name";
@@ -68,13 +84,29 @@ public class MovieContract {
         public static final String VIDEO_SIZE= "video_size";
         public static final String VIDEO_TYPE = "video_type";
 
+        public static Uri buildVideoUri(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
     }
+
+    /**********************
+    ReviewEntry class
+     **********************/
     public static final class ReviewEntry implements BaseColumns{
+
+        //CONTENT_URI = content://com.example.jamie.popularmovies/review
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(REVIEW_PATH).build();
 
         public static final String TABLE_NAME = REVIEW_PATH;
         public static final String REVIEW_KEY = "review_key";
         public static final String REVIEW_ID = "review_id";
         public static final String REVIEW_AUTHOR = "review_author";
         public static final String REVIEW_CONTENT = "review_content";
+
+        public static Uri buildReviewUri(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 }

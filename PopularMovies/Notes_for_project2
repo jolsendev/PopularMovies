@@ -1,3 +1,13 @@
+
+moviedburi "http://api.themoviedb.org/3/discover/movie?primary_release_date.gte=2015-08-15&primary_release_date.lte=2016-08-22&api_key=02a6d79992ed3e3da1f638dec4c74770"
+
+review http://api.themoviedb.org/3/movie/284052/reviews?&api_key=02a6d79992ed3e3da1f638dec4c74770
+
+video http://api.themoviedb.org/3/movie/284052/videos?&api_key=02a6d79992ed3e3da1f638dec4c74770
+
+
+
+
 Project Overview
 Welcome back to Popular Movies! In this second and final stage, you’ll add additional functionality to the app you built in Stage 1.
 

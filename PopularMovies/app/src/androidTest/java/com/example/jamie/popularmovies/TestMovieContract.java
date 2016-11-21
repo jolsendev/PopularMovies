@@ -26,7 +26,7 @@ public class TestMovieContract  extends AndroidTestCase{
                 trailerUri);
         assertEquals("Error: Movie trailer not properly appended to the end of the Uri",
                 TEST_MOVIE_TRAILER, trailerUri.getLastPathSegment());
-        assertEquals("Error: Weather location Uri doesn't match our expected result",
+        assertEquals("Error: Movie trailer Uri doesn't match our expected result",
                 trailerUri.toString(),
                 "content://com.example.jamie.popularmovies/movie/284052/trailers");
     }
@@ -34,12 +34,12 @@ public class TestMovieContract  extends AndroidTestCase{
     public void testBuildMovieReview() {
         Uri reviewUri = MovieEntry.buildMovieReview(TEST_MOVIE_ID);
         System.out.println("THIS IS THE TRAILER URI: "+ reviewUri);
-        assertNotNull("Error: Null Uri returned.  You must fill-in buildMovieTrailer in " +
+        assertNotNull("Error: Null Uri returned.  You must fill-in buildReviewTrailer in " +
                         "MovieContract.",
                 reviewUri);
-        assertEquals("Error: Movie trailer not properly appended to the end of the Uri",
+        assertEquals("Error: Movie review not properly appended to the end of the Uri",
                 TEST_MOVIE_REVIEW, reviewUri.getLastPathSegment());
-        assertEquals("Error: Weather location Uri doesn't match our expected result",
+        assertEquals("Error: Movie review Uri doesn't match our expected result",
                 reviewUri.toString(),
                 "content://com.example.jamie.popularmovies/movie/284052/reviews");
     }

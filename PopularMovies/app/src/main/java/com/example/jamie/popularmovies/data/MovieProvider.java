@@ -19,10 +19,10 @@ public class MovieProvider extends ContentProvider{
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    static final int ALL_MOVIES = 100;
-    static final int MOVIE = 200;
-    static final int MOVIE_WITH_VIDEOS = 300;
-    static final int MOVIE_WITH_REVIEWS = 400;
+    public static final int ALL_MOVIES = 100;
+    public static final int MOVIE = 200;
+    public static final int MOVIE_WITH_VIDEOS = 300;
+    public static final int MOVIE_WITH_REVIEWS = 400;
     //static final int FAVORITE_MOVIES = 500;
 
     public MovieDBHelper movieDBHelper;
@@ -62,7 +62,7 @@ public class MovieProvider extends ContentProvider{
                         "." + ReviewEntry.REVIEW_KEY);
     }
 
-    static UriMatcher buildUriMatcher(){
+    public static UriMatcher buildUriMatcher(){
         // needs to be implemented.
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
         // expressions instead?  Because you're not crazy, that's why.

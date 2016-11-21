@@ -85,8 +85,6 @@ public class TestUtilities extends AndroidTestCase {
                         "' did not match the expected value '" +
                         expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
             }
-
         }
     }
-
 }

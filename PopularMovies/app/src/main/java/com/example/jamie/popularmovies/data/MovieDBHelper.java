@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
-import com.example.jamie.popularmovies.data.MovieContract.VideoEntry;
+import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 
 /**
@@ -14,7 +14,7 @@ import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 4;
+    private static final int VERSION_ID = 5;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -48,20 +48,23 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 ReviewEntry.TABLE_NAME + " (" + ReviewEntry.REVIEW_KEY+ "), " +
                 // Set up the video column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
-                VideoEntry.TABLE_NAME + " (" + VideoEntry.VIDEO_KEY+ "))" +";";
+                TrailerEntry.TABLE_NAME + " (" + MovieContract.TrailerEntry.VIDEO_KEY+ "))" +";";
 
-        final String CREATE_VIDEO_DATABASE = "CREATE TABLE " + VideoEntry.TABLE_NAME+" ("+
-                VideoEntry.VIDEO_KEY + " INTEGER PRIMARY KEY,"+
-                VideoEntry.VIDEO_NAME + " TEXT NOT NULL, " +
-                VideoEntry.VIDEO_SITE + " TEXT NOT NULL, " +
-                VideoEntry.VIDEO_SIZE + " INTEGER NOT NULL, "+
-                VideoEntry.VIDEO_TYPE + " TEXT NOT NULL );";
+        final String CREATE_VIDEO_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
+                MovieContract.TrailerEntry.VIDEO_KEY + " INTEGER PRIMARY KEY,"+
+                MovieContract.TrailerEntry.VIDEO_NAME + " TEXT NOT NULL, " +
+                TrailerEntry.VIDEO_SITE + " TEXT NOT NULL, " +
+                MovieContract.TrailerEntry.VIDEO_SIZE + " INTEGER NOT NULL, "+
+                TrailerEntry.VIDEO_TYPE + " TEXT NOT NULL );";
 
 
         final String CREATE_REVIEW_DATABASE = "CREATE TABLE " +ReviewEntry.TABLE_NAME+" ("+
                 ReviewEntry.REVIEW_KEY + " INTEGER PRIMARY KEY, "+
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
-                ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );";
+                ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
+                ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );"
+
+                ;
 
 
         db.execSQL(CREATE_MOVIE_DATABASE);
@@ -75,6 +78,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TrailerEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ReviewEntry.TABLE_NAME);
         onCreate(db);
     }
 }

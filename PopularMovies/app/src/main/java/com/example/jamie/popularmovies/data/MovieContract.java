@@ -20,13 +20,18 @@ public class MovieContract {
 
     //possible paths
     public static final String PATH_MOVIE = "movie";
-    public static final String VIDEO_PATH = "videos";
-    public static final String REVIEW_PATH = "reviews";
+    public static final String PATH_TRAILER = "trailers";
+    public static final String PATH_REVIEW = "reviews";
+
+    private static final String LOG_TAG = MovieContract.class.getSimpleName();
+
 
     /************************
     MovieEntry class
      ************************/
     public static final class MovieEntry implements BaseColumns{
+
+        private static final String LOG_TAG = MovieEntry.class.getSimpleName();
 
         // MovieEntry.CONTENT_URI = content://com.example.jamie.popularmovies/movie
         public static final Uri CONTENT_URI =
@@ -61,32 +66,66 @@ public class MovieContract {
         public static final String IS_FAVORITE = "is_favorite";
         public static final String VOTE_AVERAGE = "vote_average";
 
-
+//        /*
+//            Student: This is the buildWeatherLocation function you filled in.
+//         */
+//        public static Uri buildWeatherLocation(String locationSetting) {
+//            return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
+//        }
+//
+//        public static Uri buildWeatherLocationWithStartDate(
+//                String locationSetting, long startDate)
+//        {
+//            long normalizedDate = normalizeDate(startDate);
+//            return CONTENT_URI.buildUpon().appendPath(locationSetting)
+//                    .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
+//        }
         public static Uri buildMovieUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildMovieReview(long movie_id){
+
+            String _id = String.valueOf(movie_id);
+            Uri retUri = CONTENT_URI.buildUpon().appendPath(_id).appendPath(PATH_REVIEW).build();
+            return retUri;
+        }
+
+        public static Uri buildMovieTrailer(long movie_id){
+
+            String _id = String.valueOf(movie_id);
+            Uri retUri = CONTENT_URI.buildUpon().appendPath(_id).appendPath(PATH_TRAILER).build();
+            return retUri;
         }
 
     }
 
     /*********************
-    VideoEntry Class
+    TrailerEntry Class
      *********************/
-    public static final class VideoEntry implements BaseColumns{
+    public static final class TrailerEntry implements BaseColumns{
 
+
+        private static final String LOG_TAG = TrailerEntry.class.getSimpleName();
         //CONTENT_URI = content://com.example.jamie.popularmovies/video
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(VIDEO_PATH).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRAILER).build();
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_TRAILER;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_TRAILER;
 
-        public static final String TABLE_NAME = VIDEO_PATH;
+        public static final String TABLE_NAME = PATH_TRAILER;
         public static final String VIDEO_KEY = "video_key";
         public static final String VIDEO_NAME = "video_name";
         public static final String VIDEO_SITE = "video_site";
         public static final String VIDEO_SIZE= "video_size";
         public static final String VIDEO_TYPE = "video_type";
 
-        public static Uri buildVideoUri(long id){
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
+//        public static Uri buildVideoUri(long id){
+//            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);
+//            retURI.withAppendedPath(retURI, "videos");
+//
+//            return retURI;
+//        }
 
     }
 
@@ -95,18 +134,24 @@ public class MovieContract {
      **********************/
     public static final class ReviewEntry implements BaseColumns{
 
+        private static final String LOG_TAG = ReviewEntry.class.getSimpleName();
         //CONTENT_URI = content://com.example.jamie.popularmovies/review
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(REVIEW_PATH).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEW).build();
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_REVIEW;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_REVIEW;
 
-        public static final String TABLE_NAME = REVIEW_PATH;
+
+        public static final String TABLE_NAME = PATH_REVIEW;
         public static final String REVIEW_KEY = "review_key";
-        public static final String REVIEW_ID = "review_id";
         public static final String REVIEW_AUTHOR = "review_author";
         public static final String REVIEW_CONTENT = "review_content";
+        public static final String REVIEW_URL = "review_url";
 
-        public static Uri buildReviewUri(long id){
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
+//        public static Uri buildReviewUri(long id){
+//            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);
+//            retURI.withAppendedPath(retURI, "reviews");
+//            return retURI;
+//        }
     }
 }

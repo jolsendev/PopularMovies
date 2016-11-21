@@ -1,10 +1,11 @@
 package com.example.jamie.popularmovies;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
-import com.example.jamie.popularmovies.data.MovieContract.VideoEntry;
+import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 import com.example.jamie.popularmovies.data.MovieDBHelper;
 
@@ -43,7 +44,7 @@ public class TestDB extends AndroidTestCase {
 
         final String[] tableNames = new String[]{
                 MovieEntry.TABLE_NAME,
-                VideoEntry.TABLE_NAME,
+                TrailerEntry.TABLE_NAME,
                 ReviewEntry.TABLE_NAME
         };
 
@@ -107,11 +108,11 @@ public class TestDB extends AndroidTestCase {
         movieColumnHashSet.add(MovieEntry.VOTE_AVERAGE);
 
         final HashSet<String> videoColumnHashSet = new HashSet();
-        videoColumnHashSet.add(VideoEntry.VIDEO_KEY);
-        videoColumnHashSet.add(VideoEntry.VIDEO_NAME);
-        videoColumnHashSet.add(VideoEntry.VIDEO_SITE);
-        videoColumnHashSet.add(VideoEntry.VIDEO_SIZE);
-        videoColumnHashSet.add(VideoEntry.VIDEO_TYPE);
+        videoColumnHashSet.add(TrailerEntry.VIDEO_KEY);
+        videoColumnHashSet.add(TrailerEntry.VIDEO_NAME);
+        videoColumnHashSet.add(TrailerEntry.VIDEO_SITE);
+        videoColumnHashSet.add(TrailerEntry.VIDEO_SIZE);
+        videoColumnHashSet.add(TrailerEntry.VIDEO_TYPE);
 
 
         final HashSet<String> reviewColumnHasSet = new HashSet();
@@ -122,7 +123,7 @@ public class TestDB extends AndroidTestCase {
 
         areColumnsCorrect(db, c, MovieEntry.TABLE_NAME, movieColumnHashSet);
         areColumnsCorrect(db, c, ReviewEntry.TABLE_NAME, reviewColumnHasSet);
-        areColumnsCorrect(db, c, VideoEntry.TABLE_NAME, videoColumnHashSet);
+        areColumnsCorrect(db, c, TrailerEntry.TABLE_NAME, videoColumnHashSet);
 
 
 //        db.close();
@@ -145,6 +146,180 @@ public class TestDB extends AndroidTestCase {
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required "+tableName+" entry columns",
                 columnHashSet.isEmpty());
+
+    }
+
+    public void testReviewTable(){
+        //Get reference to writable database
+        long locationRowId = insertMovie();
+
+        // Make sure we have a valid row ID.
+        assertFalse("Error: Location Not Inserted Correctly", locationRowId == -1L);
+
+        // First step: Get reference to writable database
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Second Step (Weather): Create weather values
+        ContentValues reviewValues = TestUtilities.createReviewValues(locationRowId);
+
+        // Third Step (Weather): Insert ContentValues into database and get a row ID back
+        long reviewRowId = db.insert(ReviewEntry.TABLE_NAME, null, reviewValues);
+        assertTrue(reviewRowId != -1);
+
+        // Fourth Step: Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor reviewCursor = db.query(
+                ReviewEntry.TABLE_NAME,  // Table to Query
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null  // sort order
+        );
+
+        // Move the cursor to the first valid database row and check to see if we have any rows
+        assertTrue( "Error: No Records returned from location query", reviewCursor.moveToFirst() );
+
+        // Fifth Step: Validate the location Query
+        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
+                reviewCursor, reviewValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse( "Error: More than one record returned from weather query",
+                reviewCursor.moveToNext() );
+
+        // Sixth Step: Close cursor and database
+        reviewCursor.close();
+        dbHelper.close();
+        //create contentvalues to insert
+        //insert the content values get a row bock (and make suer it is not -1)
+        //query the database
+        //validate data in a resulting cursor with the original content values
+        //close cursor and database
+
+    }
+
+    private long insertMovie() {
+
+        // First step: Get reference to writable database
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Second Step: Create ContentValues of what you want to insert
+        // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues movieValues = TestUtilities.createMovieValues();
+
+        // Third Step: Insert ContentValues into database and get a row ID back
+        long movieRowId;
+        movieRowId = db.insert(MovieEntry.TABLE_NAME, null, movieValues);
+
+        // Verify we got a row back.
+        assertTrue(movieRowId != -1);
+
+        // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
+        // the round trip.
+
+        // Fourth Step: Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = db.query(
+                MovieEntry.TABLE_NAME,  // Table to Query
+                null, // all columns
+                null, // Columns for the "where" clause
+                null, // Values for the "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null // sort order
+        );
+
+        // Move the cursor to a valid database row and check to see if we got any records back
+        // from the query
+        assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
+
+        // Fifth Step: Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+                cursor, movieValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse( "Error: More than one record returned from location query",
+                cursor.moveToNext() );
+
+        // Sixth Step: Close Cursor and Database
+        cursor.close();
+        db.close();
+        return movieRowId;
+    }
+
+//    public void TestReviewTable(){
+//
+//    }
+
+    public void testVideoTable(){
+        //Get reference to writable database
+        long locationRowId = insertMovie();
+
+        // Make sure we have a valid row ID.
+        assertFalse("Error: Location Not Inserted Correctly", locationRowId == -1L);
+
+        // First step: Get reference to writable database
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Second Step (Weather): Create weather values
+        ContentValues videoValues = TestUtilities.createVideoValues(locationRowId);
+
+        // Third Step (Weather): Insert ContentValues into database and get a row ID back
+        long videoRowId = db.insert(TrailerEntry.TABLE_NAME, null, videoValues);
+        assertTrue(videoRowId != -1);
+
+        // Fourth Step: Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor videoCursor = db.query(
+                TrailerEntry.TABLE_NAME,  // Table to Query
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null  // sort order
+        );
+
+        // Move the cursor to the first valid database row and check to see if we have any rows
+        assertTrue( "Error: No Records returned from location query", videoCursor.moveToFirst() );
+
+        // Fifth Step: Validate the location Query
+        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
+                videoCursor, videoValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse( "Error: More than one record returned from weather query",
+                videoCursor.moveToNext() );
+
+        // Sixth Step: Close cursor and database
+        videoCursor.close();
+        dbHelper.close();
+        //create contentvalues to insert
+        //insert the content values get a row bock (and make suer it is not -1)
+        //query the database
+        //validate data in a resulting cursor with the original content values
+        //close cursor and database
+
+    }
+
+    public void TestMovieWithReviews(){
+
+    }
+
+    public void TestVideoWithReviews(){
 
     }
 

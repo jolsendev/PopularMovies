@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
-import com.example.jamie.popularmovies.data.MovieContract.VideoEntry;
+import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 
 /**
@@ -28,6 +28,39 @@ public class MovieProvider extends ContentProvider{
     public MovieDBHelper movieDBHelper;
 
 
+    private static final SQLiteQueryBuilder sMovieTrailerQueryBuilder;
+
+    static{
+
+        sMovieTrailerQueryBuilder = new SQLiteQueryBuilder();
+
+        //This is an inner join which looks like
+        //weather INNER JOIN location ON weather.location_id = location._id
+        sMovieTrailerQueryBuilder.setTables(
+                MovieEntry.TABLE_NAME + " INNER JOIN " +
+                        TrailerEntry.TABLE_NAME +
+                        " ON " +  MovieEntry.TABLE_NAME +
+                        "." +  MovieEntry.MOVIE_ID +
+                        " = " +  TrailerEntry.TABLE_NAME +
+                        "." + TrailerEntry.VIDEO_KEY);
+    }
+
+
+    private static final SQLiteQueryBuilder sMovieReviewQueryBuilder;
+
+    static{
+        sMovieReviewQueryBuilder = new SQLiteQueryBuilder();
+
+        //This is an inner join which looks like
+        //weather INNER JOIN location ON weather.location_id = location._id
+        sMovieReviewQueryBuilder.setTables(
+                MovieEntry.TABLE_NAME + " INNER JOIN " +
+                        ReviewEntry.TABLE_NAME +
+                        " ON " +  MovieEntry.TABLE_NAME +
+                        "." +  MovieEntry.MOVIE_ID +
+                        " = " +  ReviewEntry.TABLE_NAME +
+                        "." + ReviewEntry.REVIEW_KEY);
+    }
 
     static UriMatcher buildUriMatcher(){
         // needs to be implemented.
@@ -41,8 +74,8 @@ public class MovieProvider extends ContentProvider{
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
         final String PATH_TO_MOVIE = MovieEntry.TABLE_NAME+"/#";
-        final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.VIDEO_PATH;
-        final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.REVIEW_PATH;
+        final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.PATH_TRAILER;
+        final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.PATH_REVIEW;
         //final String PATH_TO_FAVORITES = MovieEntry.TABLE_NAME+"/favorites";
 
         // For each type of URI you want to add, create a corresponding code.
@@ -67,7 +100,13 @@ public class MovieProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
         switch(match){
             case ALL_MOVIES:
+                return MovieEntry.CONTENT_TYPE;
+            case MOVIE:
                 return MovieEntry.CONTENT_ITEM_TYPE;
+            case MOVIE_WITH_REVIEWS:
+                return MovieEntry.CONTENT_TYPE;
+            case MOVIE_WITH_VIDEOS:
+                return MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");
         }
@@ -83,12 +122,12 @@ public class MovieProvider extends ContentProvider{
             case ALL_MOVIES:{
                 SQLiteQueryBuilder mbuilder = new SQLiteQueryBuilder();
                 retCurser = movieDBHelper.getReadableDatabase().query(
-                        MovieEntry.TABLE_NAME,
+                        MovieEntry.TABLE_NAME, //table name
                         projection,
                         selection,
                         selectionArgs,
-                        null,
-                        null,
+                        null,                  //Group by
+                        null,                  //Having
                         sortOrder
                 );
             }

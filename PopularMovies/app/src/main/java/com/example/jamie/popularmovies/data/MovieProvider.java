@@ -21,7 +21,7 @@ public class MovieProvider extends ContentProvider{
 
     public static final int ALL_MOVIES = 100;
     public static final int MOVIE = 200;
-    public static final int MOVIE_WITH_VIDEOS = 300;
+    public static final int MOVIE_WITH_TRAILERS = 300;
     public static final int MOVIE_WITH_REVIEWS = 400;
     //static final int FAVORITE_MOVIES = 500;
 
@@ -81,7 +81,7 @@ public class MovieProvider extends ContentProvider{
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MovieEntry.TABLE_NAME, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
-        matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_VIDEOS);
+        matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
         //matcher.addURI(authority, PATH_TO_FAVORITES, FAVORITE_MOVIES);
 
@@ -105,7 +105,7 @@ public class MovieProvider extends ContentProvider{
                 return MovieEntry.CONTENT_ITEM_TYPE;
             case MOVIE_WITH_REVIEWS:
                 return MovieEntry.CONTENT_TYPE;
-            case MOVIE_WITH_VIDEOS:
+            case MOVIE_WITH_TRAILERS:
                 return MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");

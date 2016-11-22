@@ -1,17 +1,15 @@
 package com.example.jamie.popularmovies;
 
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
+
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
-import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
-import com.example.jamie.popularmovies.data.MovieDBHelper;
+import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieProvider;
 
 /**
@@ -77,31 +75,22 @@ public class TestProvider extends AndroidTestCase {
 
     public void testBasicMovieQuery(){
         // insert our test records into the database
-        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues movieValues = TestUtilities.createMovieValues();
         long locationRowId = TestUtilities.insertMovieValues(mContext);
 
-        // Fantastic.  Now that we have a location, add some weather!
-//        ContentValues Values = TestUtilities.createWeatherValues(locationRowId);
-//
-//        long weatherRowId = db.insert(WeatherEntry.TABLE_NAME, null, weatherValues);
-//        assertTrue("Unable to Insert WeatherEntry into the Database", weatherRowId != -1);
-//
-//        db.close();
-//
+        assertTrue("Unable to Insert MovieEntries into the Database", locationRowId != -1);
+
+        System.out.println("COntent Uri:"+ MovieEntry.CONTENT_URI);
 //        // Test the basic content provider query
-//        Cursor weatherCursor = mContext.getContentResolver().query(
-//                WeatherEntry.CONTENT_URI,
-//                null,
-//                null,
-//                null,
-//                null
-//        );
+        Cursor movieCursor = mContext.getContentResolver().query(
+                MovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
 //
 //        // Make sure we get the correct cursor out of the database
-//        TestUtilities.validateCursor("testBasicWeatherQuery", weatherCursor, weatherValues);
+        //TestUtilities.validateCursor("testBasicMovieQuery", movieCursor, movieValues);
 
     }
 }

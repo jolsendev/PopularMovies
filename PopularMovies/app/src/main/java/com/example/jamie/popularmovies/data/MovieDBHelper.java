@@ -24,6 +24,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String CREATE_MOVIE_DATABASE = "CREATE TABLE "+ MovieEntry.TABLE_NAME+" ( "+
+                MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 MovieEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 MovieEntry.POSTER_PATH + " TEXT NOT NULL, " +
                 // 1 if true 0 if false
@@ -44,10 +45,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, "+
 
                 // Set up the review column as a foreign key to location table.
-                " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
+                " FOREIGN KEY (" + MovieEntry._ID  + ") REFERENCES " +
                 ReviewEntry.TABLE_NAME + " (" + ReviewEntry.MOVIE_ID + "), " +
                 // Set up the video column as a foreign key to location table.
-                " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
+                " FOREIGN KEY (" + MovieEntry._ID  + ") REFERENCES " +
                 TrailerEntry.TABLE_NAME + " (" + MovieContract.TrailerEntry.MOVIE_ID + "))" +";";
 
         final String CREATE_VIDEO_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+

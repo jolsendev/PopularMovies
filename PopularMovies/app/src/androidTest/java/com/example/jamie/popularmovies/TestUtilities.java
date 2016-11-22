@@ -99,4 +99,10 @@ public class TestUtilities extends AndroidTestCase {
         return movieRowId;
 
     }
+
+    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+        assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
+        validateCurrentRecord(error, valueCursor, expectedValues);
+        valueCursor.close();
+    }
 }

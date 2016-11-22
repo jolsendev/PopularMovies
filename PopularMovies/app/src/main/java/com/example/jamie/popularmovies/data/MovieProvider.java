@@ -74,11 +74,12 @@ public class MovieProvider extends ContentProvider{
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
+        final String PATH_TO_ALL_MOVIES = MovieEntry.TABLE_NAME;
         final String PATH_TO_MOVIE = MovieEntry.TABLE_NAME+"/#";
         final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.PATH_TRAILER;
         final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.PATH_REVIEW;
 
-        matcher.addURI(authority, MovieEntry.TABLE_NAME, ALL_MOVIES);
+        matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
         matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
@@ -119,7 +120,7 @@ public class MovieProvider extends ContentProvider{
         Cursor retCurser = null;
         switch(sUriMatcher.match(uri)){
             case ALL_MOVIES:{
-                SQLiteQueryBuilder mbuilder = new SQLiteQueryBuilder();
+
                 retCurser = movieDBHelper.getReadableDatabase().query(
                         MovieEntry.TABLE_NAME, //table name
                         projection,            //columns
@@ -129,9 +130,11 @@ public class MovieProvider extends ContentProvider{
                         null,                  //Having
                         sortOrder
                 );
+                break;
             }
 
             case MOVIE_WITH_REVIEWS:{
+                System.out.println("WHY AM I HERE??");
                 retCurser = getMovieWithReviews(uri, projection, sortOrder);
                 break;
             }

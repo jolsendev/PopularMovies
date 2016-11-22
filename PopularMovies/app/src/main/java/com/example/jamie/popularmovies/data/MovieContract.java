@@ -51,7 +51,7 @@ public class MovieContract {
 
         //table name;
         public static final String TABLE_NAME = PATH_MOVIE;
-        public static final String MOVIE_ID = "_id";
+        public static final String MOVIE_ID = "movie_id";
         public static final String POSTER_PATH = "poster_path";
         public static final String IS_ADULT = "is_adult";
         public static final String OVERVIEW = "overview";

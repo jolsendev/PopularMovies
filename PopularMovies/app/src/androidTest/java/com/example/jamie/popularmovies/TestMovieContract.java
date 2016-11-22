@@ -43,4 +43,10 @@ public class TestMovieContract  extends AndroidTestCase{
                 reviewUri.toString(),
                 "content://com.example.jamie.popularmovies/movie/284052/reviews");
     }
+
+    public void testGetMovieIdFromPath(){
+        Uri uri = MovieEntry.buildMovieUri(TEST_MOVIE_ID);
+        String x =  MovieEntry.getMovieIdFromPath(uri);
+        assertEquals("ERROR: Movie id was not retrieved from path", String.valueOf(TEST_MOVIE_ID),x);
+    }
 }

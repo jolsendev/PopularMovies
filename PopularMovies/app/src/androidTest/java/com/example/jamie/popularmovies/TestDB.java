@@ -108,7 +108,7 @@ public class TestDB extends AndroidTestCase {
         movieColumnHashSet.add(MovieEntry.VOTE_AVERAGE);
 
         final HashSet<String> videoColumnHashSet = new HashSet();
-        videoColumnHashSet.add(TrailerEntry.VIDEO_KEY);
+        videoColumnHashSet.add(TrailerEntry.MOVIE_ID);
         videoColumnHashSet.add(TrailerEntry.VIDEO_NAME);
         videoColumnHashSet.add(TrailerEntry.VIDEO_SITE);
         videoColumnHashSet.add(TrailerEntry.VIDEO_SIZE);
@@ -116,7 +116,7 @@ public class TestDB extends AndroidTestCase {
 
 
         final HashSet<String> reviewColumnHasSet = new HashSet();
-        reviewColumnHasSet.add(ReviewEntry.REVIEW_KEY);
+        reviewColumnHasSet.add(ReviewEntry.MOVIE_ID);
         reviewColumnHasSet.add(ReviewEntry.REVIEW_AUTHOR);
         reviewColumnHasSet.add(ReviewEntry.REVIEW_CONTENT);
 

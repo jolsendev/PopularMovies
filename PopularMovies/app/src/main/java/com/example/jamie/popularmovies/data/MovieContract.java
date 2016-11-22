@@ -98,6 +98,10 @@ public class MovieContract {
             return retUri;
         }
 
+
+        public static String getMovieIdFromPath(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 
     /*********************
@@ -114,7 +118,7 @@ public class MovieContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_TRAILER;
 
         public static final String TABLE_NAME = PATH_TRAILER;
-        public static final String VIDEO_KEY = "video_key";
+        public static final String MOVIE_ID = "movie_id";
         public static final String VIDEO_NAME = "video_name";
         public static final String VIDEO_SITE = "video_site";
         public static final String VIDEO_SIZE= "video_size";
@@ -143,7 +147,7 @@ public class MovieContract {
 
 
         public static final String TABLE_NAME = PATH_REVIEW;
-        public static final String REVIEW_KEY = "review_key";
+        public static final String MOVIE_ID = "review_key";
         public static final String REVIEW_AUTHOR = "review_author";
         public static final String REVIEW_CONTENT = "review_content";
         public static final String REVIEW_URL = "review_url";

@@ -42,7 +42,7 @@ public class MovieProvider extends ContentProvider{
                         " ON " +  MovieEntry.TABLE_NAME +
                         "." +  MovieEntry.MOVIE_ID +
                         " = " +  TrailerEntry.TABLE_NAME +
-                        "." + TrailerEntry.VIDEO_KEY);
+                        "." + TrailerEntry.MOVIE_ID);
     }
 
 
@@ -59,31 +59,30 @@ public class MovieProvider extends ContentProvider{
                         " ON " +  MovieEntry.TABLE_NAME +
                         "." +  MovieEntry.MOVIE_ID +
                         " = " +  ReviewEntry.TABLE_NAME +
-                        "." + ReviewEntry.REVIEW_KEY);
+                        "." + ReviewEntry.MOVIE_ID);
     }
+    private static final String sMovieWithReviewsSelection =
+            ReviewEntry.TABLE_NAME+
+                    "."+ ReviewEntry.MOVIE_ID + " = ?";
+
+    private static final String sMovieWithTrailersSelection =
+            TrailerEntry.TABLE_NAME+
+                    "."+ TrailerEntry.MOVIE_ID + " = ?";
 
     public static UriMatcher buildUriMatcher(){
-        // needs to be implemented.
-        // I know what you're thinking.  Why create a UriMatcher when you can use regular
-        // expressions instead?  Because you're not crazy, that's why.
 
-        // All paths added to the UriMatcher have a corresponding code to return when a match is
-        // found.  The code passed into the constructor represents the code to return for the root
-        // URI.  It's common to use NO_MATCH as the code for this case.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
         final String PATH_TO_MOVIE = MovieEntry.TABLE_NAME+"/#";
         final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.PATH_TRAILER;
         final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.PATH_REVIEW;
-        //final String PATH_TO_FAVORITES = MovieEntry.TABLE_NAME+"/favorites";
 
-        // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MovieEntry.TABLE_NAME, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
         matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
-        //matcher.addURI(authority, PATH_TO_FAVORITES, FAVORITE_MOVIES);
+
 
         return matcher;
     }
@@ -104,9 +103,9 @@ public class MovieProvider extends ContentProvider{
             case MOVIE:
                 return MovieEntry.CONTENT_ITEM_TYPE;
             case MOVIE_WITH_REVIEWS:
-                return MovieEntry.CONTENT_TYPE;
+                return ReviewEntry.CONTENT_TYPE;
             case MOVIE_WITH_TRAILERS:
-                return MovieEntry.CONTENT_TYPE;
+                return TrailerEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");
         }
@@ -123,21 +122,58 @@ public class MovieProvider extends ContentProvider{
                 SQLiteQueryBuilder mbuilder = new SQLiteQueryBuilder();
                 retCurser = movieDBHelper.getReadableDatabase().query(
                         MovieEntry.TABLE_NAME, //table name
-                        projection,
-                        selection,
-                        selectionArgs,
+                        projection,            //columns
+                        selection,             //where
+                        selectionArgs,         //you may include a ? in 'selection' these are the args
                         null,                  //Group by
                         null,                  //Having
                         sortOrder
                 );
             }
 
+            case MOVIE_WITH_REVIEWS:{
+                retCurser = getMovieWithReviews(uri, projection, sortOrder);
+                break;
+            }
 
+            case MOVIE_WITH_TRAILERS:{
+                retCurser = getMovieWithTrailers(uri, projection, sortOrder);
+                break;
+            }
         }
         retCurser.setNotificationUri(getContext().getContentResolver(), uri);
         return retCurser;
     }
 
+    private Cursor getMovieWithTrailers(Uri uri, String[] projection, String sortOrder) {
+        String movie_id = MovieEntry.getMovieIdFromPath(uri);
+        Cursor retCursor;
+        retCursor = sMovieTrailerQueryBuilder.query(
+                movieDBHelper.getReadableDatabase(),
+                projection,
+                sMovieWithTrailersSelection,
+                new String[]{movie_id},
+                null,
+                null,
+                sortOrder
+        );
+        return retCursor;
+    }
+
+    private Cursor getMovieWithReviews(Uri uri, String[] projection, String sortOrder) {
+        String movie_id = MovieEntry.getMovieIdFromPath(uri);
+        Cursor retCursor;
+        retCursor = sMovieReviewQueryBuilder.query(
+                movieDBHelper.getReadableDatabase(),
+                projection,
+                sMovieWithReviewsSelection,
+                new String[]{movie_id},
+                null,
+                null,
+                sortOrder
+        );
+        return retCursor;
+    }
 
 
     @Nullable

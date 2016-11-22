@@ -1,13 +1,16 @@
 package com.example.jamie.popularmovies;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
+import com.example.jamie.popularmovies.data.MovieDBHelper;
 
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +47,7 @@ public class TestUtilities extends AndroidTestCase {
 
         ContentValues values = new ContentValues();
 
-        values.put(ReviewEntry.REVIEW_KEY, movieId);
+        values.put(ReviewEntry.MOVIE_ID, movieId);
         values.put(ReviewEntry.REVIEW_AUTHOR, "iheardthatmoviewas");
         values.put(ReviewEntry.REVIEW_CONTENT, "All continues to be well in the Marvel Comics Universe as the film adaptation of another mischievous and majestic superhero from Stan Lee’s printed page empire emerges and reigns supreme on the big screen. The latest cure from the Marvel movie bag of explosive tricks is the entry of the dazzling and decorative **Doctor Strange**. Armed with a collection of notable performers, a convincing colorful scope of visual vibrancy and a hearty touch of spiritual and reflective potency the");
         values.put(ReviewEntry.REVIEW_URL, "https://www.themoviedb.org/review/581e7bad9251410a0e01146e");
@@ -54,7 +57,7 @@ public class TestUtilities extends AndroidTestCase {
     static ContentValues createVideoValues(long movieId){
 
         ContentValues values = new ContentValues();
-        values.put(MovieContract.TrailerEntry.VIDEO_KEY, movieId);
+        values.put(MovieContract.TrailerEntry.MOVIE_ID, movieId);
         values.put(TrailerEntry.VIDEO_NAME, "Doctor Strange (2016) Official Trailer 2");
         values.put(MovieContract.TrailerEntry.VIDEO_SITE, "YouTube");
         values.put(TrailerEntry.VIDEO_SIZE, 1080);
@@ -86,5 +89,14 @@ public class TestUtilities extends AndroidTestCase {
                         expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
             }
         }
+    }
+
+    public static long insertMovieValues(Context mContext) {
+        long movieRowId;
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        movieRowId = db.insert(MovieEntry.TABLE_NAME, null, TestUtilities.createMovieValues());
+        return movieRowId;
+
     }
 }

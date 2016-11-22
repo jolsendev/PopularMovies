@@ -45,13 +45,13 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
                 // Set up the review column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
-                ReviewEntry.TABLE_NAME + " (" + ReviewEntry.REVIEW_KEY+ "), " +
+                ReviewEntry.TABLE_NAME + " (" + ReviewEntry.MOVIE_ID + "), " +
                 // Set up the video column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
-                TrailerEntry.TABLE_NAME + " (" + MovieContract.TrailerEntry.VIDEO_KEY+ "))" +";";
+                TrailerEntry.TABLE_NAME + " (" + MovieContract.TrailerEntry.MOVIE_ID + "))" +";";
 
         final String CREATE_VIDEO_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
-                MovieContract.TrailerEntry.VIDEO_KEY + " INTEGER PRIMARY KEY,"+
+                MovieContract.TrailerEntry.MOVIE_ID + " INTEGER PRIMARY KEY,"+
                 MovieContract.TrailerEntry.VIDEO_NAME + " TEXT NOT NULL, " +
                 TrailerEntry.VIDEO_SITE + " TEXT NOT NULL, " +
                 MovieContract.TrailerEntry.VIDEO_SIZE + " INTEGER NOT NULL, "+
@@ -59,7 +59,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
 
         final String CREATE_REVIEW_DATABASE = "CREATE TABLE " +ReviewEntry.TABLE_NAME+" ("+
-                ReviewEntry.REVIEW_KEY + " INTEGER PRIMARY KEY, "+
+                ReviewEntry.MOVIE_ID + " INTEGER PRIMARY KEY, "+
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );"

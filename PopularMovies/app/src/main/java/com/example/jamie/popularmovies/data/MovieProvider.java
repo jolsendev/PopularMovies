@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -23,11 +24,16 @@ public class MovieProvider extends ContentProvider{
     public static final int MOVIE = 200;
     public static final int MOVIE_WITH_TRAILERS = 300;
     public static final int MOVIE_WITH_REVIEWS = 400;
+    public static final int REVIEWS = 500;
+    public static final int TRAILERS = 600;
     //static final int FAVORITE_MOVIES = 500;
 
     public MovieDBHelper movieDBHelper;
 
-
+    //    SELECT movie.original_title, trailers.trailer_key, trailers.trailer_site, trailers.trailer_type
+    //    FROM movie
+    //    INNER JOIN trailers
+    //    ON movie.movie_id = trailers.movie_id;
     private static final SQLiteQueryBuilder sMovieTrailerQueryBuilder;
 
     static{
@@ -46,6 +52,14 @@ public class MovieProvider extends ContentProvider{
     }
 
 
+//
+
+
+
+    //    SELECT movie.original_title, reviews.review_content
+    //    FROM movie
+    //    INNER JOIN reviews
+    //    ON movie.movie_id = reviews.movie_id;
     private static final SQLiteQueryBuilder sMovieReviewQueryBuilder;
 
     static{
@@ -78,11 +92,15 @@ public class MovieProvider extends ContentProvider{
         final String PATH_TO_MOVIE = MovieEntry.TABLE_NAME+"/#";
         final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.PATH_TRAILER;
         final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.PATH_REVIEW;
+        final String PATH_TO_TRAILERS = TrailerEntry.TABLE_NAME;
+        final String PATH_TO_REVIEWS = ReviewEntry.TABLE_NAME;
 
         matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
         matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
+        matcher.addURI(authority, PATH_TO_TRAILERS, TRAILERS);
+        matcher.addURI(authority, PATH_TO_REVIEWS, REVIEWS);
 
 
         return matcher;
@@ -107,6 +125,10 @@ public class MovieProvider extends ContentProvider{
                 return ReviewEntry.CONTENT_TYPE;
             case MOVIE_WITH_TRAILERS:
                 return TrailerEntry.CONTENT_TYPE;
+            case TRAILERS:
+                return TrailerEntry.CONTENT_TYPE;
+            case REVIEWS:
+                return ReviewEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");
         }
@@ -141,6 +163,30 @@ public class MovieProvider extends ContentProvider{
 
             case MOVIE_WITH_TRAILERS:{
                 retCurser = getMovieWithTrailers(uri, projection, sortOrder);
+                break;
+            }
+            case TRAILERS:{
+                retCurser = movieDBHelper.getReadableDatabase().query(
+                        TrailerEntry.TABLE_NAME, //table name
+                        projection,            //columns
+                        selection,             //where
+                        selectionArgs,         //you may include a ? in 'selection' these are the args
+                        null,                  //Group by
+                        null,                  //Having
+                        sortOrder
+                );
+                break;
+            }
+            case REVIEWS:{
+                retCurser = movieDBHelper.getReadableDatabase().query(
+                        ReviewEntry.TABLE_NAME, //table name
+                        projection,            //columns
+                        selection,             //where
+                        selectionArgs,         //you may include a ? in 'selection' these are the args
+                        null,                  //Group by
+                        null,                  //Having
+                        sortOrder
+                );
                 break;
             }
         }
@@ -189,7 +235,30 @@ public class MovieProvider extends ContentProvider{
                 long _id = movieDBHelper.getWritableDatabase().insert(MovieEntry.TABLE_NAME, null, values);
                 if(_id > 0){
                     returnUri = MovieEntry.buildMovieUri(_id);
+                }else{
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
+                break;
+            }
+            case TRAILERS:{
+                long _id = movieDBHelper.getWritableDatabase().insert(TrailerEntry.TABLE_NAME, null, values);
+                if(_id> 0){
+                    _id = (long)values.get(TrailerEntry.MOVIE_ID);
+                    returnUri = MovieEntry.buildMovieTrailer(_id);
+                }else{
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+            case REVIEWS:{
+                long _id = movieDBHelper.getWritableDatabase().insert(ReviewEntry.TABLE_NAME, null, values);
+                if(_id> 0){
+                    _id = (long)values.get(ReviewEntry.MOVIE_ID);
+                    returnUri = MovieEntry.buildMovieReview(_id);
+                }else{
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
             }
         }
         getContext().getContentResolver().notifyChange(uri, null);
@@ -198,14 +267,28 @@ public class MovieProvider extends ContentProvider{
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int rowDeleted = 0;
+//        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        int rowDeleted = 0;
+        // this makes delete all rows return the number of rows deleted
+        if ( null == selection ) selection = "1";
         switch (match){
             case ALL_MOVIES: {
                 rowDeleted = movieDBHelper.getWritableDatabase().delete(MovieEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case TRAILERS:{
+                rowDeleted = movieDBHelper.getWritableDatabase().delete(TrailerEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case REVIEWS:{
+                rowDeleted = movieDBHelper.getWritableDatabase().delete(ReviewEntry.TABLE_NAME, selection, selectionArgs);
             }
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        // Because a null deletes all rows
+        if (rowDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
         return rowDeleted;
     }
 
@@ -216,15 +299,83 @@ public class MovieProvider extends ContentProvider{
         switch (match){
             case ALL_MOVIES: {
                 rowUpdated = movieDBHelper.getWritableDatabase().update(MovieEntry.TABLE_NAME,values, selection, selectionArgs);
+                break;
+            }
+            case TRAILERS:{
+                rowUpdated = movieDBHelper.getWritableDatabase().update(TrailerEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
+            case REVIEWS:{
+                rowUpdated = movieDBHelper.getWritableDatabase().update(ReviewEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
             }
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
         return rowUpdated;
     }
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        return super.bulkInsert(uri, values);
+        final SQLiteDatabase db = movieDBHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ALL_MOVIES: {
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(MovieEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            }
+            case REVIEWS:{
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(ReviewEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+
+            }
+            case TRAILERS:{
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(TrailerEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+
+            }
+            default:
+                return super.bulkInsert(uri, values);
+        }
     }
 
 }

@@ -119,10 +119,11 @@ public class MovieContract {
 
         public static final String TABLE_NAME = PATH_TRAILER;
         public static final String MOVIE_ID = "movie_id";
-        public static final String VIDEO_NAME = "video_name";
-        public static final String VIDEO_SITE = "video_site";
-        public static final String VIDEO_SIZE= "video_size";
-        public static final String VIDEO_TYPE = "video_type";
+        public static final String TRAILER_KEY = "trailer_key";
+        public static final String TRAILER_NAME = "trailer_name";
+        public static final String TRAILER_SITE = "trailer_site";
+        public static final String TRAILER_SIZE = "trailer_size";
+        public static final String TRAILER_TYPE = "trailer_type";
 
 //        public static Uri buildVideoUri(long id){
 //            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);
@@ -147,7 +148,7 @@ public class MovieContract {
 
 
         public static final String TABLE_NAME = PATH_REVIEW;
-        public static final String MOVIE_ID = "review_key";
+        public static final String MOVIE_ID = "movie_id";
         public static final String REVIEW_AUTHOR = "review_author";
         public static final String REVIEW_CONTENT = "review_content";
         public static final String REVIEW_URL = "review_url";

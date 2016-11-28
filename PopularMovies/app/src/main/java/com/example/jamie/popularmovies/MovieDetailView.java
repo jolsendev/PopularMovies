@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.jamie.popularmovies.movie_objects.Movie;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailView extends AppCompatActivity {

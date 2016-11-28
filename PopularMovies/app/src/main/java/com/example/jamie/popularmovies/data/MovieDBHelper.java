@@ -14,7 +14,7 @@ import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 5;
+    private static final int VERSION_ID = 1;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -24,7 +24,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String CREATE_MOVIE_DATABASE = "CREATE TABLE "+ MovieEntry.TABLE_NAME+" ( "+
-                MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                MovieEntry._ID + " INTEGER PRIMARY KEY," +
                 MovieEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 MovieEntry.POSTER_PATH + " TEXT NOT NULL, " +
                 // 1 if true 0 if false
@@ -45,22 +45,23 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, "+
 
                 // Set up the review column as a foreign key to location table.
-                " FOREIGN KEY (" + MovieEntry._ID  + ") REFERENCES " +
+                " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
                 ReviewEntry.TABLE_NAME + " (" + ReviewEntry.MOVIE_ID + "), " +
                 // Set up the video column as a foreign key to location table.
-                " FOREIGN KEY (" + MovieEntry._ID  + ") REFERENCES " +
-                TrailerEntry.TABLE_NAME + " (" + MovieContract.TrailerEntry.MOVIE_ID + "))" +";";
+                " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
+                TrailerEntry.TABLE_NAME + " (" + TrailerEntry.MOVIE_ID + "))" +";";
 
-        final String CREATE_VIDEO_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
-                MovieContract.TrailerEntry.MOVIE_ID + " INTEGER PRIMARY KEY,"+
-                MovieContract.TrailerEntry.VIDEO_NAME + " TEXT NOT NULL, " +
-                TrailerEntry.VIDEO_SITE + " TEXT NOT NULL, " +
-                MovieContract.TrailerEntry.VIDEO_SIZE + " INTEGER NOT NULL, "+
-                TrailerEntry.VIDEO_TYPE + " TEXT NOT NULL );";
+        final String CREATE_TRAILER_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
+                TrailerEntry.MOVIE_ID + " INTEGER NOT NULL, "+
+                TrailerEntry.TRAILER_KEY +" TEXT NOT NULL, "+
+                TrailerEntry.TRAILER_NAME + " TEXT NOT NULL, " +
+                TrailerEntry.TRAILER_SITE + " TEXT NOT NULL, " +
+                TrailerEntry.TRAILER_SIZE + " INTEGER NOT NULL, "+
+                TrailerEntry.TRAILER_TYPE + " TEXT NOT NULL );";
 
 
         final String CREATE_REVIEW_DATABASE = "CREATE TABLE " +ReviewEntry.TABLE_NAME+" ("+
-                ReviewEntry.MOVIE_ID + " INTEGER PRIMARY KEY, "+
+                ReviewEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );"
@@ -70,7 +71,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_MOVIE_DATABASE);
 
-        db.execSQL(CREATE_VIDEO_DATABASE);
+        db.execSQL(CREATE_TRAILER_DATABASE);
 
         db.execSQL(CREATE_REVIEW_DATABASE);
 

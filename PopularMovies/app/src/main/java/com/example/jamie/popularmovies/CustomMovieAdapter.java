@@ -1,5 +1,6 @@
 package com.example.jamie.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.example.jamie.popularmovies.movie_objects.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -15,12 +17,12 @@ import java.util.List;
  *
  * Created by A5W5NZZ on 8/31/2016.
  */
-public class CustomMovieAdapter extends ArrayAdapter<Movie> {
+public class CustomMovieAdapter extends ArrayAdapter<ContentValues> {
     Context mContext;
     List<Movie> mMovieList;
     LayoutInflater mInflater;
 
-    public CustomMovieAdapter(Context mContext, List<Movie> mMovieList) {
+    public CustomMovieAdapter(Context mContext, List<ContentValues> mMovieList) {
         super(mContext, 0, mMovieList);
         this.mContext = mContext;
         this.mMovieList = mMovieList;

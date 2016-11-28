@@ -1,9 +1,8 @@
-package com.example.jamie.popularmovies;
+package com.example.jamie.popularmovies.movie_objects;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 /**

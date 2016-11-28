@@ -92,7 +92,6 @@ public class TestDB extends AndroidTestCase {
 
         // Build a HashSet of all of the column names we want to look for
         final HashSet<String> movieColumnHashSet = new HashSet();
-        movieColumnHashSet.add(MovieEntry.MOVIE_ID);
         movieColumnHashSet.add(MovieEntry.POSTER_PATH);
         movieColumnHashSet.add(MovieEntry.IS_ADULT);
         movieColumnHashSet.add(MovieEntry.OVERVIEW);
@@ -109,10 +108,10 @@ public class TestDB extends AndroidTestCase {
 
         final HashSet<String> videoColumnHashSet = new HashSet();
         videoColumnHashSet.add(TrailerEntry.MOVIE_ID);
-        videoColumnHashSet.add(TrailerEntry.VIDEO_NAME);
-        videoColumnHashSet.add(TrailerEntry.VIDEO_SITE);
-        videoColumnHashSet.add(TrailerEntry.VIDEO_SIZE);
-        videoColumnHashSet.add(TrailerEntry.VIDEO_TYPE);
+        videoColumnHashSet.add(TrailerEntry.TRAILER_NAME);
+        videoColumnHashSet.add(TrailerEntry.TRAILER_SITE);
+        videoColumnHashSet.add(TrailerEntry.TRAILER_SIZE);
+        videoColumnHashSet.add(TrailerEntry.TRAILER_TYPE);
 
 
         final HashSet<String> reviewColumnHasSet = new HashSet();
@@ -218,9 +217,13 @@ public class TestDB extends AndroidTestCase {
         // Third Step: Insert ContentValues into database and get a row ID back
         long movieRowId;
         movieRowId = db.insert(MovieEntry.TABLE_NAME, null, movieValues);
+        assertTrue(movieRowId != -1);
+        if(movieRowId != -1){
+            movieRowId = (int)movieValues.get(MovieEntry.MOVIE_ID);
+        }
 
         // Verify we got a row back.
-        assertTrue(movieRowId != -1);
+
 
         // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
         // the round trip.
@@ -275,7 +278,7 @@ public class TestDB extends AndroidTestCase {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Second Step (Weather): Create weather values
-        ContentValues videoValues = TestUtilities.createVideoValues(locationRowId);
+        ContentValues videoValues = TestUtilities.createTrailerValues(locationRowId);
 
         // Third Step (Weather): Insert ContentValues into database and get a row ID back
         long videoRowId = db.insert(TrailerEntry.TABLE_NAME, null, videoValues);

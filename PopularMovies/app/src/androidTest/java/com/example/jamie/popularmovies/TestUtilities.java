@@ -2,15 +2,19 @@ package com.example.jamie.popularmovies;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
-import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 import com.example.jamie.popularmovies.data.MovieDBHelper;
+import com.example.jamie.popularmovies.utils.PollingCheck;
 
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +28,7 @@ public class TestUtilities extends AndroidTestCase {
     static ContentValues createMovieValues(){
         ContentValues values = new ContentValues();
 
+        //values.put(MovieEntry._ID, 1);
         values.put(MovieEntry.MOVIE_ID, 284052);
         values.put(MovieEntry.POSTER_PATH, "xfWac8MTYDxujaxgPVcRD9yZaul.jpg");
         values.put(MovieEntry.IS_ADULT, 0);
@@ -54,14 +59,15 @@ public class TestUtilities extends AndroidTestCase {
         return values;
     }
 
-    static ContentValues createVideoValues(long movieId){
+    static ContentValues createTrailerValues(long movieId){
 
         ContentValues values = new ContentValues();
-        values.put(MovieContract.TrailerEntry.MOVIE_ID, movieId);
-        values.put(TrailerEntry.VIDEO_NAME, "Doctor Strange (2016) Official Trailer 2");
-        values.put(MovieContract.TrailerEntry.VIDEO_SITE, "YouTube");
-        values.put(TrailerEntry.VIDEO_SIZE, 1080);
-        values.put(TrailerEntry.VIDEO_TYPE, "Teaser");
+        values.put(TrailerEntry.MOVIE_ID, movieId);
+        values.put(TrailerEntry.TRAILER_KEY, "ZN2GdN9A-e4");
+        values.put(TrailerEntry.TRAILER_NAME, "Doctor Strange (2016) Official Trailer 2");
+        values.put(TrailerEntry.TRAILER_SITE, "YouTube");
+        values.put(TrailerEntry.TRAILER_SIZE, 1080);
+        values.put(TrailerEntry.TRAILER_TYPE, "Teaser");
 
         return values;
     }
@@ -82,7 +88,15 @@ public class TestUtilities extends AndroidTestCase {
                 assertEquals("Value '" + entry.getValue().toString() +
                         "' did not match the expected value '" +
                         expectedValue + "'. " + error, Double.parseDouble(expectedValue), valueCursor.getDouble(idx));
-            }else{
+            }
+            else if(columnName.equals(ReviewEntry.MOVIE_ID)){
+                String expectedValue = entry.getValue().toString();
+                assertEquals("Value '" + entry.getValue().toString() +
+                        "' did not match the expected value '" +
+                        expectedValue + "'. " + error, Integer.parseInt(expectedValue), valueCursor.getInt(idx));
+
+            }
+            else{
                 String expectedValue = entry.getValue().toString();
                 assertEquals("Value '" + entry.getValue().toString() +
                         "' did not match the expected value '" +
@@ -105,4 +119,86 @@ public class TestUtilities extends AndroidTestCase {
         validateCurrentRecord(error, valueCursor, expectedValues);
         valueCursor.close();
     }
+
+    public static long insertReviewValues(Context mContext, long movieRowId) {
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        movieRowId = db.insert(ReviewEntry.TABLE_NAME, null, TestUtilities.createReviewValues(movieRowId));
+        return movieRowId;
+    }
+
+    public static ContentValues createMovieWithReviewValues(long movieRowId) {
+        ContentValues values = new ContentValues();
+        values.put(MovieEntry.MOVIE_ID, movieRowId);
+        values.put(MovieEntry.ORIGINAL_TITLE, "Doctor Strange");
+        values.put(ReviewEntry.REVIEW_CONTENT, "All continues to be well in the Marvel Comics Universe as the film adaptation of another mischievous and majestic superhero from Stan Lee’s printed page empire emerges and reigns supreme on the big screen. The latest cure from the Marvel movie bag of explosive tricks is the entry of the dazzling and decorative **Doctor Strange**. Armed with a collection of notable performers, a convincing colorful scope of visual vibrancy and a hearty touch of spiritual and reflective potency the");
+        values.put(ReviewEntry.REVIEW_AUTHOR, "iheardthatmoviewas");
+        return values;
+    }
+
+    public static long insertTrailerValues(Context mContext, int id) {
+        long movieRowId;
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        movieRowId = db.insert(TrailerEntry.TABLE_NAME, null, TestUtilities.createTrailerValues(id));
+        return movieRowId;
+    }
+
+    public static ContentValues createMovieWithTrailerValues(int movieRowId) {
+
+        ContentValues values = new ContentValues();
+        values.put(MovieEntry.MOVIE_ID, movieRowId);
+        values.put(MovieEntry.ORIGINAL_TITLE, "Doctor Strange");
+        values.put(TrailerEntry.TRAILER_KEY, "ZN2GdN9A-e4");
+        values.put(TrailerEntry.TRAILER_TYPE, "Teaser");
+        return values;
+    }
+
+
+
+    static class TestContentObserver extends ContentObserver {
+        final HandlerThread mHT;
+        boolean mContentChanged;
+
+        static TestContentObserver getTestContentObserver() {
+            HandlerThread ht = new HandlerThread("ContentObserverThread");
+            ht.start();
+            return new TestContentObserver(ht);
+        }
+
+        private TestContentObserver(HandlerThread ht) {
+            super(new Handler(ht.getLooper()));
+            mHT = ht;
+        }
+
+        // On earlier versions of Android, this onChange method is called
+        @Override
+        public void onChange(boolean selfChange) {
+            onChange(selfChange, null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            mContentChanged = true;
+        }
+
+        public void waitForNotificationOrFail() {
+            // Note: The PollingCheck class is taken from the Android CTS (Compatibility Test Suite).
+            // It's useful to look at the Android CTS source for ideas on how to test your Android
+            // applications.  The reason that PollingCheck works is that, by default, the JUnit
+            // testing framework is not running on the main Android application thread.
+            new PollingCheck(5000) {
+                @Override
+                protected boolean check() {
+                    return mContentChanged;
+                }
+            }.run();
+            mHT.quit();
+        }
+    }
+
+    static TestContentObserver getTestContentObserver() {
+        return TestContentObserver.getTestContentObserver();
+    }
+
 }

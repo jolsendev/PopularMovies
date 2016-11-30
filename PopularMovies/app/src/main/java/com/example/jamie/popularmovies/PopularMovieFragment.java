@@ -2,6 +2,7 @@ package com.example.jamie.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,19 +14,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.jamie.popularmovies.Adapters.MovieCursorAdapter;
+import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.movie_objects.Movie;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class PopularMovieFragment extends Fragment {
     public List<Movie> mMovies;
     public GridView gridview;
-    public CustomMovieAdapter mAdapter;
+    public MovieCursorAdapter mAdapter;
     private Uri mPopularUri;
     private String sortValue;
 
@@ -42,15 +43,14 @@ public class PopularMovieFragment extends Fragment {
         View v = inflater.inflate(R.layout.activity_main,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
 
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Movie myMovie = mAdapter.getItem(i);
-                Intent intent = new Intent(getActivity(), MovieDetailView.class);
-                intent.putExtra(Utility.MOVIE_KEY, myMovie);
-                startActivity(intent);
-            }
-        });
+        Cursor cur = getActivity().getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+
+        mAdapter = new MovieCursorAdapter(getActivity(), cur, 0);
+
         return v;
     }
 

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,19 +18,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.example.jamie.popularmovies.Adapters.MovieCursorAdapter;
+import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.movie_objects.Movie;
 
 import java.util.List;
 
 
-public class PopularMovieFragment extends Fragment {
+public class PopularMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     public List<Movie> mMovies;
     public GridView gridview;
     public MovieCursorAdapter mAdapter;
     private Uri mPopularUri;
     private String sortValue;
+    public static final int LOADER_ID = 0;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -111,6 +114,21 @@ public class PopularMovieFragment extends Fragment {
         moviesTask.execute(mPopularUri.toString());
 //
 //        moviesTask.execute(mPopularUri.toString());
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
 

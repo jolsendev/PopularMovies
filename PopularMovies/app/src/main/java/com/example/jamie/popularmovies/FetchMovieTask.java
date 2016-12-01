@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.example.jamie.popularmovies.Adapters.MovieCursorAdapter;
+import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
 import com.example.jamie.popularmovies.data.FetchRawData;
 import com.example.jamie.popularmovies.extracting_json_data.ExtractJSONMovieData;
 

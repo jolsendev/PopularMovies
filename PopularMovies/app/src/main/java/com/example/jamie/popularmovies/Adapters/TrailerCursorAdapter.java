@@ -1,4 +1,4 @@
-package com.example.jamie.popularmovies.Adapters;
+package com.example.jamie.popularmovies.adapters;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -14,7 +14,7 @@ import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 1;
+    private static final int VERSION_ID = 15;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -24,6 +24,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String CREATE_MOVIE_DATABASE = "CREATE TABLE "+ MovieEntry.TABLE_NAME+" ( "+
+
                 MovieEntry._ID + " INTEGER PRIMARY KEY," +
                 MovieEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 MovieEntry.POSTER_PATH + " TEXT NOT NULL, " +

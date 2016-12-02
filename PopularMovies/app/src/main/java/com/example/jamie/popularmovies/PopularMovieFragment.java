@@ -21,9 +21,6 @@ import android.widget.GridView;
 
 import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
-import com.example.jamie.popularmovies.movie_objects.Movie;
-
-import java.util.List;
 
 
 public class PopularMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -124,7 +121,7 @@ public class PopularMovieFragment extends Fragment implements LoaderManager.Load
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-
+        updateMovieData();
         if(sortValue != sortBy ) {
             updateMovieData();
         } else {

@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
-import com.example.jamie.popularmovies.movie_objects.Movie;
-import com.example.jamie.popularmovies.movie_objects.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;

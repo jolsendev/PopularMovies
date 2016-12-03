@@ -1,4 +1,4 @@
-package com.example.jamie.popularmovies;
+package com.example.jamie.popularmovies.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,11 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.example.jamie.popularmovies.FetchMovieTask;
+import com.example.jamie.popularmovies.MovieSettings;
+import com.example.jamie.popularmovies.R;
+import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 
 
-public class PopularMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     public GridView gridview;
     public MovieCursorAdapter mAdapter;
     private Uri mPopularUri;
@@ -90,7 +94,6 @@ public class PopularMovieFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        //mAdapter = new CustomMovieAdapter(getActivity(), new ArrayList<Movie>());
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         setHasOptionsMenu(true);
@@ -111,6 +114,7 @@ public class PopularMovieFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onStart() {
 
+        updateMovieData();
         super.onStart();
 
     }
@@ -121,7 +125,7 @@ public class PopularMovieFragment extends Fragment implements LoaderManager.Load
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-        updateMovieData();
+
         if(sortValue != sortBy ) {
             updateMovieData();
         } else {
@@ -143,8 +147,6 @@ public class PopularMovieFragment extends Fragment implements LoaderManager.Load
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
         FetchMovieTask moviesTask = new FetchMovieTask(getContext());
         moviesTask.execute(mPopularUri.toString());
-//
-//        moviesTask.execute(mPopularUri.toString());
     }
 
     @Override

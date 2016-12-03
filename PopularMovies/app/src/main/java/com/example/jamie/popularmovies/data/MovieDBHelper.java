@@ -14,7 +14,7 @@ import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 15;
+    private static final int VERSION_ID = 18;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -26,7 +26,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         final String CREATE_MOVIE_DATABASE = "CREATE TABLE "+ MovieEntry.TABLE_NAME+" ( "+
 
                 MovieEntry._ID + " INTEGER PRIMARY KEY," +
-                MovieEntry.MOVIE_ID + " INTEGER NOT NULL, "+
+                MovieEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
                 MovieEntry.POSTER_PATH + " TEXT NOT NULL, " +
                 // 1 if true 0 if false
                 MovieEntry.IS_ADULT + " INTEGER NOT NULL, " +
@@ -41,7 +41,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 // 1 if true 0 if false
                 MovieEntry.IS_VIDEO + " INTEGER NOT NULL, " +
                 // 1 if true 0 if false
-                MovieEntry.IS_FAVORITE + " INTEGER NOT NULL, " +
+                MovieEntry.IS_FAVORITE + " INTEGER , " +
 
                 MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, "+
 
@@ -53,7 +53,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 TrailerEntry.TABLE_NAME + " (" + TrailerEntry.MOVIE_ID + "))" +";";
 
         final String CREATE_TRAILER_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
-                TrailerEntry.MOVIE_ID + " INTEGER NOT NULL, "+
+                TrailerEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
                 TrailerEntry.TRAILER_KEY +" TEXT NOT NULL, "+
                 TrailerEntry.TRAILER_NAME + " TEXT NOT NULL, " +
                 TrailerEntry.TRAILER_SITE + " TEXT NOT NULL, " +
@@ -62,7 +62,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
 
         final String CREATE_REVIEW_DATABASE = "CREATE TABLE " +ReviewEntry.TABLE_NAME+" ("+
-                ReviewEntry.MOVIE_ID + " INTEGER NOT NULL, "+
+                ReviewEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );"

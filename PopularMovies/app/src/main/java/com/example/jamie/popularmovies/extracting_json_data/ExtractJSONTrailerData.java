@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
-import com.example.jamie.popularmovies.movie_objects.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

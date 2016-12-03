@@ -5,14 +5,11 @@ import android.content.Context;
 
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 
-import com.example.jamie.popularmovies.movie_objects.Movie;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -21,7 +18,7 @@ import java.util.Vector;
 public class ExtractJSONMovieData {
     String jsonString;
     Context mContext;
-    private ArrayList<ContentValues> mWeatherContentValues;
+    private ArrayList<ContentValues> mMovieContentValues;
 
     public ExtractJSONMovieData(String jsonString, Context mContext) {
         this.mContext = mContext;
@@ -54,7 +51,7 @@ public class ExtractJSONMovieData {
                 JSONObject jsonMovieData = itemsArray.getJSONObject(i);
                 movieValues.put(MovieEntry.POSTER_PATH, jsonMovieData.getString(MOVIE_POSTER_PATH));
                 boolean isAdult = jsonMovieData.getBoolean(MOVIE_ADULT);
-                movieValues.put(MovieEntry.IS_ADULT,(isAdult == true)?0:1 );
+                movieValues.put(MovieEntry.IS_ADULT,(isAdult == true)?1:0 );
                 movieValues.put(MovieEntry.OVERVIEW, jsonMovieData.getString(MOVIE_OVERVIEW));
                 movieValues.put(MovieEntry.RELEASE_DATE, jsonMovieData.getString(MOVIE_RELEASE_DATE));
                 movieValues.put(MovieEntry.MOVIE_ID,jsonMovieData.getInt(MOVIE_ID));
@@ -65,7 +62,7 @@ public class ExtractJSONMovieData {
                 movieValues.put(MovieEntry.POPULARITY, jsonMovieData.getDouble(MOVIE_POPULARITY));
                 movieValues.put(MovieEntry.VOTE_COUNT, jsonMovieData.getDouble(MOVIE_VOTE_COUNT));
                 boolean isMovie = jsonMovieData.getBoolean(MOVIE_VIDEO);
-                movieValues.put(MovieEntry.IS_VIDEO, (isMovie == true)?0:1);
+                movieValues.put(MovieEntry.IS_VIDEO, (isMovie == true)?1:0);
                 movieValues.put(MovieEntry.VOTE_AVERAGE, jsonMovieData.getDouble(MOVIE_VOTE_AVERAGE));
                 cVVector.add(movieValues);
             }
@@ -76,15 +73,10 @@ public class ExtractJSONMovieData {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
 
                 cVVector.toArray(cvArray);
-                mWeatherContentValues.addAll(cVVector);
                 mContext.getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public ArrayList<ContentValues> getWeatherContentValues(){
-        return mWeatherContentValues;
     }
 }

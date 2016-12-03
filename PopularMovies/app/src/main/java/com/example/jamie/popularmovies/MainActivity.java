@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jamie.popularmovies.fragments.MovieFragment;
 import com.facebook.stetho.DumperPluginsProvider;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.dumpapp.DumpException;
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -29,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new OkHttpClient.Builder()
-                .addNetworkInterceptor(new StethoInterceptor())
-                .build();
+
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(new DumperPluginsProvider() {
                     @Override
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(isOnline()){
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, new PopularMovieFragment())
+                        .add(R.id.container, new MovieFragment())
                         .commit();
             }
 
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class StethoInterceptor implements Interceptor {
+    public class StethoInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             //I found thid code here: https://github.com/square/okhttp/wiki/Interceptors

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
     Context mContext;
-    MovieCursorAdapter mAdapter;
         public FetchMovieTask(Context mContext){
             this.mContext = mContext;
         }

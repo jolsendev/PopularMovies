@@ -3,6 +3,8 @@ package com.example.jamie.popularmovies.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Movie;
+
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
@@ -14,7 +16,7 @@ import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 18;
+    private static final int VERSION_ID = 28;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -24,7 +26,6 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String CREATE_MOVIE_DATABASE = "CREATE TABLE "+ MovieEntry.TABLE_NAME+" ( "+
-
                 MovieEntry._ID + " INTEGER PRIMARY KEY," +
                 MovieEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
                 MovieEntry.POSTER_PATH + " TEXT NOT NULL, " +
@@ -42,9 +43,9 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.IS_VIDEO + " INTEGER NOT NULL, " +
                 // 1 if true 0 if false
                 MovieEntry.IS_FAVORITE + " INTEGER , " +
-
+                MovieEntry.IS_TOP_RATED + " INTEGER, " +
+                MovieEntry.IS_MOST_POPULAR + " INTEGER, " +
                 MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, "+
-
                 // Set up the review column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
                 ReviewEntry.TABLE_NAME + " (" + ReviewEntry.MOVIE_ID + "), " +

@@ -32,8 +32,8 @@ On main activity reference PopularMovieFragement
 
 Phase II
 
-Create MovieCursorAdapter, ReviewCursorAdapter, TrailerCursorAdapter
-Update detail layout to include reviews and trailers.
+Create ReviewCursorAdapter, TrailerCursorAdapter
+
 
 /*
         Remember that these views are reused as needed.
@@ -58,3 +58,4 @@ Update detail layout to include reviews and trailers.
     }
 
 
+Create different queries for favorite most_popular and top_rated

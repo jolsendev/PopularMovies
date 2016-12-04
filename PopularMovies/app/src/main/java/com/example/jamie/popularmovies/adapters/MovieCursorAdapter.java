@@ -34,11 +34,11 @@ public class MovieCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // our view is pretty simple here --- just a text view
         // we'll keep the UI functional with a simple (and slow!) binding.
+//                .placeholder(R.drawable.popcorntime)
 
         ImageView imageItem = (ImageView) view.findViewById(R.id.thumbnail);
         Picasso.with(context)
                 .load(Utility.getImagePath(cursor.getString(MovieFragment.COL_POSTER_PATH)))
-                .placeholder(R.drawable.popcorntime)
                 .into(imageItem);
 
     }

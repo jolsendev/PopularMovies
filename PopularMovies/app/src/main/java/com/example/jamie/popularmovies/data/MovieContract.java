@@ -46,8 +46,15 @@ public class MovieContract {
         //video foreign key
         public static final String MOVIE_VIDEO_KEY = "video_id";
 
-        //movie _id
+        //top_rated
+        public static final String TOP_RATED = "top_rated";
 
+        //most_popular
+        public static final String MOST_POPULAR = "popular";
+
+        //favorite
+
+        public static final String FAVORITE = "favorite";
 
         //table name;
         public static final String TABLE_NAME = PATH_MOVIE;
@@ -62,24 +69,25 @@ public class MovieContract {
         public static final String BACKDROP_PATH = "backdrop_path";
         public static final String POPULARITY = "popularity";
         public static final String VOTE_COUNT = "vote_count";
-        public static final String IS_VIDEO = "is_video";
-        public static final String IS_FAVORITE = "is_favorite";
+        public static final String IS_VIDEO = "video";
+        public static final String IS_FAVORITE = FAVORITE;
         public static final String VOTE_AVERAGE = "vote_average";
+        public static final String IS_MOST_POPULAR = MOST_POPULAR;
+        public static final String IS_TOP_RATED = TOP_RATED;
 
-//        /*
-//            Student: This is the buildWeatherLocation function you filled in.
-//         */
-//        public static Uri buildWeatherLocation(String locationSetting) {
-//            return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
-//        }
-//
-//        public static Uri buildWeatherLocationWithStartDate(
-//                String locationSetting, long startDate)
-//        {
-//            long normalizedDate = normalizeDate(startDate);
-//            return CONTENT_URI.buildUpon().appendPath(locationSetting)
-//                    .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
-//        }
+        public static Uri buildFavoriteUri(){
+            return CONTENT_URI.buildUpon().appendPath(IS_FAVORITE).build();
+        }
+
+        public static Uri buildPopularUri(){
+            return CONTENT_URI.buildUpon().appendPath(MOST_POPULAR).build();
+        }
+
+        public static Uri buildTopRatedUri(){
+            return CONTENT_URI.buildUpon().appendPath(TOP_RATED).build();
+        }
+
+
         public static Uri buildMovieUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }

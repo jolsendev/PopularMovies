@@ -54,10 +54,12 @@
     <string-array name="pref_sort_array">
         <item>popular</item>
         <item>top_rated</item>
+        <item>favorite</item>
     </string-array>
     <string-array name="pref_sort_option_array">
-        <item>Most Popular</item>
+        <item>Popular</item>
         <item>Top Rated</item>
+        <item>Favorite</item>
     </string-array>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>

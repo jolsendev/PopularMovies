@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
@@ -26,6 +27,9 @@ public class MovieProvider extends ContentProvider{
     public static final int MOVIE_WITH_REVIEWS = 400;
     public static final int REVIEWS = 500;
     public static final int TRAILERS = 600;
+    public static final int TOP_RATED = 700;
+    public static final int FAVORITE = 800;
+    public static final int POPULAR = 900;
     //static final int FAVORITE_MOVIES = 500;
 
     public MovieDBHelper movieDBHelper;
@@ -78,6 +82,15 @@ public class MovieProvider extends ContentProvider{
     private static final String sMovieWithReviewsSelection =
             ReviewEntry.TABLE_NAME+
                     "."+ ReviewEntry.MOVIE_ID + " = ?";
+    private static final String sFavoriteMovies =
+            MovieEntry.TABLE_NAME+
+                    "."+ MovieEntry.IS_FAVORITE+" = 1";
+    private static final String sTopRatedMovies =
+            MovieEntry.TABLE_NAME+
+                    "."+ MovieEntry.IS_TOP_RATED+" = 1";
+    private static final String sMostPopularMovies =
+            MovieEntry.TABLE_NAME+
+                    "."+ MovieEntry.IS_MOST_POPULAR+" = 1";
 
     private static final String sMovieWithTrailersSelection =
             TrailerEntry.TABLE_NAME+
@@ -94,13 +107,20 @@ public class MovieProvider extends ContentProvider{
         final String PATH_TO_MOVIE_WITH_REVIEWS = PATH_TO_MOVIE+"/"+MovieContract.PATH_REVIEW;
         final String PATH_TO_TRAILERS = TrailerEntry.TABLE_NAME;
         final String PATH_TO_REVIEWS = ReviewEntry.TABLE_NAME;
+        final String PATH_TO_FAVORITE = MovieEntry.TABLE_NAME+"/"+MovieEntry.FAVORITE;
+        final String PATH_TO_TOP_RATED = MovieEntry.TABLE_NAME+"/"+MovieEntry.TOP_RATED;
+        final String PATH_TO_MOST_POPULAR = MovieEntry.TABLE_NAME+"/"+MovieEntry.MOST_POPULAR;
+
 
         matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
-        matcher.addURI(authority,  PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
+        matcher.addURI(authority, PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
         matcher.addURI(authority, PATH_TO_TRAILERS, TRAILERS);
         matcher.addURI(authority, PATH_TO_REVIEWS, REVIEWS);
+        matcher.addURI(authority, PATH_TO_FAVORITE, FAVORITE);
+        matcher.addURI(authority, PATH_TO_MOST_POPULAR, POPULAR);
+        matcher.addURI(authority, PATH_TO_TOP_RATED, TOP_RATED);
 
 
         return matcher;
@@ -129,6 +149,12 @@ public class MovieProvider extends ContentProvider{
                 return TrailerEntry.CONTENT_TYPE;
             case REVIEWS:
                 return ReviewEntry.CONTENT_TYPE;
+            case FAVORITE:
+                return MovieEntry.CONTENT_TYPE;
+            case TOP_RATED:
+                return MovieEntry.CONTENT_TYPE;
+            case POPULAR:
+                return MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");
         }
@@ -141,6 +167,57 @@ public class MovieProvider extends ContentProvider{
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCurser = null;
         switch(sUriMatcher.match(uri)){
+            case MOVIE:{
+                retCurser = movieDBHelper.getReadableDatabase().query(
+                        MovieEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case TOP_RATED:{
+
+                retCurser = movieDBHelper.getReadableDatabase().query(
+                        MovieEntry.TABLE_NAME, //table name
+                        projection,            //columns
+                        sTopRatedMovies,       //where
+                        selectionArgs,         //you may include a ? in 'selection' these are the args
+                        null,                  //Group by
+                        null,                  //Having
+                        sortOrder
+                );
+                break;
+            }
+            case FAVORITE:{
+
+                retCurser = movieDBHelper.getReadableDatabase().query(
+                        MovieEntry.TABLE_NAME, //table name
+                        projection,            //columns
+                        sFavoriteMovies,       //where
+                        selectionArgs,         //you may include a ? in 'selection' these are the args
+                        null,                  //Group by
+                        null,                  //Having
+                        sortOrder
+                );
+                break;
+            }
+            case POPULAR:{
+
+                retCurser = movieDBHelper.getReadableDatabase().query(
+                        MovieEntry.TABLE_NAME, //table name
+                        projection,            //columns
+                        sMostPopularMovies,    //where
+                        selectionArgs,         //you may include a ? in 'selection' these are the args
+                        null,                  //Group by
+                        null,                  //Having
+                        sortOrder
+                );
+                break;
+            }
             case ALL_MOVIES:{
 
                 retCurser = movieDBHelper.getReadableDatabase().query(
@@ -156,7 +233,6 @@ public class MovieProvider extends ContentProvider{
             }
 
             case MOVIE_WITH_REVIEWS:{
-                System.out.println("WHY AM I HERE??");
                 retCurser = getMovieWithReviews(uri, projection, sortOrder);
                 break;
             }
@@ -208,6 +284,7 @@ public class MovieProvider extends ContentProvider{
         );
         return retCursor;
     }
+
 
     private Cursor getMovieWithReviews(Uri uri, String[] projection, String sortOrder) {
         String movie_id = MovieEntry.getMovieIdFromPath(uri);
@@ -378,4 +455,20 @@ public class MovieProvider extends ContentProvider{
         }
     }
 
+    public static String whereSortOrderIs(String sortBy) {
+        switch (sortBy){
+            case MovieEntry.TOP_RATED:{
+                return sTopRatedMovies;
+            }
+            case MovieEntry.MOST_POPULAR:{
+                return sMostPopularMovies;
+            }
+            case MovieEntry.FAVORITE:{
+                return sFavoriteMovies;
+            }
+            default:
+                return null;
+
+        }
+    }
 }

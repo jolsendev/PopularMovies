@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
 import com.example.jamie.popularmovies.MovieSettings;
@@ -50,7 +51,9 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
             MovieContract.MovieEntry.IS_VIDEO,
             MovieContract.MovieEntry.IS_FAVORITE,
             MovieContract.MovieEntry.VOTE_AVERAGE,
-            MovieContract.MovieEntry._ID
+            MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.IS_MOST_POPULAR,
+            MovieContract.MovieEntry.IS_TOP_RATED
     };
 
     public static final int COL_MOVIE_ID = 0;
@@ -68,6 +71,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_IS_FAVORITE = 12;
     public static final int COL_VOTE_AVERAGE = 13;
     public static final int COL_ID = 15;
+    public static final int COL_IS_MOST_POPULAR = 16;
+    public static final int COL_IS_TOP_RATED = 17;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -77,19 +82,46 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Cursor cur = getActivity().getContentResolver().query(
-                MovieContract.MovieEntry.CONTENT_URI,
-                MOVIE_COLUMNS,
-                null,
-                null,
-                null);
-
-        mAdapter = new MovieCursorAdapter(getActivity(), cur, 0);
+        updateMovieData();
+        createAdapterWithCursor();
 
         View v = inflater.inflate(R.layout.activity_main,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
         gridview.setAdapter(mAdapter);
         return v;
+    }
+
+    private void createAdapterWithCursor() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+        Uri uri = null;
+        switch(sortBy){
+
+            case MovieContract.MovieEntry.TOP_RATED:{
+                uri = MovieContract.MovieEntry.buildTopRatedUri();
+                break;
+            }
+            case MovieContract.MovieEntry.MOST_POPULAR:{
+                uri = MovieContract.MovieEntry.buildPopularUri();
+                break;
+            }
+            case MovieContract.MovieEntry.FAVORITE:{
+                uri = MovieContract.MovieEntry.buildFavoriteUri();
+                break;
+            }
+        }
+
+        if(uri != null){
+            Cursor cur = getActivity().getContentResolver().query(
+                    uri,
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null);
+
+            mAdapter = new MovieCursorAdapter(getActivity(), cur, 0);
+        }
+
     }
 
     @Override
@@ -125,7 +157,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-
+        //createAdapterWithCursor();
         if(sortValue != sortBy ) {
             updateMovieData();
         } else {
@@ -137,6 +169,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     private void updateMovieData() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+        Toast.makeText(getActivity(), "This is the sort value: "+sortBy, Toast.LENGTH_LONG).show();
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
 
 

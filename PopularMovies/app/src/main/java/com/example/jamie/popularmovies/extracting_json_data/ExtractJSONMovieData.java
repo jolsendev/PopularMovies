@@ -27,6 +27,7 @@ public class ExtractJSONMovieData {
     String jsonString;
     Context mContext;
     private ArrayList<ContentValues> mMovieContentValues;
+    private String jsonData;
 
     public ExtractJSONMovieData(String jsonString, Context mContext) {
         this.mContext = mContext;

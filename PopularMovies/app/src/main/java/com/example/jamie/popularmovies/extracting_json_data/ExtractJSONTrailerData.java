@@ -24,15 +24,18 @@ public class ExtractJSONTrailerData {
         this.jsonString = jsonString;
     }
 
-    public void getTrailerDataFromJsonAndPutInDatabase(){
+    public void putTrailersInDatabase(){
 
         final String MOVIE_ID = "id";
         final String TRAILER_RESULTS = "results";
-        final String TRAILER_KEY = "key";
         final String TRAILER_NAME = "name";
-        final String TRAILER_SITE = "site";
         final String TRAILER_SIZE = "size";
         final String TRAILER_TYPE = "type";
+
+//        "name": "Doctor Strange Official Trailer 2",
+//                "size": "HD",
+//                "source": "HSzx-zryEgM",
+//                "type": "Trailer"
 
         try {
 

@@ -18,12 +18,16 @@ import java.util.Vector;
  * Created by Jamie Olsen on 11/26/2016.
  */
 public class ExtractJSONReviewData {
+
     String jsonString;
     Context mContext;
+
+
     public ExtractJSONReviewData(String jsonString, Context mContext) {
         this.mContext = mContext;
         this.jsonString = jsonString;
     }
+
 
     public void getReviewDataFromJsonAndPutInDatabase() {
 
@@ -36,13 +40,13 @@ public class ExtractJSONReviewData {
         try {
 
             JSONObject jsonData = new JSONObject(jsonString);
+            int movieId = jsonData.getInt(MOVIE_ID);
             Vector<ContentValues> cVVector = new Vector(jsonData.length());
-            long movie_id = jsonData.getLong(MOVIE_ID);
             JSONArray itemsArray = jsonData.getJSONArray(REVIEW_RESULTS);
             for(int i = 0; i < itemsArray.length(); i++){
                 ContentValues reviewValues = new ContentValues();
                 JSONObject jObj = itemsArray.getJSONObject(i);
-                reviewValues.put(ReviewEntry.MOVIE_ID, movie_id);
+                reviewValues.put(ReviewEntry.MOVIE_ID, movieId);
                 reviewValues.put(ReviewEntry.REVIEW_AUTHOR, jObj.getString(REVIEW_AUTHOR));
                 reviewValues.put(ReviewEntry.REVIEW_CONTENT, jObj.getString(REVIEW_CONTENT));
                 reviewValues.put(ReviewEntry.REVIEW_URL, jObj.getString(REVIEW_URL));

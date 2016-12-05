@@ -21,6 +21,8 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
+import com.example.jamie.popularmovies.FetchReviewTask;
+import com.example.jamie.popularmovies.FetchTrailerTask;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -79,6 +81,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         inflater.inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -165,7 +168,6 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         }
     }
 
-
     private void updateMovieData() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
@@ -178,8 +180,11 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
 
         mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
+
         FetchMovieTask moviesTask = new FetchMovieTask(getContext());
         moviesTask.execute(mPopularUri.toString());
+
+
     }
 
     @Override
@@ -203,31 +208,5 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
-
-
-//    public class FetchPopularMoviesTask extends AsyncTask<String, Void, List<Movie>>{
-//
-//        @Override
-//        protected void onPostExecute(List<Movie> movies) {
-//            super.onPostExecute(movies);
-//            if(movies != null){
-//                mAdapter.clear();
-//                for(Movie movie : movies) {
-//                    mAdapter.add(movie);
-//                }
-//                mAdapter.notifyDataSetChanged();
-//                gridview.setAdapter(mAdapter);
-//            }
-//        }
-//
-//        @Override
-//        protected List<Movie> doInBackground(String... params) {
-//            FetchRawData mRawData = new FetchRawData(params[0]);
-//            ExtractJSONMovieData mData = new ExtractJSONMovieData(mRawData.fetch());
-//            return mData.getMovieObjects();
-//        }
-//
-//    }
-
 
 }

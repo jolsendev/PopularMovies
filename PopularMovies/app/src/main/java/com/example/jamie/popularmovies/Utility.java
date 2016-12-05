@@ -35,4 +35,16 @@ public final class Utility {
         }
         return false;
     }
+
+    public static Uri getUrlByIdForType(String movieID, String type) {
+        //http://api.themoviedb.org/3/movie/284052/reviews?&api_key=02a6d79992ed3e3da1f638dec4c74770
+        String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+movieID+"/"+type;
+
+        String MOVIE_API_KEY = "api_key";
+        String API_KEY = Utility.MOVIE_API_KEY;
+
+        Uri mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
+        return mPopularUri;
+    }
 }

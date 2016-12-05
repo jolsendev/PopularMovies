@@ -67,7 +67,6 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );"
-
                 ;
 
 

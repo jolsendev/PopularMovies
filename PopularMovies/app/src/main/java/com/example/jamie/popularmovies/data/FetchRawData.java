@@ -18,6 +18,8 @@ import okhttp3.Response;
  */
 public class FetchRawData {
     String urlString;
+    String jsonData;
+
     public FetchRawData(String url) {
         this.urlString = url;
     }
@@ -49,8 +51,8 @@ public class FetchRawData {
             while((line = reader.readLine()) != null) {
                 buffer.append(line + "\n");
             }
-
-            return buffer.toString();
+            setJsonData(buffer.toString());
+            return getJsonData();
 
         } catch(IOException e) {
             return null;
@@ -69,5 +71,13 @@ public class FetchRawData {
                 }
             }
         }
+    }
+
+    public String getJsonData() {
+        return jsonData;
+    }
+
+    public void setJsonData(String jsonData) {
+        this.jsonData = jsonData;
     }
 }

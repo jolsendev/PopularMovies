@@ -13,17 +13,32 @@ import java.util.ArrayList;
 /**
  * Created by Jamie Olsen on 11/26/2016.
  */
-public class FetchMovieTask extends AsyncTask<String, Void, Void> {
+public class FetchMovieTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
         public FetchMovieTask(Context mContext){
             this.mContext = mContext;
         }
-        @Override
-        protected Void doInBackground(String... params) {
+
+    @Override
+    protected void onPostExecute(String movieJson) {
+        super.onPostExecute(movieJson);
+
+
+        //Is this super weird....
+        FetchReviewTask reviewTask = new FetchReviewTask(mContext);
+        reviewTask.execute(movieJson);
+
+        FetchTrailerTask trailerTask = new FetchTrailerTask(mContext);
+        trailerTask.execute(movieJson);
+
+    }
+
+    @Override
+        protected String doInBackground(String... params) {
             FetchRawData mRawData = new FetchRawData(params[0]);
             ExtractJSONMovieData mData = new ExtractJSONMovieData(mRawData.fetch(), mContext);
             mData.extractMovieAndPlaceInDatabase();
-            return null;
+            return mRawData.getJsonData();
         }
 }

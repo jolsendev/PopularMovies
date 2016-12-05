@@ -3,11 +3,10 @@ package com.example.jamie.popularmovies.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Movie;
 
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
-import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
+import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 
 /**
  * Created by jamie on 11/16/16.
@@ -16,7 +15,7 @@ import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 28;
+    private static final int VERSION_ID = 31;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -53,20 +52,25 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
                 TrailerEntry.TABLE_NAME + " (" + TrailerEntry.MOVIE_ID + "))" +";";
 
+
+//        "name": "Doctor Strange Official Trailer 2",
+//                "size": "HD",
+//                "source": "HSzx-zryEgM",
+//                "type": "Trailer"
+
         final String CREATE_TRAILER_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
-                TrailerEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
-                TrailerEntry.TRAILER_KEY +" TEXT NOT NULL, "+
+                TrailerEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 TrailerEntry.TRAILER_NAME + " TEXT NOT NULL, " +
-                TrailerEntry.TRAILER_SITE + " TEXT NOT NULL, " +
-                TrailerEntry.TRAILER_SIZE + " INTEGER NOT NULL, "+
+                TrailerEntry.TRAILER_SIZE + " TEXT NOT NULL, "+
+                TrailerEntry.TRAILER_SOURCE + " TEXT UNIQUE NOT NULL, " +
                 TrailerEntry.TRAILER_TYPE + " TEXT NOT NULL );";
 
 
         final String CREATE_REVIEW_DATABASE = "CREATE TABLE " +ReviewEntry.TABLE_NAME+" ("+
-                ReviewEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
+                ReviewEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
-                ReviewEntry.REVIEW_CONTENT + " TEXT NOT NULL );"
+                ReviewEntry.REVIEW_CONTENT + " TEXT UNIQUE NOT NULL );"
                 ;
 
 

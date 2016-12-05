@@ -132,6 +132,7 @@ public class MovieContract {
         public static final String TRAILER_SITE = "trailer_site";
         public static final String TRAILER_SIZE = "trailer_size";
         public static final String TRAILER_TYPE = "trailer_type";
+        public static final String TRAILER_SOURCE = "trailer_source";
 
 //        public static Uri buildVideoUri(long id){
 //            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);

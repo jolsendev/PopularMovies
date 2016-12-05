@@ -9,8 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -27,10 +25,11 @@ public class ExtractJSONTrailerData {
     public void putTrailersInDatabase(){
 
         final String MOVIE_ID = "id";
-        final String TRAILER_RESULTS = "results";
+        final String TRAILER_YOUTUBE = "youtube";
         final String TRAILER_NAME = "name";
         final String TRAILER_SIZE = "size";
         final String TRAILER_TYPE = "type";
+        final String TRAILER_SOURCE = "source";
 
 //        "name": "Doctor Strange Official Trailer 2",
 //                "size": "HD",
@@ -42,15 +41,14 @@ public class ExtractJSONTrailerData {
             JSONObject jsonData = new JSONObject(jsonString);
             Vector<ContentValues> cVVector = new Vector(jsonData.length());
             long movie_id = jsonData.getLong(MOVIE_ID);
-            JSONArray itemsArray = jsonData.getJSONArray(TRAILER_RESULTS);
+            JSONArray itemsArray = jsonData.getJSONArray(TRAILER_YOUTUBE);
             for(int i = 0; i < itemsArray.length(); i++){
                 ContentValues trailerValues = new ContentValues();
                 JSONObject jObj = itemsArray.getJSONObject(i);
                 trailerValues.put(TrailerEntry.MOVIE_ID, movie_id);
-                trailerValues.put(TrailerEntry.TRAILER_KEY, jObj.getString(TRAILER_KEY));
                 trailerValues.put(TrailerEntry.TRAILER_NAME, jObj.getString(TRAILER_NAME));
-                trailerValues.put(TrailerEntry.TRAILER_SITE, jObj.getString(TRAILER_SITE));
-                trailerValues.put(TrailerEntry.TRAILER_SIZE, jObj.getLong(TRAILER_SIZE));
+                trailerValues.put(TrailerEntry.TRAILER_SIZE, jObj.getString(TRAILER_SIZE));
+                trailerValues.put(TrailerEntry.TRAILER_SOURCE, jObj.getString(TRAILER_SOURCE));
                 trailerValues.put(TrailerEntry.TRAILER_TYPE, jObj.getString(TRAILER_TYPE));
                 cVVector.add(trailerValues);
             }

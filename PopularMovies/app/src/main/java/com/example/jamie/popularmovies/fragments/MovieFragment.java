@@ -105,8 +105,9 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int movieId = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID));
+                Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 Intent intent = new Intent(getActivity(), MovieDetailView.class).
-                        setData(MovieContract.MovieEntry.buildMovieUri(movieId));
+                        setData(uri);
                 startActivity(intent);
             }
         });

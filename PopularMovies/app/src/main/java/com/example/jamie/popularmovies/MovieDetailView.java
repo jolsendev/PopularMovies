@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -19,8 +21,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
 import com.example.jamie.popularmovies.adapters.ReviewCursorAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.squareup.picasso.Picasso;
@@ -68,8 +68,6 @@ public class MovieDetailView extends AppCompatActivity {
     public static final int COL_IS_MOST_POPULAR = 16;
     public static final int COL_IS_TOP_RATED = 17;
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
@@ -80,7 +78,7 @@ public class MovieDetailView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_movie_detail_view);
 
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
 
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().add(R.id.movie_container, new MovieDetailFragment()).commit();
@@ -89,13 +87,15 @@ public class MovieDetailView extends AppCompatActivity {
 
 
 
-    public static class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+    public static class MovieDetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
+
         private static ReviewCursorAdapter mAdapter;
         private LinearLayout titleLayout;
         private TextView mMovieTitle;
         private TextView mMovieRating;
         private TextView mReleaseDate;
         private TextView mOverView;
+        private Parcelable mUri;
 
         public MovieDetailFragment(){
 
@@ -104,7 +104,10 @@ public class MovieDetailView extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+//            Bundle arguments = getArguments();
+//            if (arguments != null) {
+//                mUri = arguments.getParcelable();
+//            }
             View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
             imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
             titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
@@ -114,8 +117,13 @@ public class MovieDetailView extends AppCompatActivity {
             mReleaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
             mOverView = (TextView) rootView.findViewById(R.id.movie_overview);
 
-
            return rootView;
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+            super.onActivityCreated(savedInstanceState);
         }
 
         @Override
@@ -137,23 +145,27 @@ public class MovieDetailView extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            mMovieTitle.setText(data.getColumnName(MovieDetailView.COL_TITLE));
+            int count = data.getCount();
+            if (data != null && data.moveToFirst()) {
+                String title = data.getString(MovieDetailView.COL_TITLE);
+                mMovieTitle.setText(title);
 
 
-            String rating = Double.parseDouble(String.format("%.1f",data.getColumnName(MovieDetailView.COL_VOTE_AVERAGE)))+"/10";
-            mMovieRating.setText(rating);
+                String rating = Double.parseDouble(String.format("%.1f", data.getString(MovieDetailView.COL_VOTE_AVERAGE))) + "/10";
+                mMovieRating.setText(rating);
 
 
-            String[] splitDate = data.getColumnName(MovieDetailView.COL_RELEASE_DATE).split("-");
-            mReleaseDate.setText(splitDate[0]);
+                String[] splitDate = data.getString(MovieDetailView.COL_RELEASE_DATE).split("-");
+                mReleaseDate.setText(splitDate[0]);
 
 
-            mOverView.setText(data.getColumnName(MovieDetailView.COL_OVERVIEW));
+                mOverView.setText(data.getString(MovieDetailView.COL_OVERVIEW));
 
-            Picasso.with(getActivity())
-                    .load(data.getColumnName(MovieDetailView.COL_BACKDROP_PATH))
-                    .placeholder(R.drawable.popcorntime)
-                    .into(imageItem);
+                Picasso.with(getActivity())
+                        .load(data.getString(MovieDetailView.COL_BACKDROP_PATH))
+                        .placeholder(R.drawable.popcorntime)
+                        .into(imageItem);
+            }
 
 
         }

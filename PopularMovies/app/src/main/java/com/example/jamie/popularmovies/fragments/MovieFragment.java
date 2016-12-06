@@ -96,7 +96,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         updateMovieData();
-        //createAdapterWithCursor();
+        createAdapterWithCursor();
 
         View v = inflater.inflate(R.layout.activity_main,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
@@ -107,6 +107,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
                 int movieId = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID));
                 Intent intent = new Intent(getActivity(), MovieDetailView.class).
                         setData(MovieContract.MovieEntry.buildMovieUri(movieId));
+                startActivity(intent);
             }
         });
 
@@ -180,7 +181,6 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-        //createAdapterWithCursor();
         if(sortValue != sortBy ) {
             updateMovieData();
         } else {

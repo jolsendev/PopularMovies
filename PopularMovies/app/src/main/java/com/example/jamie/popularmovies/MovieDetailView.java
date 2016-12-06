@@ -91,6 +91,12 @@ public class MovieDetailView extends AppCompatActivity {
 
     public static class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
         private static ReviewCursorAdapter mAdapter;
+        private LinearLayout titleLayout;
+        private TextView mMovieTitle;
+        private TextView mMovieRating;
+        private TextView mReleaseDate;
+        private TextView mOverView;
+
         public MovieDetailFragment(){
 
         }
@@ -100,60 +106,18 @@ public class MovieDetailView extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
-            //createAdapterWithCursor();
-//
-//            imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
-//            LinearLayout titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
-//
-//            TextView mMovieTitle = (TextView) titleLayout.findViewById(R.id.movie_title);
-//            mMovieTitle.setText(mMovie.getTitle());
-//
-//            TextView mMovieRating = (TextView) rootView.findViewById(R.id.movie_rating);
-//            String rating = Double.parseDouble(String.format("%.1f",mMovie.getVoteAverage()))+"/10";
-//            mMovieRating.setText(rating);
-//
-//            TextView mReleaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
-//            String[] splitDate = mMovie.getReleaseDate().split("-");
-//            mReleaseDate.setText(splitDate[0]);
-//
-//            TextView mOverView = (TextView) rootView.findViewById(R.id.movie_overview);
-//            mOverView.setText(mMovie.getOverview());
-//
-//            Picasso.with(getActivity())
-//                    .load(mMovie.getPosterPath())
-//                    .placeholder(R.drawable.popcorntime)
-//                    .into(imageItem);
+            imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
+            titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
+
+            mMovieTitle = (TextView) titleLayout.findViewById(R.id.movie_title);
+            mMovieRating = (TextView) rootView.findViewById(R.id.movie_rating);
+            mReleaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
+            mOverView = (TextView) rootView.findViewById(R.id.movie_overview);
+
+
            return rootView;
         }
-        private void createAdapterWithCursor() {
-            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-            Uri uri = null;
-            switch(sortBy){
 
-                case MovieContract.MovieEntry.TOP_RATED:{
-                    uri = MovieContract.MovieEntry.buildTopRatedUri();
-                    break;
-                }
-                case MovieContract.MovieEntry.MOST_POPULAR:{
-                    uri = MovieContract.MovieEntry.buildPopularUri();
-                    break;
-                }
-                case MovieContract.MovieEntry.FAVORITE:{
-                    uri = MovieContract.MovieEntry.buildFavoriteUri();
-                    break;
-                }
-            }
-
-            Cursor cur = getActivity().getContentResolver().query(
-                    uri,
-                    MOVIE_COLUMNS,
-                    null,
-                    null,
-                    null);
-
-            mAdapter = new ReviewCursorAdapter(getActivity(), cur, 1);
-        }
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             Intent intent = getActivity().getIntent();
@@ -173,6 +137,24 @@ public class MovieDetailView extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            mMovieTitle.setText(data.getColumnName(MovieDetailView.COL_TITLE));
+
+
+            String rating = Double.parseDouble(String.format("%.1f",data.getColumnName(MovieDetailView.COL_VOTE_AVERAGE)))+"/10";
+            mMovieRating.setText(rating);
+
+
+            String[] splitDate = data.getColumnName(MovieDetailView.COL_RELEASE_DATE).split("-");
+            mReleaseDate.setText(splitDate[0]);
+
+
+            mOverView.setText(data.getColumnName(MovieDetailView.COL_OVERVIEW));
+
+            Picasso.with(getActivity())
+                    .load(data.getColumnName(MovieDetailView.COL_BACKDROP_PATH))
+                    .placeholder(R.drawable.popcorntime)
+                    .into(imageItem);
+
 
         }
 

@@ -8,21 +8,24 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
 import com.example.jamie.popularmovies.FetchReviewTask;
 import com.example.jamie.popularmovies.FetchTrailerTask;
+import com.example.jamie.popularmovies.MovieDetailView;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -30,12 +33,14 @@ import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 
 
-public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     public GridView gridview;
     public MovieCursorAdapter mAdapter;
     private Uri mPopularUri;
     private String sortValue;
     public static final int LOADER_ID = 0;
+
+
 
 
     private static final String[] MOVIE_COLUMNS = {
@@ -82,14 +87,29 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         updateMovieData();
-        createAdapterWithCursor();
+        //createAdapterWithCursor();
 
         View v = inflater.inflate(R.layout.activity_main,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                int movieId = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID));
+                Intent intent = new Intent(getActivity(), MovieDetailView.class).
+                        setData(MovieContract.MovieEntry.buildMovieUri(movieId));
+            }
+        });
+
         gridview.setAdapter(mAdapter);
         return v;
     }
@@ -201,6 +221,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         mAdapter.swapCursor(data);
     }
 

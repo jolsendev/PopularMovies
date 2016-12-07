@@ -127,6 +127,7 @@ public class MovieDetailView extends AppCompatActivity {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             Intent intent = getActivity().getIntent();
+            String movie_id = MovieContract.MovieEntry.getMovieIdFromPath(intent.getData());
             if (intent == null) {
                 return null;
             }
@@ -135,8 +136,8 @@ public class MovieDetailView extends AppCompatActivity {
                     getActivity(),
                     intent.getData(),
                     MOVIE_COLUMNS,
-                    null,
-                    null,
+                    "movie_id = ?", //this was what I was missing
+                    new String[]{movie_id}, //this was what I was missing
                     null
             );
         }
@@ -145,19 +146,7 @@ public class MovieDetailView extends AppCompatActivity {
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             int count = cursor.getCount();
             if (cursor != null && cursor.moveToFirst()) {
-                if(cursor.moveToNext()){
-                    System.out.println("WHAT THE HECK?");
-                }
 
-
-                String x = cursor.getString(0);
-                int w = cursor.getInt(COL_MOVIE_ID);
-                String a = cursor.getString(COL_POSTER_PATH);
-                String b = cursor.getString(COL_OVERVIEW);
-                String c = cursor.getString(COL_TITLE);
-                String d = cursor.getString(COL_BACKDROP_PATH);
-                String e = cursor.getString(COL_ORIGINAL_LANGUAGE);
-                String f = cursor.getString(COL_ORIGINAL_TITLE);
                 String title = cursor.getString(MovieDetailView.COL_TITLE);
                 mMovieTitle.setText(title);
 

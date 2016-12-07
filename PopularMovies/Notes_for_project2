@@ -75,3 +75,40 @@ App conforms to common standards found in the Android Nanodegree General Project
 Suggestions to Make Your Project Stand Out!
 Implement a content provider to store favorite movie details with a database such as SQLite. Store the title, poster, synopsis, user rating, and release date and display them even when offline.
 Implement sharing functionality to allow the user to share the first trailer’s YouTube URL from the movie details screen.
+
+//this code was found here: http://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
+public static void watchYoutubeVideo(String id){
+    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + id));
+    try {
+        startActivity(appIntent);
+    } catch (ActivityNotFoundException ex) {
+        startActivity(webIntent);
+    }
+}
+
+        public static final String MOVIE_ID = "movie_id";
+        public static final String REVIEW_AUTHOR = "review_author";
+        public static final String REVIEW_CONTENT = "review_content";
+        public static final String REVIEW_URL = "review_url";
+
+
+SELECT
+  movie.movie_id,
+  movie.title,
+  movie.backdrop_path,
+  movie.release_date,
+  movie.vote_average,
+  movie.favorite,
+  trailers.trailer_key,
+  trailers.trailer_name,
+  reviews.review_author,
+  reviews.review_content,
+  reviews.review_url
+  FROM
+  movie
+  LEFT JOIN movie ON movie.movie_id = trailers.movie_id
+  LEFT JOIN review ON movie.movie_is = review.movie_id
+
+

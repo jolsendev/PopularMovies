@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Movie;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -34,6 +36,7 @@ public class ExtractJSONMovieData {
         this.jsonString = jsonString;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void extractMovieAndPlaceInDatabase() {
         final String MOVIE_RESULTS = "results";
         final String MOVIE_POSTER_PATH = "poster_path";
@@ -70,9 +73,8 @@ public class ExtractJSONMovieData {
                 int movie_id = jsonMovieData.getInt(MOVIE_ID);
 
                 //if movie exists and is both popular and top_rated, update movie
-                if(Utility.isMovieIdInDB(movie_id, mContext)){
-
-                    Uri uri =  MovieEntry.buildMovieUri(movie_id);
+                Uri uri = MovieEntry.buildMovieUri(movie_id);
+                if(MovieEntry.isMovieIdInDB(uri, mContext)){
 
                     if(sortBy.compareTo("popular")==0){
                         //update popular

@@ -20,21 +20,21 @@ public final class Utility {
         return IMAGE_BASE_PATH+imageID;
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static boolean isMovieIdInDB(int movie_id, Context mContext) {
-        Uri uri = MovieContract.MovieEntry.buildMovieUri(movie_id);
-        Cursor cursor = mContext.getContentResolver().query(
-                uri,
-                new String[] {MovieContract.MovieEntry.MOVIE_ID},
-                MovieContract.MovieEntry.MOVIE_ID + " = ? ",
-                new String[] {Integer.toString(movie_id)},
-                null,
-                null);
-        if(cursor.getCount() > 0){
-            return true;
-        }
-        return false;
-    }
+//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+//    public static boolean isMovieIdInDB(int movie_id, Context mContext) {
+//        Uri uri = MovieContract.MovieEntry.buildMovieUri(movie_id);
+//        Cursor cursor = mContext.getContentResolver().query(
+//                uri,
+//                new String[] {MovieContract.MovieEntry.MOVIE_ID},
+//                MovieContract.MovieEntry.MOVIE_ID + " = ? ",
+//                new String[] {Integer.toString(movie_id)},
+//                null,
+//                null);
+//        if(cursor.getCount() > 0){
+//            return true;
+//        }
+//        return false;
+//    }
 
     public static Uri getUrlByIdForType(String movieID, String type) {
         //http://api.themoviedb.org/3/movie/284052/reviews?&api_key=02a6d79992ed3e3da1f638dec4c74770
@@ -47,4 +47,5 @@ public final class Utility {
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
         return mPopularUri;
     }
+
 }

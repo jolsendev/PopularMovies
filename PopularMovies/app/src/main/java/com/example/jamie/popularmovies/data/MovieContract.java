@@ -2,8 +2,12 @@ package com.example.jamie.popularmovies.data;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.BaseColumns;
+import android.support.annotation.RequiresApi;
 
 /**
  * Created by jamie on 11/16/16.
@@ -106,6 +110,20 @@ public class MovieContract {
             return retUri;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        public static boolean isMovieIdInDB(Uri uri, Context mContext) {
+            Cursor cursor = mContext.getContentResolver().query(
+                    uri,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+            if(cursor.getCount()!=0)
+                return true;
+            else
+                return false;
+        }
 
         public static String getMovieIdFromPath(Uri uri) {
             return uri.getPathSegments().get(1);

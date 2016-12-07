@@ -4,11 +4,13 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.example.jamie.popularmovies.MovieDetailView;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
@@ -79,6 +81,9 @@ public class MovieProvider extends ContentProvider{
                         " = " +  ReviewEntry.TABLE_NAME +
                         "." + ReviewEntry.MOVIE_ID);
     }
+    private static final String sMovieWithId =
+            MovieEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+" = ?";
+
     private static final String sMovieWithReviewsSelection =
             ReviewEntry.TABLE_NAME+
                     "."+ ReviewEntry.MOVIE_ID + " = ?";
@@ -168,15 +173,18 @@ public class MovieProvider extends ContentProvider{
         Cursor retCurser = null;
         switch(sUriMatcher.match(uri)){
             case MOVIE:{
+                String movie_id = MovieEntry.getMovieIdFromPath(uri);
                 retCurser = movieDBHelper.getReadableDatabase().query(
                         MovieEntry.TABLE_NAME,
                         projection,
-                        selection,
-                        selectionArgs,
+                        sMovieWithId,
+                        new String[]{movie_id},
                         null,
                         null,
                         sortOrder
                 );
+                DatabaseUtils.dumpCursorToString(retCurser);
+
                 break;
             }
             case TOP_RATED:{

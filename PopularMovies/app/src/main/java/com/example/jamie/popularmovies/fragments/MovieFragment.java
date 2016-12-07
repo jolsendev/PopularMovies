@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,8 +22,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
-import com.example.jamie.popularmovies.FetchReviewTask;
-import com.example.jamie.popularmovies.FetchTrailerTask;
 import com.example.jamie.popularmovies.MovieDetailView;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
@@ -44,6 +41,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
 
     private static final String[] MOVIE_COLUMNS = {
+            MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.MOVIE_ID,
             MovieContract.MovieEntry.POSTER_PATH,
             MovieContract.MovieEntry.IS_ADULT,
@@ -58,28 +56,27 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
             MovieContract.MovieEntry.IS_VIDEO,
             MovieContract.MovieEntry.IS_FAVORITE,
             MovieContract.MovieEntry.VOTE_AVERAGE,
-            MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.IS_MOST_POPULAR,
             MovieContract.MovieEntry.IS_TOP_RATED
     };
 
-    public static final int COL_MOVIE_ID = 0;
-    public static final int COL_POSTER_PATH = 1;
-    public static final int COL_IS_ADULT = 2;
-    public static final int COL_OVERVIEW = 3;
-    public static final int COL_RELEASE_DATE = 4;
-    public static final int COL_ORIGINAL_TITLE = 5;
-    public static final int COL_ORIGINAL_LANGUAGE = 6;
-    public static final int COL_TITLE = 7;
-    public static final int COL_BACKDROP_PATH = 8;
-    public static final int COL_POPULARITY = 9;
-    public static final int COL_VOTE_COUNT = 10;
-    public static final int COL_IS_VIDEO = 11;
-    public static final int COL_IS_FAVORITE = 12;
-    public static final int COL_VOTE_AVERAGE = 13;
-    public static final int COL_ID = 15;
-    public static final int COL_IS_MOST_POPULAR = 16;
-    public static final int COL_IS_TOP_RATED = 17;
+    public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 1;
+    public static final int COL_POSTER_PATH = 2;
+    public static final int COL_IS_ADULT = 3;
+    public static final int COL_OVERVIEW = 4;
+    public static final int COL_RELEASE_DATE = 5;
+    public static final int COL_ORIGINAL_TITLE = 6;
+    public static final int COL_ORIGINAL_LANGUAGE = 7;
+    public static final int COL_TITLE = 8;
+    public static final int COL_BACKDROP_PATH = 9;
+    public static final int COL_POPULARITY = 10;
+    public static final int COL_VOTE_COUNT = 11;
+    public static final int COL_IS_VIDEO = 12;
+    public static final int COL_IS_FAVORITE = 13;
+    public static final int COL_VOTE_AVERAGE = 14;
+    public static final int COL_IS_MOST_POPULAR = 15;
+    public static final int COL_IS_TOP_RATED = 16;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -103,8 +100,9 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                int movieId = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID));
+                int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 Intent intent = new Intent(getActivity(), MovieDetailView.class).
                         setData(uri);
@@ -222,7 +220,9 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        if(data != null){
+            //String dataString = data.getString(MovieFragment.COL_TITLE);
+        }
         mAdapter.swapCursor(data);
     }
 

@@ -1,16 +1,13 @@
 package com.example.jamie.popularmovies;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.example.jamie.popularmovies.adapters.ReviewCursorAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.squareup.picasso.Picasso;
@@ -31,6 +29,7 @@ public class MovieDetailView extends AppCompatActivity {
     private static final int LOADER_ID = 1;
 
     private static final String[] MOVIE_COLUMNS = {
+            MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.MOVIE_ID,
             MovieContract.MovieEntry.POSTER_PATH,
             MovieContract.MovieEntry.IS_ADULT,
@@ -45,28 +44,27 @@ public class MovieDetailView extends AppCompatActivity {
             MovieContract.MovieEntry.IS_VIDEO,
             MovieContract.MovieEntry.IS_FAVORITE,
             MovieContract.MovieEntry.VOTE_AVERAGE,
-            MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.IS_MOST_POPULAR,
             MovieContract.MovieEntry.IS_TOP_RATED
     };
 
-    public static final int COL_MOVIE_ID = 0;
-    public static final int COL_POSTER_PATH = 1;
-    public static final int COL_IS_ADULT = 2;
-    public static final int COL_OVERVIEW = 3;
-    public static final int COL_RELEASE_DATE = 4;
-    public static final int COL_ORIGINAL_TITLE = 5;
-    public static final int COL_ORIGINAL_LANGUAGE = 6;
-    public static final int COL_TITLE = 7;
-    public static final int COL_BACKDROP_PATH = 8;
-    public static final int COL_POPULARITY = 9;
-    public static final int COL_VOTE_COUNT = 10;
-    public static final int COL_IS_VIDEO = 11;
-    public static final int COL_IS_FAVORITE = 12;
-    public static final int COL_VOTE_AVERAGE = 13;
-    public static final int COL_ID = 15;
-    public static final int COL_IS_MOST_POPULAR = 16;
-    public static final int COL_IS_TOP_RATED = 17;
+    public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 1;
+    public static final int COL_POSTER_PATH = 2;
+    public static final int COL_IS_ADULT = 3;
+    public static final int COL_OVERVIEW = 4;
+    public static final int COL_RELEASE_DATE = 5;
+    public static final int COL_ORIGINAL_TITLE = 6;
+    public static final int COL_ORIGINAL_LANGUAGE = 7;
+    public static final int COL_TITLE = 8;
+    public static final int COL_BACKDROP_PATH = 9;
+    public static final int COL_POPULARITY = 10;
+    public static final int COL_VOTE_COUNT = 11;
+    public static final int COL_IS_VIDEO = 12;
+    public static final int COL_IS_FAVORITE = 13;
+    public static final int COL_VOTE_AVERAGE = 14;
+    public static final int COL_IS_MOST_POPULAR = 15;
+    public static final int COL_IS_TOP_RATED = 16;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,7 +130,7 @@ public class MovieDetailView extends AppCompatActivity {
             if (intent == null) {
                 return null;
             }
-
+            Uri d = intent.getData();
             return new CursorLoader(
                     getActivity(),
                     intent.getData(),
@@ -144,25 +142,39 @@ public class MovieDetailView extends AppCompatActivity {
         }
 
         @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            int count = data.getCount();
-            if (data != null && data.moveToFirst()) {
-                String title = data.getString(MovieDetailView.COL_TITLE);
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            int count = cursor.getCount();
+            if (cursor != null && cursor.moveToFirst()) {
+                if(cursor.moveToNext()){
+                    System.out.println("WHAT THE HECK?");
+                }
+
+
+                String x = cursor.getString(0);
+                int w = cursor.getInt(COL_MOVIE_ID);
+                String a = cursor.getString(COL_POSTER_PATH);
+                String b = cursor.getString(COL_OVERVIEW);
+                String c = cursor.getString(COL_TITLE);
+                String d = cursor.getString(COL_BACKDROP_PATH);
+                String e = cursor.getString(COL_ORIGINAL_LANGUAGE);
+                String f = cursor.getString(COL_ORIGINAL_TITLE);
+                String title = cursor.getString(MovieDetailView.COL_TITLE);
                 mMovieTitle.setText(title);
 
 
-                String rating = Double.parseDouble(String.format("%.1f", data.getString(MovieDetailView.COL_VOTE_AVERAGE))) + "/10";
+                String rating = Double.parseDouble(String.format("%.1f", cursor.getDouble(MovieDetailView.COL_VOTE_AVERAGE))) + "/10";
                 mMovieRating.setText(rating);
 
 
-                String[] splitDate = data.getString(MovieDetailView.COL_RELEASE_DATE).split("-");
+                String[] splitDate = cursor.getString(MovieDetailView.COL_RELEASE_DATE).split("-");
                 mReleaseDate.setText(splitDate[0]);
 
 
-                mOverView.setText(data.getString(MovieDetailView.COL_OVERVIEW));
-
+                mOverView.setText(cursor.getString(MovieDetailView.COL_OVERVIEW));
+                String imagePath = cursor.getString(MovieDetailView.COL_BACKDROP_PATH);
+                String processedPath = Utility.getImagePath(imagePath);
                 Picasso.with(getActivity())
-                        .load(data.getString(MovieDetailView.COL_BACKDROP_PATH))
+                        .load(processedPath)
                         .placeholder(R.drawable.popcorntime)
                         .into(imageItem);
             }
@@ -172,6 +184,7 @@ public class MovieDetailView extends AppCompatActivity {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
+
 
         }
     }

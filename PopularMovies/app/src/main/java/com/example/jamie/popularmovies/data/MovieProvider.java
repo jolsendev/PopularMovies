@@ -32,6 +32,7 @@ public class MovieProvider extends ContentProvider{
     public static final int TOP_RATED = 700;
     public static final int FAVORITE = 800;
     public static final int POPULAR = 900;
+    public static final int MOVIE_DETAILS = 150;
     //static final int FAVORITE_MOVIES = 500;
 
     public MovieDBHelper movieDBHelper;
@@ -58,12 +59,21 @@ public class MovieProvider extends ContentProvider{
     }
 
 
-//
+//movie.movie_id = reviews.movie_id and  trailers.movie_id = movie.movie_id  and  movie.movie_id = ?
 
+    private static final SQLiteQueryBuilder sMovieDetailsQueryBuilder;
 
+    static{
+
+        sMovieDetailsQueryBuilder = new SQLiteQueryBuilder();
+        sMovieDetailsQueryBuilder.setTables(
+                MovieEntry.TABLE_NAME +", "+ReviewEntry.TABLE_NAME+", "+TrailerEntry.TABLE_NAME
+
+        );
+    }
 
     //    SELECT movie.original_title, reviews.review_content
-    //    FROM movie
+    //    FROM mo
     //    INNER JOIN reviews
     //    ON movie.movie_id = reviews.movie_id;
     private static final SQLiteQueryBuilder sMovieReviewQueryBuilder;
@@ -83,6 +93,16 @@ public class MovieProvider extends ContentProvider{
     }
     private static final String sMovieWithId =
             MovieEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+" = ?";
+    //movie.movie_id = reviews.movie_id and  trailers.movie_id = movie.movie_id  and  movie.movie_id = ?
+
+    private static final String sMovieDetailsTables =
+            MovieEntry.TABLE_NAME+"."+MovieEntry.MOVIE_ID+
+                    " = "+ReviewEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+
+                    " and "+
+            TrailerEntry.TABLE_NAME+"."+TrailerEntry.MOVIE_ID+
+            " = "+ReviewEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+
+                    " and "+
+            MovieEntry.TABLE_NAME+"."+MovieEntry.MOVIE_ID+" = ?";
 
     private static final String sMovieWithReviewsSelection =
             ReviewEntry.TABLE_NAME+
@@ -115,6 +135,7 @@ public class MovieProvider extends ContentProvider{
         final String PATH_TO_FAVORITE = MovieEntry.TABLE_NAME+"/"+MovieEntry.FAVORITE;
         final String PATH_TO_TOP_RATED = MovieEntry.TABLE_NAME+"/"+MovieEntry.TOP_RATED;
         final String PATH_TO_MOST_POPULAR = MovieEntry.TABLE_NAME+"/"+MovieEntry.MOST_POPULAR;
+        final String PATH_TO_MOVIE_DETAILS = PATH_TO_MOVIE+"/"+MovieEntry.MOVIE_DETAIL;
 
 
         matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
@@ -126,6 +147,7 @@ public class MovieProvider extends ContentProvider{
         matcher.addURI(authority, PATH_TO_FAVORITE, FAVORITE);
         matcher.addURI(authority, PATH_TO_MOST_POPULAR, POPULAR);
         matcher.addURI(authority, PATH_TO_TOP_RATED, TOP_RATED);
+        matcher.addURI(authority, PATH_TO_MOVIE_DETAILS, MOVIE_DETAILS);
 
 
         return matcher;
@@ -160,6 +182,8 @@ public class MovieProvider extends ContentProvider{
                 return MovieEntry.CONTENT_TYPE;
             case POPULAR:
                 return MovieEntry.CONTENT_TYPE;
+            case MOVIE_DETAILS:
+                return MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Uri was jacked... er something.. ");
         }
@@ -172,6 +196,14 @@ public class MovieProvider extends ContentProvider{
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCurser = null;
         switch(sUriMatcher.match(uri)){
+
+            case MOVIE_DETAILS:{
+                retCurser = getMovieDetails(uri, projection, sortOrder);
+                DatabaseUtils.dumpCursorToString(retCurser);
+                break;
+
+            }
+
             case MOVIE:{
                 String movie_id = MovieEntry.getMovieIdFromPath(uri);
                 retCurser = movieDBHelper.getReadableDatabase().query(
@@ -278,6 +310,21 @@ public class MovieProvider extends ContentProvider{
         return retCurser;
     }
 
+    private Cursor getMovieDetails(Uri uri, String[] projection, String sortOrder) {
+        String movie_id = MovieEntry.getMovieIdFromPath(uri);
+        Cursor retCursor;
+        retCursor = sMovieDetailsQueryBuilder.query(
+                movieDBHelper.getReadableDatabase(),
+                projection,
+                sMovieDetailsTables,
+                new String[]{movie_id},
+                null,
+                null,
+                sortOrder
+        );
+        return retCursor;
+    }
+
     private Cursor getMovieWithTrailers(Uri uri, String[] projection, String sortOrder) {
         String movie_id = MovieEntry.getMovieIdFromPath(uri);
         Cursor retCursor;
@@ -308,6 +355,8 @@ public class MovieProvider extends ContentProvider{
         );
         return retCursor;
     }
+
+
 
 
     @Nullable

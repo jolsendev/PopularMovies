@@ -103,7 +103,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
                 //Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int movieId = cursor.getInt(COL_MOVIE_ID);
-                Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
+                Uri uri = MovieContract.MovieEntry.buildMovieDetailUri(movieId);
                 Intent intent = new Intent(getActivity(), MovieDetailView.class).
                         setData(uri);
                 startActivity(intent);
@@ -190,7 +190,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     private void updateMovieData() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-        Toast.makeText(getActivity(), "This is the sort value: "+sortBy, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), "This is the sort value: "+sortBy, Toast.LENGTH_LONG).show();
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
 
 

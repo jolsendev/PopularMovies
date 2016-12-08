@@ -27,6 +27,7 @@ public class MovieContract {
     public static final String PATH_TRAILER = "trailers";
     public static final String PATH_REVIEW = "reviews";
 
+
     private static final String LOG_TAG = MovieContract.class.getSimpleName();
 
 
@@ -42,7 +43,7 @@ public class MovieContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
-
+        public static final String MOVIE_DETAIL = "detail";
 
         //review foreign key
         public static final String MOVIE_REVIEW_KEY = "review_id";
@@ -91,6 +92,11 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(TOP_RATED).build();
         }
 
+        public static Uri buildMovieDetailUri(long id){
+            String _id = String.valueOf(id);
+            Uri retUri = CONTENT_URI.buildUpon().appendPath(_id).appendPath(MovieEntry.MOVIE_DETAIL).build();
+            return retUri;
+        }
 
         public static Uri buildMovieUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

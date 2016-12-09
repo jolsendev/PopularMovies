@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
+import com.squareup.picasso.Picasso;
 
 public class MovieDetailView extends AppCompatActivity {
 
@@ -65,7 +66,7 @@ public class MovieDetailView extends AppCompatActivity {
 
 
 
-    public static class MovieDetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
+    public static class MovieDetailFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
         private static DetailReviewAdapter mAdapter;
         private LinearLayout titleLayout;
@@ -75,7 +76,7 @@ public class MovieDetailView extends AppCompatActivity {
         private TextView mOverView;
         private Parcelable mUri;
 
-        public MovieDetailFragment(){
+        public MovieDetailFragment() {
 
         }
 
@@ -92,7 +93,7 @@ public class MovieDetailView extends AppCompatActivity {
             mReleaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
             mOverView = (TextView) rootView.findViewById(R.id.movie_overview);
 
-           return rootView;
+            return rootView;
         }
 
         @Override
@@ -122,33 +123,29 @@ public class MovieDetailView extends AppCompatActivity {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
-//                String title = cursor.getString(MovieDetailView.COL_TITLE);
-//                mMovieTitle.setText(title);
-//
-//
-//                String rating = Double.parseDouble(String.format("%.1f", cursor.getDouble(MovieDetailView.COL_VOTE_AVERAGE))) + "/10";
-//                mMovieRating.setText(rating);
-//
-//
-//                String[] splitDate = cursor.getString(MovieDetailView.COL_RELEASE_DATE).split("-");
-//                mReleaseDate.setText(splitDate[0]);
-//
-//
-//                mOverView.setText(cursor.getString(MovieDetailView.COL_OVERVIEW));
-//                String imagePath = cursor.getString(MovieDetailView.COL_BACKDROP_PATH);
-//                String processedPath = Utility.getImagePath(imagePath);
-//                Picasso.with(getActivity())
-//                        .load(processedPath)
-//                        .placeholder(R.drawable.popcorntime)
-//                        .into(imageItem);
-            //}
+            String title = cursor.getString(MovieDetailView.COL_TITLE);
+            mMovieTitle.setText(title);
 
 
+            String rating = Double.parseDouble(String.format("%.1f", cursor.getDouble(MovieDetailView.COL_VOTE_AVERAGE))) + "/10";
+            mMovieRating.setText(rating);
+
+
+            String[] splitDate = cursor.getString(MovieDetailView.COL_RELEASE_DATE).split("-");
+            mReleaseDate.setText(splitDate[0]);
+
+
+            mOverView.setText(cursor.getString(MovieDetailView.COL_OVERVIEW));
+            String imagePath = cursor.getString(MovieDetailView.COL_POSTER_PATH);
+            String processedPath = Utility.getImagePath(imagePath);
+            Picasso.with(getActivity())
+                    .load(processedPath)
+                    .placeholder(R.drawable.popcorntime)
+                    .into(imageItem);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-
 
         }
     }

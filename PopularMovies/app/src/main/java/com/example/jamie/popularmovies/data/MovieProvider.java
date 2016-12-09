@@ -3,10 +3,12 @@ package com.example.jamie.popularmovies.data;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.graphics.Movie;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
@@ -62,13 +64,27 @@ public class MovieProvider extends ContentProvider{
 
 //movie.movie_id = reviews.movie_id and  trailers.movie_id = movie.movie_id  and  movie.movie_id = ?
 
+//    SELECT Table4.company, table1.id, table1.value
+//    FROM Table1
+//    INNER JOIN Table1
+//    ON Table2.table1_id = Table1.id
+//    INNER JOIN Table3
+//    ON Table3.table2_id = Table2.id
+//    INNER JOIN Table4
+//    ON Table4.table3_id = Table3.id
     private static final SQLiteQueryBuilder sMovieDetailsQueryBuilder;
 
     static{
 
         sMovieDetailsQueryBuilder = new SQLiteQueryBuilder();
         sMovieDetailsQueryBuilder.setTables(
-                MovieEntry.TABLE_NAME +", "+ReviewEntry.TABLE_NAME+", "+TrailerEntry.TABLE_NAME
+                MovieEntry.TABLE_NAME+
+                        " INNER JOIN "+ReviewEntry.TABLE_NAME+
+                        " ON " + MovieEntry.TABLE_NAME + "."+MovieEntry.MOVIE_ID+" = "+ReviewEntry.TABLE_NAME+"."+
+                        ReviewEntry.MOVIE_ID+
+                        " INNER JOIN "+TrailerEntry.TABLE_NAME+" ON "+
+                        MovieEntry.TABLE_NAME+"."+MovieEntry.MOVIE_ID+" = "+
+                        TrailerEntry.TABLE_NAME+"."+TrailerEntry.MOVIE_ID
 
         );
     }
@@ -97,12 +113,6 @@ public class MovieProvider extends ContentProvider{
     //movie.movie_id = reviews.movie_id and  trailers.movie_id = movie.movie_id  and  movie.movie_id = ?
 
     private static final String sMovieDetailsTables =
-            MovieEntry.TABLE_NAME+"."+MovieEntry.MOVIE_ID+
-                    " = "+ReviewEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+
-                    " and "+
-            TrailerEntry.TABLE_NAME+"."+TrailerEntry.MOVIE_ID+
-            " = "+ReviewEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+
-                    " and "+
             MovieEntry.TABLE_NAME+"."+MovieEntry.MOVIE_ID+" = ?";
 
     private static final String sMovieWithReviewsSelection =

@@ -34,6 +34,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     private Uri mPopularUri;
     private String sortValue;
     public static final int LOADER_ID = 0;
+    public static final int LOADER_ID1 = 1;
 
 
 
@@ -85,12 +86,14 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(LOADER_ID1, null, this);
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         updateMovieData();
+
         createAdapterWithCursor();
 
         View v = inflater.inflate(R.layout.activity_main,container, false);
@@ -230,6 +233,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //loader.getId();
         mAdapter.swapCursor(data);
     }
 

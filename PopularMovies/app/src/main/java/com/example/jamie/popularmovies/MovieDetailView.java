@@ -18,49 +18,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.jamie.popularmovies.adapters.ReviewCursorAdapter;
+import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
-import com.squareup.picasso.Picasso;
 
 public class MovieDetailView extends AppCompatActivity {
 
     private static ImageView imageItem;
     private static final int LOADER_ID = 1;
-
-//    MovieContract.MovieEntry._ID,
-//    MovieContract.MovieEntry.MOVIE_ID,
-//    MovieContract.MovieEntry.POSTER_PATH,
-//    MovieContract.MovieEntry.IS_ADULT,
-//    MovieContract.MovieEntry.OVERVIEW,
-//    MovieContract.MovieEntry.RELEASE_DATE,
-//    MovieContract.MovieEntry.ORIGINAL_TITLE,
-//    MovieContract.MovieEntry.ORIGINAL_LANGUAGE,
-//    MovieContract.MovieEntry.TITLE,
-//    MovieContract.MovieEntry.BACKDROP_PATH,
-//    MovieContract.MovieEntry.POPULARITY,
-//    MovieContract.MovieEntry.VOTE_COUNT,
-//    MovieContract.MovieEntry.IS_VIDEO,
-//    MovieContract.MovieEntry.IS_FAVORITE,
-//    MovieContract.MovieEntry.VOTE_AVERAGE,
-//    MovieContract.MovieEntry.IS_MOST_POPULAR,
-//    MovieContract.MovieEntry.IS_TOP_RATED
-
-    //    select distinct
-//    movie.title,
-//    movie.poster_path,
-//    movie.overview,
-//    movie.vote_average,
-//    movie.favorite,
-//    movie.release_date,
-//    reviews.review_url,
-//    reviews.review_content,
-//    trailers.trailer_source,
-//    trailers.trailer_name,
-//    trailers.trailer_type
-//    from movie where movie.movie_id = reviews.movie_id and  trailers.movie_id = movie.movie_id  and  movie.movie_id = ?
-
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry._ID,
@@ -76,25 +41,6 @@ public class MovieDetailView extends AppCompatActivity {
             MovieContract.TrailerEntry.TRAILER_NAME,
             MovieContract.TrailerEntry.TRAILER_TYPE
     };
-
-//    public static final int COL_ID = 0;
-//    public static final int COL_MOVIE_ID = 1;
-//    public static final int COL_POSTER_PATH = 2;
-//    public static final int COL_IS_ADULT = 3;
-//    public static final int COL_OVERVIEW = 4;
-//    public static final int COL_RELEASE_DATE = 5;
-//    public static final int COL_ORIGINAL_TITLE = 6;
-//    public static final int COL_ORIGINAL_LANGUAGE = 7;
-//    public static final int COL_TITLE = 8;
-//    public static final int COL_BACKDROP_PATH = 9;
-//    public static final int COL_POPULARITY = 10;
-//    public static final int COL_VOTE_COUNT = 11;
-//    public static final int COL_IS_VIDEO = 12;
-//    public static final int COL_IS_FAVORITE = 13;
-//    public static final int COL_VOTE_AVERAGE = 14;
-//    public static final int COL_IS_MOST_POPULAR = 15;
-//    public static final int COL_IS_TOP_RATED = 16;
-
 
     public static final int COL_ID = 0;
     public static final int COL_TITLE = 1;
@@ -130,7 +76,7 @@ public class MovieDetailView extends AppCompatActivity {
 
     public static class MovieDetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
-        private static ReviewCursorAdapter mAdapter;
+        private static DetailReviewAdapter mAdapter;
         private LinearLayout titleLayout;
         private TextView mMovieTitle;
         private TextView mMovieRating;

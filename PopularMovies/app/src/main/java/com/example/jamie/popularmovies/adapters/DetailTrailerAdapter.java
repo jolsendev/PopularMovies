@@ -10,9 +10,9 @@ import android.widget.CursorAdapter;
  * Created by a5w5nzz on 11/30/2016.
  */
 
-public class TrailerCursorAdapter extends CursorAdapter {
+public class DetailTrailerAdapter extends CursorAdapter {
 
-    public TrailerCursorAdapter(Context context, Cursor c, int flags) {
+    public DetailTrailerAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 

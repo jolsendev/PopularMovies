@@ -19,20 +19,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
-
 import com.example.jamie.popularmovies.FetchMovieTask;
 import com.example.jamie.popularmovies.MovieDetailView;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
-import com.example.jamie.popularmovies.adapters.MovieCursorAdapter;
+import com.example.jamie.popularmovies.adapters.MainMovieAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 
 
-public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
+public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     public GridView gridview;
-    public MovieCursorAdapter mAdapter;
+    public MainMovieAdapter mAdapter;
     private Uri mPopularUri;
     private String sortValue;
     public static final int LOADER_ID = 0;
@@ -100,7 +98,6 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieDetailUri(movieId);
@@ -115,8 +112,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     }
 
     private void createAdapterWithCursor() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+        String sortBy = Utility.getSharedPreference(getActivity());
         Uri uri = null;
         switch(sortBy){
 
@@ -142,7 +138,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
                     null,
                     null);
 
-            mAdapter = new MovieCursorAdapter(getActivity(), cur, 0);
+            mAdapter = new MainMovieAdapter(getActivity(), cur, 0);
         }
 
     }
@@ -181,6 +177,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         if(sortValue != sortBy ) {
+            //createAdapterWithCursor();
             updateMovieData();
         } else {
             // do nothing
@@ -208,12 +205,31 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortBy = Utility.getSharedPreference(getContext());
+        String selection = "";
+        switch (sortBy){
+            case MovieContract.MovieEntry.IS_MOST_POPULAR:{
+                selection = MovieContract.MovieEntry.IS_MOST_POPULAR+" = 1";
+                break;
+            }
+            case MovieContract.MovieEntry.IS_TOP_RATED:{
+                selection = MovieContract.MovieEntry.TOP_RATED+" = 1";
+                break;
+            }
+            case MovieContract.MovieEntry.IS_FAVORITE:{
+                selection = MovieContract.MovieEntry.FAVORITE+" = 1";
+                break;
+            }
+            default:
+                break;
+        }
+
 
         return new CursorLoader(
                 getActivity(),
                 MovieContract.MovieEntry.CONTENT_URI,
                 null,
-                null,
+                selection,
                 null,
                 null);
     }
@@ -221,7 +237,7 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data != null){
-            //String dataString = data.getString(MovieFragment.COL_TITLE);
+            //String dataString = data.getString(MainMovieFragment.COL_TITLE);
         }
         mAdapter.swapCursor(data);
     }

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
-import com.example.jamie.popularmovies.fragments.MovieFragment;
+import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.squareup.picasso.Picasso;
@@ -17,10 +17,10 @@ import com.squareup.picasso.Picasso;
  * Created by a5w5nzz on 11/30/2016.
  */
 
-public class MovieCursorAdapter extends CursorAdapter {
+public class MainMovieAdapter extends CursorAdapter {
 
 
-    public MovieCursorAdapter(Context context, Cursor c, int flags) {
+    public MainMovieAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 
@@ -36,7 +36,7 @@ public class MovieCursorAdapter extends CursorAdapter {
         // we'll keep the UI functional with a simple (and slow!) binding.
 //                .placeholder(R.drawable.popcorntime)
 
-        String path = cursor.getString(MovieFragment.COL_POSTER_PATH);
+        String path = cursor.getString(MainMovieFragment.COL_POSTER_PATH);
         ImageView imageItem = (ImageView) view.findViewById(R.id.thumbnail);
         Picasso.with(context)
                 .load(Utility.getImagePath(path))

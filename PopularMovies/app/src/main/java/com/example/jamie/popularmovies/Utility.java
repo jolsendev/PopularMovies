@@ -2,9 +2,11 @@ package com.example.jamie.popularmovies;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import com.example.jamie.popularmovies.data.MovieContract;
 
@@ -20,22 +22,11 @@ public final class Utility {
         return IMAGE_BASE_PATH+imageID;
     }
 
-//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-//    public static boolean isMovieIdInDB(int movie_id, Context mContext) {
-//        Uri uri = MovieContract.MovieEntry.buildMovieUri(movie_id);
-//        Cursor cursor = mContext.getContentResolver().query(
-//                uri,
-//                new String[] {MovieContract.MovieEntry.MOVIE_ID},
-//                MovieContract.MovieEntry.MOVIE_ID + " = ? ",
-//                new String[] {Integer.toString(movie_id)},
-//                null,
-//                null);
-//        if(cursor.getCount() > 0){
-//            return true;
-//        }
-//        return false;
-//    }
-
+    public static String getSharedPreference(Context mContext){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String sortBy = pref.getString(mContext.getString(R.string.pref_sort_key), mContext.getString(R.string.pref_default_sort_value));
+        return sortBy;
+    }
     public static Uri getUrlByIdForType(String movieID, String type) {
         //http://api.themoviedb.org/3/movie/284052/reviews?&api_key=02a6d79992ed3e3da1f638dec4c74770
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+movieID+"/"+type;

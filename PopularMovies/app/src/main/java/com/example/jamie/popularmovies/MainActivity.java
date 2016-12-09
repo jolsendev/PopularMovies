@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.jamie.popularmovies.fragments.MovieFragment;
+import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 import com.facebook.stetho.DumperPluginsProvider;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.dumpapp.DumpException;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(isOnline()){
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, new MovieFragment())
+                        .add(R.id.container, new MainMovieFragment())
                         .commit();
             }
 
@@ -82,27 +82,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void dump(DumperContext dumpContext) throws DumpException {
 
-        }
-    }
-
-    public class StethoInterceptor implements Interceptor {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            //I found thid code here: https://github.com/square/okhttp/wiki/Interceptors
-            Request request = chain.request();
-
-            long t1 = System.nanoTime();
-            Logger logger = null;
-            logger.info(String.format("Sending request %s on %s%n%s",
-                    request.url(), chain.connection(), request.headers()));
-
-            Response response = chain.proceed(request);
-
-            long t2 = System.nanoTime();
-            logger.info(String.format("Received response for %s in %.1fms%n%s",
-                    response.request().url(), (t2 - t1) / 1e6d, response.headers()));
-
-            return response;
         }
     }
 }

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.example.jamie.popularmovies.MovieDetailView;
+import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
@@ -259,6 +260,7 @@ public class MovieProvider extends ContentProvider{
                 break;
             }
             case ALL_MOVIES:{
+                String sortBy = Utility.getSharedPreference(getContext());
 
                 retCurser = movieDBHelper.getReadableDatabase().query(
                         MovieEntry.TABLE_NAME, //table name
@@ -509,23 +511,6 @@ public class MovieProvider extends ContentProvider{
             }
             default:
                 return super.bulkInsert(uri, values);
-        }
-    }
-
-    public static String whereSortOrderIs(String sortBy) {
-        switch (sortBy){
-            case MovieEntry.TOP_RATED:{
-                return sTopRatedMovies;
-            }
-            case MovieEntry.MOST_POPULAR:{
-                return sMostPopularMovies;
-            }
-            case MovieEntry.FAVORITE:{
-                return sFavoriteMovies;
-            }
-            default:
-                return null;
-
         }
     }
 }

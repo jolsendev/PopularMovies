@@ -2,7 +2,6 @@ package com.example.jamie.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -17,16 +16,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
+import com.example.jamie.popularmovies.adapters.DetailTrailerAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailView extends AppCompatActivity {
 
     private static ImageView imageItem;
-    private static final int LOADER_ID = 1;
+    private static final int MOVIE_LOADER = 0;
+    private static final int REVIEW_LOADER = 1;
+    private static final int TRAILER_LOADER = 2;
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry._ID,
@@ -75,6 +78,9 @@ public class MovieDetailView extends AppCompatActivity {
         private TextView mReleaseDate;
         private TextView mOverView;
         private Parcelable mUri;
+        private View trailerListView;
+        private DetailTrailerAdapter trailerAdapter;
+        private ListView trailerItemListView;
 
         public MovieDetailFragment() {
 
@@ -84,7 +90,11 @@ public class MovieDetailView extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
+            View rootView = inflater.inflate(R.layout.detail_layout, container, false);
+            trailerListView = rootView.findViewById(R.id.trailer_list_view);
+            trailerItemListView = (ListView) trailerListView.findViewById(R.id.trailer_list_view);
+
+
             imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
             titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
 
@@ -98,7 +108,9 @@ public class MovieDetailView extends AppCompatActivity {
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            getLoaderManager().initLoader(LOADER_ID, null, this);
+            getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+            getLoaderManager().initLoader(REVIEW_LOADER, null, this);
+            getLoaderManager().initLoader(TRAILER_LOADER, null, this);
             super.onActivityCreated(savedInstanceState);
         }
 
@@ -120,8 +132,18 @@ public class MovieDetailView extends AppCompatActivity {
             );
         }
 
+
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+            int id = loader.getId();
+            switch (id){
+                case TRAILER_LOADER:{
+                    trailerAdapter = new DetailTrailerAdapter(getContext(), cursor, 0);
+                    trailerItemListView.setAdapter(trailerAdapter);
+                    break;
+                }
+            }
 
             String title = cursor.getString(MovieDetailView.COL_TITLE);
             mMovieTitle.setText(title);

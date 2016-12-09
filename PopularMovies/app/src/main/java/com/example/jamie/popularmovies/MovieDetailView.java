@@ -35,11 +35,6 @@ public class MovieDetailView extends AppCompatActivity {
             MovieContract.MovieEntry.VOTE_AVERAGE,
             MovieContract.MovieEntry.FAVORITE,
             MovieContract.MovieEntry.RELEASE_DATE,
-            MovieContract.ReviewEntry.REVIEW_URL,
-            MovieContract.ReviewEntry.REVIEW_CONTENT,
-            MovieContract.TrailerEntry.TRAILER_SOURCE,
-            MovieContract.TrailerEntry.TRAILER_NAME,
-            MovieContract.TrailerEntry.TRAILER_TYPE
     };
 
     public static final int COL_ID = 0;
@@ -49,11 +44,7 @@ public class MovieDetailView extends AppCompatActivity {
     public static final int COL_VOTE_AVERAGE = 4;
     public static final int COL_FAVORITE = 5;
     public static final int COL_RELEASE_DATE = 6;
-    public static final int COL_REVIEW_URL = 7;
-    public static final int COL_REVIEW_CONTENT = 8;
-    public static final int COL_TRAILER_SOURCE = 9;
-    public static final int COL_TRAILER_NAME = 10;
-    public static final int COL_TRAILER_TYPE = 11;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,10 +82,7 @@ public class MovieDetailView extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//            Bundle arguments = getArguments();
-//            if (arguments != null) {
-//                mUri = arguments.getParcelable();
-//            }
+
             View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
             imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
             titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
@@ -120,7 +108,7 @@ public class MovieDetailView extends AppCompatActivity {
             if (intent == null) {
                 return null;
             }
-            Uri d = intent.getData();
+
             return new CursorLoader(
                     getActivity(),
                     intent.getData(),
@@ -133,11 +121,6 @@ public class MovieDetailView extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            int count = cursor.getCount();
-            if (cursor != null && cursor.moveToFirst()) {
-                while(cursor.moveToNext()){
-                    String duh =  cursor.getString(COL_TRAILER_NAME);
-                }
 
 //                String title = cursor.getString(MovieDetailView.COL_TITLE);
 //                mMovieTitle.setText(title);
@@ -158,7 +141,7 @@ public class MovieDetailView extends AppCompatActivity {
 //                        .load(processedPath)
 //                        .placeholder(R.drawable.popcorntime)
 //                        .into(imageItem);
-            }
+            //}
 
 
         }

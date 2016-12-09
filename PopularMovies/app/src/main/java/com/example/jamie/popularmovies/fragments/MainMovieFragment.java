@@ -177,7 +177,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         if(sortValue != sortBy ) {
-            //createAdapterWithCursor();
             updateMovieData();
         } else {
             // do nothing
@@ -187,9 +186,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     private void updateMovieData() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-        //Toast.makeText(getActivity(), "This is the sort value: "+sortBy, Toast.LENGTH_LONG).show();
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
-
 
         String MOVIE_API_KEY = "api_key";
         String API_KEY = Utility.MOVIE_API_KEY;
@@ -199,8 +196,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
         FetchMovieTask moviesTask = new FetchMovieTask(getContext());
         moviesTask.execute(mPopularUri.toString());
-
-
     }
 
     @Override
@@ -224,7 +219,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 break;
         }
 
-
         return new CursorLoader(
                 getActivity(),
                 MovieContract.MovieEntry.CONTENT_URI,
@@ -236,9 +230,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(data != null){
-            //String dataString = data.getString(MainMovieFragment.COL_TITLE);
-        }
         mAdapter.swapCursor(data);
     }
 

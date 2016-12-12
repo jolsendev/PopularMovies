@@ -103,7 +103,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int movieId = cursor.getInt(COL_MOVIE_ID);
-                Uri uri = MovieContract.MovieEntry.buildMovieDetailUri(movieId);
+                Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 Intent intent = new Intent(getActivity(), MovieDetailView.class).
                         setData(uri);
                 startActivity(intent);

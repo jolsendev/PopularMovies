@@ -2,18 +2,15 @@ package com.example.jamie.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Movie;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.test.mock.MockContentProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -23,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.jamie.popularmovies.adapters.DetailMovieAdapter;
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
 import com.example.jamie.popularmovies.adapters.DetailTrailerAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
@@ -75,7 +71,8 @@ public class MovieDetailView extends AppCompatActivity {
     public static final int COL_REVIEW_ID = 0;
     public static final int COL_REVIEW_MOVIE_ID = 1;
     public static final int COL_REVIEW_AUTHOR = 2;
-    public static final int COL_REVIEW_URL = 3;
+    public static final int COL_REVIEW_CONTENT = 3;
+    public static final int COL_REVIEW_URL = 4;
 
     public static final int COL_TRAILER_ID = 0;
     public static final int COL_TRAILER_KEY = 1;
@@ -94,34 +91,27 @@ public class MovieDetailView extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.detail_layout);
-
-        //Intent intent = getIntent();
-
+       setContentView(R.layout.activity_movie_detail_view);
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.detail_container, new MovieDetailFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_container, new MovieDetailFragment()).commit();
         }
     }
-
-
 
     public static class MovieDetailFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
         private static DetailReviewAdapter mAdapter;
         private LinearLayout titleLayout;
-        private TextView mMovieTitle;
-        private TextView mMovieRating;
-        private TextView mReleaseDate;
-        private TextView mOverView;
         private Parcelable mUri;
-        private View trailerListView;
         private DetailTrailerAdapter trailerAdapter;
         private DetailReviewAdapter reviewAdapter;
-        private DetailMovieAdapter movieAdapter;
-        private ListView trailerItemListView;
+        private ListView trailerListView;
+        private ListView reviewListView;
         private LinearLayout movieLayout;
-        private TextView titleView;
-        private ListView movieDetailView;
+        private TextView mMovieTitle;
+        private ImageView mMovieImage;
+        private TextView mMovieRating;
+        private TextView mReleaseDate;
+        private TextView mMovieOverview;
 
         public MovieDetailFragment() {
 
@@ -131,39 +121,15 @@ public class MovieDetailView extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.detail_layout, container, false);
-
-            Intent intent = getActivity().getIntent();
-            Uri uri = intent.getData();
-
-            movieLayout = (LinearLayout) rootView.findViewById(R.id.detail_container);
-            movieDetailView = (ListView) movieLayout.findViewById(R.id.movie_detail_list_view);
-
-            titleView = (TextView) movieLayout.findViewById(R.id.movie_title);
-
-                Cursor cur = getActivity().getContentResolver().query(
-                        uri,
-                        MOVIE_COLUMNS,
-                        null,
-                        null,
-                        null);
-
-                movieAdapter = new DetailMovieAdapter(getContext(), cur, 0);
-                movieDetailView.setAdapter(movieAdapter);
-
-
-//            trailerListView = rootView.findViewById(R.id.trailer_list_view);
-//            trailerItemListView = (ListView) trailerListView.findViewById(R.id.trailer_list_view);
-
-
-
-//            imageItem = (ImageView) rootView.findViewById(R.id.detail_movie_image);
-//            titleLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
-//
-//            mMovieTitle = (TextView) titleLayout.findViewById(R.id.movie_title);
-//            mMovieRating = (TextView) rootView.findViewById(R.id.movie_rating);
-//            mReleaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
-//            mOverView = (TextView) rootView.findViewById(R.id.movie_overview);
+            View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
+            trailerListView = (ListView) rootView.findViewById(R.id.trailer_list_view);
+            reviewListView = (ListView) rootView.findViewById(R.id.review_list_view);
+            movieLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
+            mMovieTitle = (TextView)movieLayout.findViewById(R.id.movie_title);
+            mMovieImage = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
+            mMovieRating = (TextView) movieLayout.findViewById(R.id.movie_rating);
+            mReleaseDate = (TextView) movieLayout.findViewById(R.id.movie_release_date);
+            mMovieOverview = (TextView) movieLayout.findViewById(R.id.movie_overview);
 
             return rootView;
         }
@@ -240,16 +206,27 @@ public class MovieDetailView extends AppCompatActivity {
             switch (id){
                 case TRAILER_LOADER:{
                     trailerAdapter = new DetailTrailerAdapter(getContext(), cursor, 0);
-                    //trailerItemListView.setAdapter(trailerAdapter);
+                    trailerListView.setAdapter(trailerAdapter);
                     break;
                 }
                 case REVIEW_LOADER:{
                     reviewAdapter = new DetailReviewAdapter(getContext(), cursor, 0);
+                    reviewListView.setAdapter(reviewAdapter);
                     break;
                 }
                 case MOVIE_LOADER:{
 
-                    mAdapter.swapCursor(cursor);
+                    mMovieTitle.setText(cursor.getString(COL_TITLE));
+                    mMovieRating.setText(cursor.getString(COL_VOTE_AVERAGE));
+                    mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
+                    mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
+
+                    ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
+                    Picasso.with(getContext())
+                            .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))
+                            .into(imageItem);
+
+
                     break;
                 }
             }

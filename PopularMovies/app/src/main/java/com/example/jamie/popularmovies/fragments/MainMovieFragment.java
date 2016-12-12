@@ -94,7 +94,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         updateMovieData();
 
-        //createAdapterWithCursor();
+        createAdapterWithCursor();
 
         View v = inflater.inflate(R.layout.activity_main,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);

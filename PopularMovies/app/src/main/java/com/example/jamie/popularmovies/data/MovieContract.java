@@ -1,5 +1,6 @@
 package com.example.jamie.popularmovies.data;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -116,7 +117,7 @@ public class MovieContract {
             return retUri;
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         public static boolean isMovieIdInDB(Uri uri, Context mContext) {
             Cursor cursor = mContext.getContentResolver().query(
                     uri,

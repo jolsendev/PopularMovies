@@ -36,7 +36,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private static final int TRAILER_LOADER = 2;
 
     private static final String[] MOVIE_COLUMNS = {
-            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.TITLE,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.POSTER_PATH,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.OVERVIEW,
@@ -46,7 +45,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     };
 
     private static final String[] REVIEW_COLUMNS = {
-            MovieContract.ReviewEntry.TABLE_NAME+"."+MovieContract.ReviewEntry._ID,
             MovieContract.ReviewEntry.TABLE_NAME+"."+MovieContract.ReviewEntry.MOVIE_ID,
             MovieContract.ReviewEntry.TABLE_NAME+"."+MovieContract.ReviewEntry.REVIEW_AUTHOR,
             MovieContract.ReviewEntry.TABLE_NAME+"."+MovieContract.ReviewEntry.REVIEW_CONTENT,
@@ -55,7 +53,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
 
     public static final String[] TRAILER_COLUMNS = {
-            MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry._ID,
             MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_NAME,
             MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_SIZE,
             MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_SOURCE,
@@ -128,9 +125,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        //getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         getLoaderManager().initLoader(REVIEW_LOADER, null, this);
-        //getLoaderManager().initLoader(TRAILER_LOADER, null, this);
+        getLoaderManager().initLoader(TRAILER_LOADER, null, this);
         reviewAdapter = new DetailReviewAdapter(getContext(), null, 0);
         trailerAdapter = new DetailTrailerAdapter(getContext(), null, 0);
         super.onActivityCreated(savedInstanceState);

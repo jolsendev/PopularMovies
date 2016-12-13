@@ -9,8 +9,8 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.jamie.popularmovies.MovieDetailView;
 import com.example.jamie.popularmovies.R;
+import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 
 /**
  * Created by a5w5nzz on 11/30/2016.
@@ -32,6 +32,6 @@ public class DetailReviewAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView trailerView = (TextView) view.findViewById(R.id.movie_review);
-        trailerView.setText(cursor.getString(MovieDetailView.COL_REVIEW_CONTENT));
+        trailerView.setText(cursor.getString(MovieDetailFragment.COL_REVIEW_CONTENT));
     }
 }

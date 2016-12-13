@@ -40,23 +40,23 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
 
     private static final String[] MOVIE_COLUMNS = {
-            MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.MOVIE_ID,
-            MovieContract.MovieEntry.POSTER_PATH,
-            MovieContract.MovieEntry.IS_ADULT,
-            MovieContract.MovieEntry.OVERVIEW,
-            MovieContract.MovieEntry.RELEASE_DATE,
-            MovieContract.MovieEntry.ORIGINAL_TITLE,
-            MovieContract.MovieEntry.ORIGINAL_LANGUAGE,
-            MovieContract.MovieEntry.TITLE,
-            MovieContract.MovieEntry.BACKDROP_PATH,
-            MovieContract.MovieEntry.POPULARITY,
-            MovieContract.MovieEntry.VOTE_COUNT,
-            MovieContract.MovieEntry.IS_VIDEO,
-            MovieContract.MovieEntry.IS_FAVORITE,
-            MovieContract.MovieEntry.VOTE_AVERAGE,
-            MovieContract.MovieEntry.IS_MOST_POPULAR,
-            MovieContract.MovieEntry.IS_TOP_RATED
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.POSTER_PATH,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.IS_ADULT,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.OVERVIEW,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.RELEASE_DATE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.ORIGINAL_TITLE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.ORIGINAL_LANGUAGE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.TITLE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.BACKDROP_PATH,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.POPULARITY,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.VOTE_COUNT,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.IS_VIDEO,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.IS_FAVORITE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.VOTE_AVERAGE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.IS_MOST_POPULAR,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.IS_TOP_RATED
     };
 
     public static final int COL_ID = 0;

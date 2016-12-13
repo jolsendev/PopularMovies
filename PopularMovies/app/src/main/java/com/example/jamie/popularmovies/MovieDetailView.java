@@ -44,20 +44,20 @@ public class MovieDetailView extends AppCompatActivity {
 
     private static final String[] REVIEW_COLUMNS = {
             MovieContract.ReviewEntry._ID,
-            MovieContract.ReviewEntry.MOVIE_ID,
+            MovieContract.ReviewEntry.TABLE_NAME+"."+MovieContract.ReviewEntry.MOVIE_ID,
             MovieContract.ReviewEntry.REVIEW_AUTHOR,
             MovieContract.ReviewEntry.REVIEW_CONTENT,
             MovieContract.ReviewEntry.REVIEW_URL
     };
 
+
     public static final String[] TRAILER_COLUMNS = {
             MovieContract.TrailerEntry._ID,
-            MovieContract.TrailerEntry.TRAILER_KEY,
             MovieContract.TrailerEntry.TRAILER_NAME,
-            MovieContract.TrailerEntry.TRAILER_SITE,
             MovieContract.TrailerEntry.TRAILER_SIZE,
-            MovieContract.TrailerEntry.TRAILER_TYPE,
-            MovieContract.TrailerEntry.TRAILER_SOURCE
+            MovieContract.TrailerEntry.TRAILER_SOURCE,
+            MovieContract.TrailerEntry.TRAILER_TYPE
+
     };
 
     public static final int COL_ID = 0;
@@ -74,13 +74,13 @@ public class MovieDetailView extends AppCompatActivity {
     public static final int COL_REVIEW_CONTENT = 3;
     public static final int COL_REVIEW_URL = 4;
 
+
     public static final int COL_TRAILER_ID = 0;
-    public static final int COL_TRAILER_KEY = 1;
-    public static final int COL_TRAILER_NAME = 2;
-    public static final int COL_TRAILER_SITE = 3;
-    public static final int COL_TRAILER_SIZE = 4;
-    public static final int COL_TRAILER_TYPE = 5;
-    public static final int COL_TRAILER_SOURCE = 6;
+    public static final int COL_TRAILER_NAME = 1;
+    public static final int COL_TRAILER_SIZE = 2;
+    public static final int COL_TRAILER_SOURCE = 3;
+    public static final int COL_TRAILER_TYPE = 4;
+
 
 
     @Override
@@ -92,6 +92,7 @@ public class MovieDetailView extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_movie_detail_view);
+
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().add(R.id.movie_container, new MovieDetailFragment()).commit();
         }
@@ -104,7 +105,7 @@ public class MovieDetailView extends AppCompatActivity {
         private Parcelable mUri;
         private DetailTrailerAdapter trailerAdapter;
         private DetailReviewAdapter reviewAdapter;
-        private ListView trailerListView;
+
         private ListView reviewListView;
         private LinearLayout movieLayout;
         private TextView mMovieTitle;
@@ -112,7 +113,7 @@ public class MovieDetailView extends AppCompatActivity {
         private TextView mMovieRating;
         private TextView mReleaseDate;
         private TextView mMovieOverview;
-
+        private ListView trailerListView;
         public MovieDetailFragment() {
 
         }
@@ -122,6 +123,7 @@ public class MovieDetailView extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
+
             trailerListView = (ListView) rootView.findViewById(R.id.trailer_list_view);
             reviewListView = (ListView) rootView.findViewById(R.id.review_list_view);
             movieLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
@@ -139,6 +141,7 @@ public class MovieDetailView extends AppCompatActivity {
             getLoaderManager().initLoader(MOVIE_LOADER, null, this);
             getLoaderManager().initLoader(REVIEW_LOADER, null, this);
             getLoaderManager().initLoader(TRAILER_LOADER, null, this);
+            reviewAdapter = new DetailReviewAdapter(getContext(), null, 0);
             super.onActivityCreated(savedInstanceState);
         }
 
@@ -210,7 +213,8 @@ public class MovieDetailView extends AppCompatActivity {
                     break;
                 }
                 case REVIEW_LOADER:{
-                    reviewAdapter = new DetailReviewAdapter(getContext(), cursor, 0);
+
+                    reviewAdapter.swapCursor(cursor);
                     reviewListView.setAdapter(reviewAdapter);
                     break;
                 }

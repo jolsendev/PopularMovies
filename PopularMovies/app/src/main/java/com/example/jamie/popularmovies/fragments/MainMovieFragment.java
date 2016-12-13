@@ -41,7 +41,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry._ID,
-            MovieContract.MovieEntry.MOVIE_ID,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.MOVIE_ID,
             MovieContract.MovieEntry.POSTER_PATH,
             MovieContract.MovieEntry.IS_ADULT,
             MovieContract.MovieEntry.OVERVIEW,

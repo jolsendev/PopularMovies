@@ -44,6 +44,7 @@ public class MovieProvider extends ContentProvider{
     //    FROM movie
     //    INNER JOIN trailers
     //    ON movie.movie_id = trailers.movie_id;
+
     private static final SQLiteQueryBuilder sMovieTrailerQueryBuilder;
 
     static{
@@ -53,7 +54,7 @@ public class MovieProvider extends ContentProvider{
         //This is an inner join which looks like
         //weather INNER JOIN location ON weather.location_id = location._id
         sMovieTrailerQueryBuilder.setTables(
-                MovieEntry.TABLE_NAME + " INNER JOIN " +
+                MovieEntry.TABLE_NAME + " JOIN " +
                         TrailerEntry.TABLE_NAME +
                         " ON " +  MovieEntry.TABLE_NAME +
                         "." +  MovieEntry.MOVIE_ID +
@@ -101,7 +102,7 @@ public class MovieProvider extends ContentProvider{
         //This is an inner join which looks like
         //weather INNER JOIN location ON weather.location_id = location._id
         sMovieReviewQueryBuilder.setTables(
-                MovieEntry.TABLE_NAME + " INNER JOIN " +
+                MovieEntry.TABLE_NAME + " JOIN " +
                         ReviewEntry.TABLE_NAME +
                         " ON " +  MovieEntry.TABLE_NAME +
                         "." +  MovieEntry.MOVIE_ID +

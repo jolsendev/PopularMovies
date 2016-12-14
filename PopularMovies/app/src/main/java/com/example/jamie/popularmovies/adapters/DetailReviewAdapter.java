@@ -32,6 +32,9 @@ public class DetailReviewAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView trailerView = (TextView) view.findViewById(R.id.movie_review);
-        trailerView.setText(cursor.getString(MovieDetailFragment.COL_REVIEW_CONTENT));
+        String reviewContent = cursor.getString(MovieDetailFragment.COL_REVIEW_CONTENT);
+        reviewContent = reviewContent.substring(0,20);
+        reviewContent = reviewContent+"...";
+        trailerView.setText(reviewContent);
     }
 }

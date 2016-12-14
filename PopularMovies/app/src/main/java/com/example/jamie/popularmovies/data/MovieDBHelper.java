@@ -15,7 +15,7 @@ import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 35;
+    private static final int VERSION_ID = 1;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -50,15 +50,12 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 ReviewEntry.TABLE_NAME + " (" + ReviewEntry.MOVIE_ID + "), " +
                 // Set up the video column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
-                TrailerEntry.TABLE_NAME + " (" + TrailerEntry.MOVIE_ID + "))" +";";
+                TrailerEntry.TABLE_NAME + " (" + TrailerEntry.MOVIE_ID + ")" +
+                ")" +";";
 
-
-//        "name": "Doctor Strange Official Trailer 2",
-//                "size": "HD",
-//                "source": "HSzx-zryEgM",
-//                "type": "Trailer"
 
         final String CREATE_TRAILER_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
+                TrailerEntry._ID + " INTEGER PRIMARY KEY," +
                 TrailerEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 TrailerEntry.TRAILER_NAME + " TEXT NOT NULL, " +
                 TrailerEntry.TRAILER_SIZE + " TEXT NOT NULL, "+
@@ -67,12 +64,11 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
 
         final String CREATE_REVIEW_DATABASE = "CREATE TABLE " +ReviewEntry.TABLE_NAME+" ("+
+                ReviewEntry._ID + " INTEGER PRIMARY KEY," +
                 ReviewEntry.MOVIE_ID + " INTEGER NOT NULL, "+
                 ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, "+
                 ReviewEntry.REVIEW_URL + " TEXT NOT NULL, "+
-                ReviewEntry.REVIEW_CONTENT + " TEXT UNIQUE NOT NULL );"
-                ;
-
+                ReviewEntry.REVIEW_CONTENT + " TEXT UNIQUE NOT NULL);";
 
         db.execSQL(CREATE_MOVIE_DATABASE);
 

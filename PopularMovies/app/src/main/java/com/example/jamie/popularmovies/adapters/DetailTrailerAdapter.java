@@ -30,6 +30,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView trailerView = (TextView) view.findViewById(R.id.movie_trailer);
-        trailerView.setText(cursor.getString(MovieDetailFragment.COL_TRAILER_NAME));
+        String detail = cursor.getString(MovieDetailFragment.COL_TRAILER_NAME);
+        trailerView.setText(detail);
     }
 }

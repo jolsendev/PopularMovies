@@ -154,8 +154,6 @@ public class MovieProvider extends ContentProvider{
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_REVIEWS, MOVIE_WITH_REVIEWS);
-        matcher.addURI(authority, PATH_TO_TRAILERS, TRAILERS);
-        matcher.addURI(authority, PATH_TO_REVIEWS, REVIEWS);
         matcher.addURI(authority, PATH_TO_FAVORITE, FAVORITE);
         matcher.addURI(authority, PATH_TO_MOST_POPULAR, POPULAR);
         matcher.addURI(authority, PATH_TO_TOP_RATED, TOP_RATED);
@@ -294,30 +292,30 @@ public class MovieProvider extends ContentProvider{
                 retCurser = getMovieWithTrailers(uri, projection, sortOrder);
                 break;
             }
-            case TRAILERS:{
-                retCurser = movieDBHelper.getReadableDatabase().query(
-                        TrailerEntry.TABLE_NAME, //table name
-                        projection,            //columns
-                        selection,             //where
-                        selectionArgs,         //you may include a ? in 'selection' these are the args
-                        null,                  //Group by
-                        null,                  //Having
-                        sortOrder
-                );
-                break;
-            }
-            case REVIEWS:{
-                retCurser = movieDBHelper.getReadableDatabase().query(
-                        ReviewEntry.TABLE_NAME, //table name
-                        projection,            //columns
-                        selection,             //where
-                        selectionArgs,         //you may include a ? in 'selection' these are the args
-                        null,                  //Group by
-                        null,                  //Having
-                        sortOrder
-                );
-                break;
-            }
+//            case TRAILERS:{
+//                retCurser = movieDBHelper.getReadableDatabase().query(
+//                        TrailerEntry.TABLE_NAME, //table name
+//                        projection,            //columns
+//                        selection,             //where
+//                        selectionArgs,         //you may include a ? in 'selection' these are the args
+//                        null,                  //Group by
+//                        null,                  //Having
+//                        sortOrder
+//                );
+//                break;
+//            }
+//            case REVIEWS:{
+//                retCurser = movieDBHelper.getReadableDatabase().query(
+//                        ReviewEntry.TABLE_NAME, //table name
+//                        projection,            //columns
+//                        selection,             //where
+//                        selectionArgs,         //you may include a ? in 'selection' these are the args
+//                        null,                  //Group by
+//                        null,                  //Having
+//                        sortOrder
+//                );
+//                break;
+//            }
         }
         retCurser.setNotificationUri(getContext().getContentResolver(), uri);
         return retCurser;

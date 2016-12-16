@@ -90,7 +90,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //updateMovieData();
+        updateMovieData();
 
 
 

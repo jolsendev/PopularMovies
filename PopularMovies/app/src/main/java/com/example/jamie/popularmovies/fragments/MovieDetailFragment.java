@@ -118,8 +118,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onResume() {
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        //getLoaderManager().initLoader(REVIEW_LOADER, null, this);
-        //getLoaderManager().initLoader(TRAILER_LOADER, null, this);
+        getLoaderManager().initLoader(REVIEW_LOADER, null, this);
+        getLoaderManager().initLoader(TRAILER_LOADER, null, this);
         super.onResume();
 
     }
@@ -127,6 +127,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
 
 

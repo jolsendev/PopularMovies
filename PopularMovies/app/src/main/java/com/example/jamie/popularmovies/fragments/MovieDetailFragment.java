@@ -2,7 +2,6 @@ package com.example.jamie.popularmovies.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -37,7 +36,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private static final int TRAILER_LOADER = 2;
 
     private static final String[] MOVIE_COLUMNS = {
-            MovieContract.MovieEntry.TABLE_NAME+"."+ MovieContract.MovieEntry._ID,
+            //MovieContract.MovieEntry.TABLE_NAME+"."+ MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+ MovieContract.MovieEntry.MOVIE_ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.TITLE,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.POSTER_PATH,
@@ -66,14 +65,14 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     };
 
-    public static final int COL_ID = 0;
-    public static final int COL_MOVIE_ID = 1;
-    public static final int COL_TITLE = 2;
-    public static final int COL_POSTER_PATH = 3;
-    public static final int COL_OVERVIEW = 4;
-    public static final int COL_VOTE_AVERAGE = 5;
-    public static final int COL_FAVORITE = 6;
-    public static final int COL_RELEASE_DATE = 7;
+    //public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 0;
+    public static final int COL_TITLE = 1;
+    public static final int COL_POSTER_PATH = 2;
+    public static final int COL_OVERVIEW = 3;
+    public static final int COL_VOTE_AVERAGE = 4;
+    public static final int COL_FAVORITE = 5;
+    public static final int COL_RELEASE_DATE = 6;
 
     public static final int COL_REVIEW_ID = 0;
     public static final int COL_REVIEW_MOVIE_ID = 1;
@@ -103,18 +102,33 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private TextView mReleaseDate;
     private TextView mMovieOverview;
     private ListView trailerListView;
+    private boolean here = false;
+
     public MovieDetailFragment() {
 
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        //getLoaderManager().initLoader(REVIEW_LOADER, null, this);
+        //getLoaderManager().initLoader(TRAILER_LOADER, null, this);
+        super.onResume();
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
 
         View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
@@ -133,9 +147,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        //getLoaderManager().initLoader(REVIEW_LOADER, null, this);
-        //getLoaderManager().initLoader(TRAILER_LOADER, null, this);
+
         reviewAdapter = new DetailReviewAdapter(getContext(), null, 0);
         trailerAdapter = new DetailTrailerAdapter(getContext(), null, 0);
         super.onActivityCreated(savedInstanceState);
@@ -165,6 +177,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         null, //this was what I was missing
                         null
                 );
+                //String holder = DatabaseUtils.dumpCursorToString(cursor);
                 break;
             }
             case REVIEW_LOADER:{
@@ -201,6 +214,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
+        int size = cursor.getCount();
         int id = loader.getId();
         switch (id){
             case TRAILER_LOADER:{
@@ -216,15 +230,18 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             }
             case MOVIE_LOADER:{
 
-                mMovieTitle.setText(cursor.getString(COL_TITLE));
-                mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE)));
-                mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
-                mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
+                if(cursor.moveToFirst()){
+                    //String holder = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.TITLE));
+                    mMovieTitle.setText(cursor.getString(COL_TITLE));
+                    mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE)));
+                    mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
+                    //mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
 
-                ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
-                Picasso.with(getContext())
-                        .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))
-                        .into(imageItem);
+                    ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
+                    Picasso.with(getContext())
+                            .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))
+                            .into(imageItem);
+                }
                 break;
             }
         }
@@ -232,6 +249,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        reviewAdapter.swapCursor(null);
+        trailerAdapter.swapCursor(null);
     }
 }

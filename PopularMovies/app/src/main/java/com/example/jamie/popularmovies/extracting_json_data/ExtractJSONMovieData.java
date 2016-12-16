@@ -3,16 +3,11 @@ package com.example.jamie.popularmovies.extracting_json_data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Movie;
-import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 
 import com.example.jamie.popularmovies.R;
-import com.example.jamie.popularmovies.Utility;
-import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 
 import org.json.JSONArray;
@@ -70,26 +65,26 @@ public class ExtractJSONMovieData {
 
                 JSONObject jsonMovieData = itemsArray.getJSONObject(i);
 
-                int movie_id = jsonMovieData.getInt(MOVIE_ID);
+//                int movie_id = jsonMovieData.getInt(MOVIE_ID);
 
                 //if movie exists and is both popular and top_rated, update movie
-                Uri uri = MovieEntry.buildMovieUri(movie_id);
-                if(MovieEntry.isMovieIdInDB(uri, mContext)){
-
-                    if(sortBy.compareTo("popular")==0){
-                        //update popular
-                        movieValues.put(MovieEntry.IS_MOST_POPULAR, (sortBy.compareTo("popular")==0)?1:0);
-
-                    }else if(sortBy.compareTo("top_rated")==0){
-                        //update top_rated
-                        movieValues.put(MovieEntry.IS_TOP_RATED, (sortBy.compareTo("top_rated")==0)?1:0);
-                    }
-
-                    mContext.getContentResolver().update(
-                            uri,movieValues, MovieEntry._ID + "= ?",
-                            new String[] { Long.toString(movie_id)});
-                }
-                else{
+//                Uri uri = MovieEntry.buildMovieUri(movie_id);
+//                if(MovieEntry.isMovieIdInDB(uri, mContext)){
+//
+//                    if(sortBy.compareTo("popular")==0){
+//                        //update popular
+//                        movieValues.put(MovieEntry.IS_MOST_POPULAR, (sortBy.compareTo("popular")==0)?1:0);
+//
+//                    }else if(sortBy.compareTo("top_rated")==0){
+//                        //update top_rated
+//                        movieValues.put(MovieEntry.IS_TOP_RATED, (sortBy.compareTo("top_rated")==0)?1:0);
+//                    }
+//
+//                    mContext.getContentResolver().update(
+//                            uri,movieValues, MovieEntry._ID + "= ?",
+//                            new String[] { Long.toString(movie_id)});
+//                }
+//                else{
                     movieValues.put(MovieEntry.POSTER_PATH, jsonMovieData.getString(MOVIE_POSTER_PATH));
                     boolean isAdult = jsonMovieData.getBoolean(MOVIE_ADULT);
                     movieValues.put(MovieEntry.IS_ADULT,(isAdult == true)?1:0 );
@@ -109,7 +104,7 @@ public class ExtractJSONMovieData {
                     movieValues.put(MovieEntry.IS_TOP_RATED, (sortBy.compareTo("top_rated")==0)?1:0);
 
                     cVVector.add(movieValues);
-                }
+                //}
 
                 int inserted = 0;
                 //add to database

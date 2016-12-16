@@ -6,7 +6,7 @@
     android:id="@+id/detail_container">
 
     <fragment android:name="com.example.jamie.popularmovies.fragments.MovieDetailFragment"
-        android:id="@+id/headlines_fragment"
+        android:id="@+id/movie_detail_fragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent" />

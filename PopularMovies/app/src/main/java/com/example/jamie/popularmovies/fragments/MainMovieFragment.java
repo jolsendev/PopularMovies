@@ -34,9 +34,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     private Uri mPopularUri;
     private String sortValue;
     public static final int LOADER_ID = 0;
-//    public static final int LOADER_ID1 = 1;
-
-
 
 
     private static final String[] MOVIE_COLUMNS = {
@@ -86,15 +83,16 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(LOADER_ID, null, this);
+
         //getLoaderManager().initLoader(LOADER_ID1, null, this);
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        updateMovieData();
+        //updateMovieData();
 
-        createAdapterWithCursor();
+
 
         View v = inflater.inflate(R.layout.activity_main,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
@@ -150,6 +148,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void onCreate(@Nullable Bundle savedInstanceState) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+        createAdapterWithCursor();
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
@@ -160,15 +159,13 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         if(id == R.id.sort_by_setting){
             Intent intent = new Intent(getActivity(),MovieSettings.class);
             startActivity(intent);
-
         }
-
         return super.onOptionsItemSelected(item);
     }
     @Override
     public void onStart() {
 
-        updateMovieData();
+        //updateMovieData();
         super.onStart();
 
     }
@@ -180,7 +177,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         if(sortValue != sortBy ) {
-            updateMovieData();
+            //updateMovieData();
         } else {
             // do nothing
         }
@@ -234,7 +231,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //loader.getId();
         mAdapter.swapCursor(data);
     }
 

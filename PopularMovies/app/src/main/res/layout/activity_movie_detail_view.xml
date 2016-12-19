@@ -75,27 +75,36 @@
                 android:id="@+id/movie_overview"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/trailer_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Trailers"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/trailer_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Trailers"/>
 
             <ListView
                 android:id="@+id/trailer_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
             </ListView>
-        <TextView
-            android:id="@+id/review_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reviews"/>
+            <TextView
+                android:id="@+id/review_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reviews"/>
 
             <ListView
                 android:id="@+id/review_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
+                android:layout_height="wrap_content">
+
+            </ListView>
+
+        </LinearLayout>
+
         </LinearLayout>
 
 

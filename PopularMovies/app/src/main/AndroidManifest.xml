@@ -32,13 +32,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jamie.popularmovies.MainActivity" />
+        </activity>
 
-            </activity>
         <provider
-            android:authorities="com.example.jamie.popularmovies"
             android:name=".data.MovieProvider"
+            android:authorities="com.example.jamie.popularmovies"
             android:exported="false"
-            android:syncable="true"/>
+            android:syncable="true" />
+
+        <activity android:name=".ReviewActivity"></activity>
     </application>
 
 </manifest>

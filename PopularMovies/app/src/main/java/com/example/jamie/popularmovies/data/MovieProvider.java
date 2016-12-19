@@ -66,8 +66,8 @@ public class MovieProvider extends ContentProvider{
         final String PATH_TO_FAVORITE = MovieEntry.TABLE_NAME+"/"+MovieEntry.FAVORITE;
         final String PATH_TO_TOP_RATED = MovieEntry.TABLE_NAME+"/"+MovieEntry.TOP_RATED;
         final String PATH_TO_MOST_POPULAR = MovieEntry.TABLE_NAME+"/"+MovieEntry.MOST_POPULAR;
-        final String PATH_TO_ALL_REVIEWS = PATH_TO_ALL_MOVIES+"/"+ReviewEntry.TABLE_NAME;
-        final String PATH_TO_ALL_TRAILERS = PATH_TO_ALL_MOVIES+"/"+TrailerEntry.TABLE_NAME;
+        final String PATH_TO_ALL_REVIEWS = ReviewEntry.TABLE_NAME;
+        final String PATH_TO_ALL_TRAILERS = TrailerEntry.TABLE_NAME;
 
 
         matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
@@ -208,7 +208,7 @@ public class MovieProvider extends ContentProvider{
             case MOVIE_WITH_TRAILERS:{
                 String movie_id = MovieEntry.getMovieIdFromPath(uri);
                 retCurser = movieDBHelper.getReadableDatabase().query(
-                        ReviewEntry.TABLE_NAME, //table name
+                        TrailerEntry.TABLE_NAME, //table name
                         projection,            //columns
                         sMovieWithTrailersSelection,             //where
                         new String[]{movie_id},         //you may include a ? in 'selection' these are the args
@@ -217,6 +217,7 @@ public class MovieProvider extends ContentProvider{
                         sortOrder
                 );
                 //retCurser = getMovieWithTrailers(uri, projection, sortOrder);
+                String holder = DatabaseUtils.dumpCursorToString(retCurser);
                 break;
             }
         }

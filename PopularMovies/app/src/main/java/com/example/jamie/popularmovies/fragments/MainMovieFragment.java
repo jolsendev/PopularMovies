@@ -83,8 +83,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        //updateMovieData();
-        //getLoaderManager().initLoader(LOADER_ID1, null, this);
+        updateMovieData();
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
@@ -184,6 +183,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     }
 
     private void updateMovieData() {
+        //http://api.themoviedb.org/3/movie/top_rated/API_KEY="02a6d79992ed3e3da1f638dec4c74770";
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;

@@ -2,6 +2,7 @@ package com.example.jamie.popularmovies.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -36,7 +37,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private static final int TRAILER_LOADER = 2;
 
     private static final String[] MOVIE_COLUMNS = {
-            //MovieContract.MovieEntry.TABLE_NAME+"."+ MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+ MovieContract.MovieEntry.MOVIE_ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.TITLE,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.POSTER_PATH,
@@ -87,6 +87,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public static final int COL_TRAILER_SIZE = 3;
     public static final int COL_TRAILER_SOURCE = 4;
     public static final int COL_TRAILER_TYPE = 5;
+
 
     private static DetailReviewAdapter mAdapter;
     private LinearLayout titleLayout;
@@ -219,6 +220,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         int id = loader.getId();
         switch (id){
             case TRAILER_LOADER:{
+                String holder = DatabaseUtils.dumpCursorToString(cursor);
                 trailerAdapter.swapCursor(cursor);
                 trailerListView.setAdapter(trailerAdapter);
                 break;
@@ -232,12 +234,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             case MOVIE_LOADER:{
 
                 if(cursor.moveToFirst()){
-                    //String holder = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.TITLE));
                     mMovieTitle.setText(cursor.getString(COL_TITLE));
                     mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE)));
                     mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
-                    //mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
-
+                    mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
+//
                     ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
                     Picasso.with(getContext())
                             .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))

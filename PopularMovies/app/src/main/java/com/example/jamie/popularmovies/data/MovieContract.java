@@ -41,11 +41,6 @@ public class MovieContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
         public static final String MOVIE_DETAIL = "detail";
 
-        //review foreign key
-        public static final String MOVIE_REVIEW_KEY = "review_id";
-
-        //video foreign key
-        public static final String MOVIE_VIDEO_KEY = "video_id";
 
         //top_rated
         public static final String TOP_RATED = "top_rated";
@@ -141,12 +136,13 @@ public class MovieContract {
 
         public static final String TABLE_NAME = PATH_TRAILER;
         public static final String MOVIE_ID = "movie_id";
-        public static final String TRAILER_KEY = "trailer_key";
         public static final String TRAILER_NAME = "trailer_name";
-        public static final String TRAILER_SITE = "trailer_site";
         public static final String TRAILER_SIZE = "trailer_size";
         public static final String TRAILER_TYPE = "trailer_type";
         public static final String TRAILER_SOURCE = "trailer_source";
+
+
+
 
 //        public static Uri buildVideoUri(long id){
 //            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);

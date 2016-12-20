@@ -31,6 +31,7 @@ public class MovieProvider extends ContentProvider{
     public static final int TOP_RATED = 700;
     public static final int FAVORITE = 800;
     public static final int POPULAR = 900;
+    public static final int UPDATE_FAVORITE = 850;
     //static final int FAVORITE_MOVIES = 500;
 
     public MovieDBHelper movieDBHelper;
@@ -68,8 +69,10 @@ public class MovieProvider extends ContentProvider{
         final String PATH_TO_MOST_POPULAR = MovieEntry.TABLE_NAME+"/"+MovieEntry.MOST_POPULAR;
         final String PATH_TO_ALL_REVIEWS = ReviewEntry.TABLE_NAME;
         final String PATH_TO_ALL_TRAILERS = TrailerEntry.TABLE_NAME;
+        final String PATH_TO_UPDATE_FAVORITE = PATH_TO_MOVIE+"/"+MovieEntry.FAVORITE;
 
 
+        matcher.addURI(authority, PATH_TO_UPDATE_FAVORITE, UPDATE_FAVORITE);
         matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
         matcher.addURI(authority, PATH_TO_MOVIE_WITH_VIDEOS, MOVIE_WITH_TRAILERS);
@@ -117,7 +120,6 @@ public class MovieProvider extends ContentProvider{
 
 
     @Nullable
-    @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCurser = null;
         switch(sUriMatcher.match(uri)){
@@ -301,6 +303,10 @@ public class MovieProvider extends ContentProvider{
                 rowUpdated = movieDBHelper.getWritableDatabase().update(MovieEntry.TABLE_NAME,values, selection, selectionArgs);
                 break;
             }
+            case MOVIE: {
+                rowUpdated = movieDBHelper.getWritableDatabase().update(MovieEntry.TABLE_NAME,values, selection, selectionArgs);
+                break;
+            }
             case ALL_TRAILERS:{
                 rowUpdated = movieDBHelper.getWritableDatabase().update(TrailerEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
@@ -308,6 +314,9 @@ public class MovieProvider extends ContentProvider{
             case ALL_REVIEWS:{
                 rowUpdated = movieDBHelper.getWritableDatabase().update(ReviewEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
+            }
+            case FAVORITE:{
+                rowUpdated = movieDBHelper.getWritableDatabase().update(MovieEntry.TABLE_NAME, values, selection, selectionArgs);
             }
         }
 

@@ -71,6 +71,10 @@ public class MovieContract {
         public static final String IS_MOST_POPULAR = MOST_POPULAR;
         public static final String IS_TOP_RATED = TOP_RATED;
 
+        public static Uri buildAddFavoriteToDBUri(int movie_id){String _id = String.valueOf(movie_id);
+            Uri retUri = CONTENT_URI.buildUpon().appendPath(_id).appendPath(FAVORITE).build();
+            return retUri;
+        }
         public static Uri buildFavoriteUri(){
             return CONTENT_URI.buildUpon().appendPath(IS_FAVORITE).build();
         }

@@ -63,9 +63,9 @@ public class TestUtilities extends AndroidTestCase {
 
         ContentValues values = new ContentValues();
         values.put(TrailerEntry.MOVIE_ID, movieId);
-        values.put(TrailerEntry.TRAILER_KEY, "ZN2GdN9A-e4");
+        //values.put(TrailerEntry.TRAILER_KEY, "ZN2GdN9A-e4");
         values.put(TrailerEntry.TRAILER_NAME, "Doctor Strange (2016) Official Trailer 2");
-        values.put(TrailerEntry.TRAILER_SITE, "YouTube");
+        //values.put(TrailerEntry.TRAILER_SITE, "YouTube");
         values.put(TrailerEntry.TRAILER_SIZE, 1080);
         values.put(TrailerEntry.TRAILER_TYPE, "Teaser");
 
@@ -149,7 +149,7 @@ public class TestUtilities extends AndroidTestCase {
         ContentValues values = new ContentValues();
         values.put(MovieEntry.MOVIE_ID, movieRowId);
         values.put(MovieEntry.ORIGINAL_TITLE, "Doctor Strange");
-        values.put(TrailerEntry.TRAILER_KEY, "ZN2GdN9A-e4");
+        //values.put(TrailerEntry.TRAILER_KEY, "ZN2GdN9A-e4");
         values.put(TrailerEntry.TRAILER_TYPE, "Teaser");
         return values;
     }

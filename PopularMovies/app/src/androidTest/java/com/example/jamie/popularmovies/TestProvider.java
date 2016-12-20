@@ -139,7 +139,6 @@ public class TestProvider extends AndroidTestCase {
         String[] columns = {
                 MovieEntry.TABLE_NAME+"."+MovieEntry.MOVIE_ID,
                 MovieEntry.TABLE_NAME+"."+MovieEntry.ORIGINAL_TITLE,
-                TrailerEntry.TABLE_NAME+"."+TrailerEntry.TRAILER_KEY,
                 TrailerEntry.TABLE_NAME+"."+TrailerEntry.TRAILER_TYPE
         };
 

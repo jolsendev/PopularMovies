@@ -1,6 +1,7 @@
 package com.example.jamie.popularmovies;
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -39,4 +40,27 @@ public final class Utility {
         return mPopularUri;
     }
 
+    public static void addMovieToFavorite(Context context, int movie_id) {
+        Uri uri = MovieContract.MovieEntry.buildMovieUri(movie_id);
+        ContentValues values = new ContentValues();
+        values.put(MovieContract.MovieEntry.IS_FAVORITE, 1);
+        context.getContentResolver().update(
+                uri, //uri
+                values,//content values
+                MovieContract.MovieEntry.MOVIE_ID+" = ?",//where
+                new String[]{Integer.toString(movie_id)}//args
+        );
+    }
+
+    public static void removeMovieToFavorite(Context context, int movie_id) {
+        Uri uri = MovieContract.MovieEntry.buildMovieUri(movie_id);
+        ContentValues values = new ContentValues();
+        values.put(MovieContract.MovieEntry.IS_FAVORITE, 0);
+        context.getContentResolver().update(
+                uri, //uri
+                values,//content values
+                MovieContract.MovieEntry.MOVIE_ID+" = ?",//where
+                new String[]{Integer.toString(movie_id)}//args
+        );
+    }
 }

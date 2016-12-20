@@ -109,7 +109,6 @@ public class TestDB extends AndroidTestCase {
         final HashSet<String> videoColumnHashSet = new HashSet();
         videoColumnHashSet.add(TrailerEntry.MOVIE_ID);
         videoColumnHashSet.add(TrailerEntry.TRAILER_NAME);
-        videoColumnHashSet.add(TrailerEntry.TRAILER_SITE);
         videoColumnHashSet.add(TrailerEntry.TRAILER_SIZE);
         videoColumnHashSet.add(TrailerEntry.TRAILER_TYPE);
 

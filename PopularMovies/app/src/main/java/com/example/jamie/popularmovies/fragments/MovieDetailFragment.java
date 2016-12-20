@@ -14,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -104,6 +105,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private TextView mMovieOverview;
     private ListView trailerListView;
     private boolean here = false;
+    private Button favoriteButton;
 
     public MovieDetailFragment() {
 
@@ -143,6 +145,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mMovieOverview = (TextView) movieLayout.findViewById(R.id.movie_overview);
         trailerListView = (ListView) movieLayout.findViewById(R.id.trailer_list_view);
         reviewListView = (ListView) movieLayout.findViewById(R.id.review_list_view);
+        favoriteButton = (Button) movieLayout.findViewById(R.id.favorite_button);
 
         return rootView;
     }
@@ -172,8 +175,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         switch (id){
             case MOVIE_LOADER:{
                 cursor = new CursorLoader(
-                        getActivity(),
-                        movieUri,
+                        getActivity(),     movieUri,
                         MOVIE_COLUMNS,
                         null, //this was what I was missing
                         null, //this was what I was missing
@@ -243,6 +245,28 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     Picasso.with(getContext())
                             .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))
                             .into(imageItem);
+
+                    final int movie_id = cursor.getInt(COL_MOVIE_ID);
+                    final int is_favorite = cursor.getInt(COL_FAVORITE);
+                    if(is_favorite == 0){
+                        favoriteButton.setText("Add favorite");
+                    }else{
+                        favoriteButton.setText("Remove favorite");
+                    }
+                    favoriteButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if(is_favorite == 0){
+                                Utility.addMovieToFavorite(getActivity(), movie_id);
+                                favoriteButton.setText("Remove favorite");
+                            }else{
+                                Utility.removeMovieToFavorite(getActivity(), movie_id);
+                                favoriteButton.setText("Remove favorite");
+                            }
+                        }
+                    });
+
                 }
                 break;
             }

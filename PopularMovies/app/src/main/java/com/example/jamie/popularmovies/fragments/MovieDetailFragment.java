@@ -107,6 +107,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private ListView trailerListView;
     private boolean here = false;
     private Button favoriteButton;
+    private Uri mMovieUri;
+    private Uri mReviewUri;
+    private Uri mTrailerUri;
 
     public MovieDetailFragment() {
 
@@ -131,10 +134,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
-
-
         View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
 
@@ -168,19 +167,23 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if (intent == null || intent.getData() == null) {
             return null;
         }
+        else{
 
-        String movie = MovieContract.MovieEntry.getMovieIdFromPath(intent.getData());
+            mUri = intent.getData();
+        }
+
+        String movie = MovieContract.MovieEntry.getMovieIdFromPath((Uri) mUri);
         int movie_id = Integer.parseInt(movie);
-        Uri movieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
-        Uri reviewUri = MovieContract.MovieEntry.buildMovieReview(movie_id);
-        Uri trailerUri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
+        mMovieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
+        mReviewUri = MovieContract.MovieEntry.buildMovieReview(movie_id);
+        mTrailerUri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
 
 
         switch (id){
             case MOVIE_LOADER:{
                 cursor = new CursorLoader(
                         getActivity(),
-                        movieUri,
+                        mMovieUri,
                         MOVIE_COLUMNS,
                         null, //this was what I was missing
                         null, //this was what I was missing
@@ -192,7 +195,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             case REVIEW_LOADER:{
                 cursor = new CursorLoader(
                         getActivity(),
-                        reviewUri,
+                        mReviewUri,
                         REVIEW_COLUMNS,
                         null, //this was what I was missing
                         null, //this was what I was missing
@@ -204,7 +207,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             case TRAILER_LOADER:{
                 cursor = new CursorLoader(
                         getActivity(),
-                        trailerUri,
+                        mTrailerUri,
                         TRAILER_COLUMNS,
                         null, //this was what I was missing
                         null, //this was what I was missing
@@ -282,5 +285,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
         reviewAdapter.swapCursor(null);
         trailerAdapter.swapCursor(null);
+    }
+
+    public void movieDetailChanged(String preference) {
+        //based on the new preference
+        //create a URI that that can be send to the 3 new adapters
+        //get movie_id of the first
     }
 }

@@ -30,6 +30,7 @@ import com.example.jamie.popularmovies.data.MovieContract;
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     private int mPosition;
 
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -45,7 +46,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public MainMovieAdapter mAdapter;
     private Uri mPopularUri;
     private String sortValue;
-    public static final int LOADER_ID = 0;
+    public static final int MAIN_MOVIE_LOADER = 0;
 
 
     private static final String[] MOVIE_COLUMNS = {
@@ -86,6 +87,13 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public static final int COL_IS_MOST_POPULAR = 15;
     public static final int COL_IS_TOP_RATED = 16;
 
+
+    public void onSortPreferenceChanged() {
+        updateMovieData();
+        getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
+
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
@@ -94,7 +102,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(MAIN_MOVIE_LOADER, null, this);
         updateMovieData();
         super.onActivityCreated(savedInstanceState);
     }

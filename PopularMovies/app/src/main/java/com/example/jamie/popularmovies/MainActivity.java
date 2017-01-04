@@ -23,12 +23,13 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     private static final String DETAIL_FRAGMENT_TAG = "DFT";
     private boolean mTwoPane;
+    private String mPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        mPreference = Utility.getSharedPreference(this);
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(new DumperPluginsProvider() {
                     @Override
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
                 if(isOnline()){
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.movie_detail_container, new MovieDetailFragment())
+                            .add(R.id.movie_detail_container, new MovieDetailFragment(),DETAIL_FRAGMENT_TAG)
                             .commit();
                 }
 
@@ -61,6 +62,24 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String preference = Utility.getSharedPreference(this);
+        if(preference != null || !preference.equals(mPreference)){
+            MainMovieFragment mMF = (MainMovieFragment)getSupportFragmentManager().findFragmentById(R.id.full_review_view);
+            if(mMF != null){
+                mMF.onSortPreferenceChanged();
+            }
+
+            MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+            if(mDF != null){
+
+                mDF.movieDetailChanged(preference);
+            }
+        }
+
+    }
     //I got this from the stack overflow link that was in the project implementation guild.
     public boolean isOnline() {
         ConnectivityManager cm =

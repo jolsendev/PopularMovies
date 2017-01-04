@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import com.example.jamie.popularmovies.FetchMovieTask;
-import com.example.jamie.popularmovies.MovieDetailView;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -29,16 +28,17 @@ import com.example.jamie.popularmovies.data.MovieContract;
 
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
+    private int mPosition;
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
      * selections.
      */
-    public interface Callback {
-        /**
+    public interface Callback {        /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri detailUri);
     }
 
     public GridView gridview;
@@ -110,9 +110,8 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
-                Intent intent = new Intent(getActivity(), MovieDetailView.class).
-                        setData(uri);
-                startActivity(intent);
+                ((Callback) getActivity()).onItemSelected(uri);
+                mPosition = position;
             }
         });
 

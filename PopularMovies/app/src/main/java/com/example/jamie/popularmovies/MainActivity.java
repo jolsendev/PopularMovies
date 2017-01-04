@@ -1,7 +1,9 @@
 package com.example.jamie.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,17 +17,11 @@ import com.facebook.stetho.dumpapp.DumpException;
 import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 
-import java.io.IOException;
-import java.util.logging.Logger;
 
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import okhttp3.Response;
+public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback {
 
 
-public class MainActivity extends AppCompatActivity {
-
-
+    private static final String DETAIL_FRAGMENT_TAG = "DFT";
     private boolean mTwoPane;
 
     @Override
@@ -82,6 +78,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(Uri detailUri) {
+        if(mTwoPane){
+            Bundle args = new Bundle();
+            args.putParcelable(MovieDetailFragment.DETAIL_URI, detailUri);
+            MovieDetailFragment mDF = new MovieDetailFragment();
+            mDF.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG);
+        }else{
+            Intent intent = new Intent(this, MovieDetailView.class).
+            setData(detailUri);
+            startActivity(intent);
+        }
     }
 
     private class MyDumperPlugin implements DumperPlugin {

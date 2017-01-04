@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.jamie.popularmovies.fragments.MainMovieFragment;
+import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 import com.facebook.stetho.DumperPluginsProvider;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.dumpapp.DumpException;
@@ -24,6 +25,8 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +46,23 @@ public class MainActivity extends AppCompatActivity {
                 .build());
 
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
 
-            if(isOnline()){
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, new MainMovieFragment())
-                        .commit();
+        if(findViewById(R.id.movie_detail_container) != null){
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+
+                if(isOnline()){
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.movie_detail_container, new MovieDetailFragment())
+                            .commit();
+                }
+
+            }else{
+                mTwoPane = false;
             }
 
         }
+
     }
 
     //I got this from the stack overflow link that was in the project implementation guild.

@@ -29,6 +29,18 @@ import com.example.jamie.popularmovies.data.MovieContract;
 
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
+    }
+
     public GridView gridview;
     public MainMovieAdapter mAdapter;
     private Uri mPopularUri;
@@ -83,17 +95,14 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        //updateMovieData();
+        updateMovieData();
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
-
-
-        View v = inflater.inflate(R.layout.activity_main,container, false);
+        View v = inflater.inflate(R.layout.activity_movie,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,7 +124,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         String sortBy = Utility.getSharedPreference(getActivity());
         Uri uri = null;
         switch(sortBy){
-
             case MovieContract.MovieEntry.TOP_RATED:{
                 uri = MovieContract.MovieEntry.buildTopRatedUri();
                 break;

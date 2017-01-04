@@ -160,22 +160,26 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         CursorLoader cursor = null;
         Intent intent = getActivity().getIntent();
+
+        if (intent == null || intent.getData() == null) {
+            return null;
+        }
+
         String movie = MovieContract.MovieEntry.getMovieIdFromPath(intent.getData());
         int movie_id = Integer.parseInt(movie);
         Uri movieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
         Uri reviewUri = MovieContract.MovieEntry.buildMovieReview(movie_id);
         Uri trailerUri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
 
-        if (intent == null) {
-            return null;
-        }
 
         switch (id){
             case MOVIE_LOADER:{
                 cursor = new CursorLoader(
-                        getActivity(),     movieUri,
+                        getActivity(),
+                        movieUri,
                         MOVIE_COLUMNS,
                         null, //this was what I was missing
                         null, //this was what I was missing

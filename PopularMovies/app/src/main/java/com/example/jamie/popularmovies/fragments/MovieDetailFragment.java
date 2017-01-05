@@ -287,9 +287,12 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         trailerAdapter.swapCursor(null);
     }
 
-    public void movieDetailChanged(String preference) {
-        //based on the new preference
-        //create a URI that that can be send to the 3 new adapters
-        //get movie_id of the first
+    public void updateDetailWithNewPreference(Uri prefUri) {
+        if(mUri != null){
+            mUri = prefUri;
+            getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
+            getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
+            getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
+        }
     }
 }

@@ -74,11 +74,15 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
             MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
             if(mDF != null){
+                Uri prefUri = Utility.getFirstMovieFromPreference(this, preference);
+                if(prefUri != null){
+                    mDF.updateDetailWithNewPreference(prefUri);
+                }
 
-                mDF.movieDetailChanged(preference);
             }
         }
 
+        mPreference = preference;
     }
     //I got this from the stack overflow link that was in the project implementation guild.
     public boolean isOnline() {

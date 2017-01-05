@@ -7,7 +7,7 @@ import android.view.Menu;
 
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 
-public class MovieDetailView extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
 
 

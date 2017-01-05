@@ -64,22 +64,29 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     @Override
     protected void onResume() {
+
         super.onResume();
+
         String preference = Utility.getSharedPreference(this);
         if(preference != null || !preference.equals(mPreference)){
             MainMovieFragment mMF = (MainMovieFragment)getSupportFragmentManager().findFragmentById(R.id.full_review_view);
+
             if(mMF != null){
                 mMF.onSortPreferenceChanged();
             }
 
-            MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
-            if(mDF != null){
-                Uri prefUri = Utility.getFirstMovieFromPreference(this, preference);
-                if(prefUri != null){
-                    mDF.updateDetailWithNewPreference(prefUri);
-                }
+            if(mTwoPane){
+                //I only want to do this in a two pane scenario
+                MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+                if(mDF != null){
+                    Uri prefUri = Utility.getFirstMovieFromPreference(this, preference);
+                    if(prefUri != null){
+                        mDF.updateDetailWithNewPreference(prefUri);
+                    }
 
+                }
             }
+
         }
 
         mPreference = preference;
@@ -112,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             mDF.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG);
         }else{
-            Intent intent = new Intent(this, MovieDetailView.class).
+            Intent intent = new Intent(this, DetailActivity.class).
             setData(detailUri);
             startActivity(intent);
         }

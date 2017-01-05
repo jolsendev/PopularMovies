@@ -117,8 +117,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
     }
 
@@ -134,8 +132,24 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
+        Bundle args = new Bundle();
+
+        if(args !=null){
+            Uri movieUri = args.getParcelable(MovieDetailFragment.DETAIL_URI);
+            if(movieUri != null){
+                String movie_id_string = MovieContract.MovieEntry.getMovieIdFromPath(movieUri);
+                long movie_id = Long.parseLong(movie_id_string);
+                setUris(movie_id);
+            }
+        }else{
+            Uri uri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
+            if(uri != null){
+                Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath(uri));
+                setUris(movie_id);
+            }
+        }
+        View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
         movieLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
         mMovieTitle = (TextView)  movieLayout.findViewById(R.id.movie_title);
@@ -174,10 +188,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
         String movie = MovieContract.MovieEntry.getMovieIdFromPath((Uri) mUri);
         int movie_id = Integer.parseInt(movie);
-        mMovieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
-        mReviewUri = MovieContract.MovieEntry.buildMovieReview(movie_id);
-        mTrailerUri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
-
+        setUris(movie_id);
 
         switch (id){
             case MOVIE_LOADER:{
@@ -294,5 +305,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
             getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
         }
+    }
+
+    public void setUris(long movie_id) {
+        mMovieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
+        mTrailerUri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
+        mReviewUri = MovieContract.MovieEntry.buildMovieReview(movie_id);
     }
 }

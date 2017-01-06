@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
                 if(isOnline()){
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.movie_detail_container, new MovieDetailFragment(),DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.movie_detail_container, new MovieDetailFragment(),DETAIL_FRAGMENT_TAG)
                             .commit();
                 }
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
         String preference = Utility.getSharedPreference(this);
         if(preference != null || !preference.equals(mPreference)){
-            MainMovieFragment mMF = (MainMovieFragment)getSupportFragmentManager().findFragmentById(R.id.full_review_view);
+            MainMovieFragment mMF = (MainMovieFragment)getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
 
             if(mMF != null){
                 mMF.onSortPreferenceChanged();
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             args.putParcelable(MovieDetailFragment.DETAIL_URI, detailUri);
             MovieDetailFragment mDF = new MovieDetailFragment();
             mDF.setArguments(args);
-            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG);
+            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG).commit();
         }else{
             Intent intent = new Intent(this, DetailActivity.class).
             setData(detailUri);

@@ -21,7 +21,6 @@ import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
  */
 
 public class DetailReviewAdapter extends CursorAdapter {
-    private ImageView imageItem;
 
     public DetailReviewAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);

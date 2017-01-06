@@ -26,6 +26,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
         super(context, c, flags);
     }
 
+    private final String BASE_URL= "http://www.youtube.com/watch?v=" ;
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.trailer_list_item, parent, false);
@@ -45,7 +46,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
             public void onClick(View v) {
                 Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + video_source));
                 Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=" + video_source));
+                        Uri.parse(BASE_URL+ video_source));
                         try {
                             mContext.startActivity(appIntent);
                         } catch (ActivityNotFoundException ex) {
@@ -55,15 +56,4 @@ public class DetailTrailerAdapter extends CursorAdapter {
             }
         });
     }
-//    public static void watchYoutubeVideo(String id){
-//        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
-//        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-//                Uri.parse("http://www.youtube.com/watch?v=" + id));
-//        try {
-//            startActivity(appIntent);
-//        } catch (ActivityNotFoundException ex) {
-//            startActivity(webIntent);
-//        }
-//    }
-
 }

@@ -105,20 +105,6 @@ public class MovieContract {
             return retUri;
         }
 
-//        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-//        public static boolean isMovieIdInDB(Uri uri, Context mContext) {
-//            Cursor cursor = mContext.getContentResolver().query(
-//                    uri,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null);
-//            if(cursor.getCount()!=0)
-//                return true;
-//            else
-//                return false;
-//        }
 
         public static String getMovieIdFromPath(Uri uri) {
             return uri.getPathSegments().get(1);

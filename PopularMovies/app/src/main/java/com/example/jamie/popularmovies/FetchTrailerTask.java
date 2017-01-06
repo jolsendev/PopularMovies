@@ -34,17 +34,20 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
             JSONObject movieJsonObject = new JSONObject(movieJsonData);
 
             JSONArray itemsArray = movieJsonObject.getJSONArray(MOVIE_RESULTS);
-            for (int i = 0; i < itemsArray.length(); i++) {
+            if(itemsArray != null){
+                for (int i = 0; i < itemsArray.length(); i++) {
 
-                JSONObject jsonMovieData = itemsArray.getJSONObject(i);
-                int movieID = jsonMovieData.getInt(MOVIE_ID);
+                    JSONObject jsonMovieData = itemsArray.getJSONObject(i);
+                    int movieID = jsonMovieData.getInt(MOVIE_ID);
 
-                Uri reviewUri = Utility.getUrlByIdForType(Integer.toString(movieID),TrailerEntry.TABLE_NAME);
-                String rawData = new FetchRawData(reviewUri.toString()).fetch();
-                JSONObject reviews = new JSONObject(rawData);
-                ExtractJSONTrailerData fetchTrailerTask = new ExtractJSONTrailerData(reviews.toString(), mContext);
-                fetchTrailerTask.putTrailersInDatabase();
+                    Uri reviewUri = Utility.getUrlByIdForType(Integer.toString(movieID),TrailerEntry.TABLE_NAME);
+                    String rawData = new FetchRawData(reviewUri.toString()).fetch();
+                    JSONObject reviews = new JSONObject(rawData);
+                    ExtractJSONTrailerData fetchTrailerTask = new ExtractJSONTrailerData(reviews.toString(), mContext);
+                    fetchTrailerTask.putTrailersInDatabase();
+                }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

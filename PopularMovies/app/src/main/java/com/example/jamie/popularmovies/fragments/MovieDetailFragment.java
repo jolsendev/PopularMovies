@@ -118,6 +118,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -133,22 +134,23 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Bundle args = new Bundle();
+        Bundle arguments = getArguments();
 
-        if(args !=null){
-            Uri movieUri = args.getParcelable(MovieDetailFragment.DETAIL_URI);
-            if(movieUri != null){
-                String movie_id_string = MovieContract.MovieEntry.getMovieIdFromPath(movieUri);
+        if(arguments != null){
+            mUri = arguments.getParcelable(DETAIL_URI);
+            if(mUri != null){
+                String movie_id_string = MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri);
                 long movie_id = Long.parseLong(movie_id_string);
                 setUris(movie_id);
             }
         }else{
-            Uri uri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
-            if(uri != null){
-                Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath(uri));
+            mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
+            if(mUri != null){
+                Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri));
                 setUris(movie_id);
             }
         }
+
         View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
         movieLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
@@ -176,16 +178,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         CursorLoader cursor = null;
-        Intent intent = getActivity().getIntent();
-
-        if (intent == null || intent.getData() == null) {
-            return null;
-        }
-        else{
-
-            mUri = intent.getData();
-        }
-
         String movie = MovieContract.MovieEntry.getMovieIdFromPath((Uri) mUri);
         int movie_id = Integer.parseInt(movie);
         setUris(movie_id);
@@ -259,7 +251,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE)));
                     mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
                     mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
-//
                     ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
                     Picasso.with(getContext())
                             .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))
@@ -272,6 +263,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     }else{
                         favoriteButton.setText("Remove favorite");
                     }
+
                     favoriteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -1,6 +1,5 @@
 package com.example.jamie.popularmovies.fragments;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
@@ -46,6 +45,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.VOTE_AVERAGE,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.FAVORITE,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.RELEASE_DATE,
+            MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.BACKDROP_PATH,
     };
 
     private static final String[] REVIEW_COLUMNS = {
@@ -75,6 +75,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public static final int COL_VOTE_AVERAGE = 4;
     public static final int COL_FAVORITE = 5;
     public static final int COL_RELEASE_DATE = 6;
+    public static final int COL_BACKDROP_PATH = 7;
 
     public static final int COL_REVIEW_ID = 0;
     public static final int COL_REVIEW_MOVIE_ID = 1;
@@ -143,7 +144,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 long movie_id = Long.parseLong(movie_id_string);
                 setUris(movie_id);
             }
-        }else{
+        }
+        else{
             mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
             if(mUri != null){
                 Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri));
@@ -253,7 +255,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
                     ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
                     Picasso.with(getContext())
-                            .load(Utility.getImagePath(cursor.getString(COL_POSTER_PATH)))
+                            .load(Utility.getImagePath(cursor.getString(COL_BACKDROP_PATH)))
                             .into(imageItem);
 
                     final int movie_id = cursor.getInt(COL_MOVIE_ID);

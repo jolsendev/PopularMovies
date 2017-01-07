@@ -89,7 +89,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
 
     public void onSortPreferenceChanged() {
-        updateMovieData();
+        //updateMovieData();
         getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
 
     }

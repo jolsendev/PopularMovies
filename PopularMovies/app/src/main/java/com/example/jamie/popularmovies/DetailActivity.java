@@ -22,7 +22,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_detail);
         if(savedInstanceState == null){
 
             Bundle arguments = new Bundle();
@@ -31,10 +31,8 @@ public class DetailActivity extends AppCompatActivity {
             MovieDetailFragment mDF = new MovieDetailFragment();
             mDF.setArguments(arguments);
 
-            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, mDF)
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, mDF, MainActivity.DETAIL_FRAGMENT_TAG)
                     .commit();
         }
     }
-
-
 }

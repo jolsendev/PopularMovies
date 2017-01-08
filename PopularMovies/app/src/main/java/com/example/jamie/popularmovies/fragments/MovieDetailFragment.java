@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.jamie.popularmovies.MainActivity;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
@@ -135,6 +136,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+//        MovieDetailFragment tag = (MovieDetailFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.DETAIL_FRAGMENT_TAG);
+//        if(tag != null){
+//            //HERE
+//        }
         Bundle arguments = getArguments();
 
         if(arguments != null){
@@ -146,11 +151,14 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             }
         }
         else{
-            mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
-            if(mUri != null){
-                Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri));
+            //mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
+            //if(mUri != null){
+                mUri = getActivity().getIntent().getData();
+            if(mUri != null) {
+                Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri) mUri));
                 setUris(movie_id);
             }
+            //}
         }
 
         View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
@@ -179,6 +187,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        if(mUri == null){
+            return null;
+        }
         CursorLoader cursor = null;
         String movie = MovieContract.MovieEntry.getMovieIdFromPath((Uri) mUri);
         int movie_id = Integer.parseInt(movie);

@@ -21,7 +21,7 @@ import com.facebook.stetho.dumpapp.DumperPlugin;
 public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback {
 
 
-    private static final String DETAIL_FRAGMENT_TAG = "DFT";
+    public static final String DETAIL_FRAGMENT_TAG = "DFT";
     private boolean mTwoPane;
     private String mPreference;
 
@@ -54,10 +54,9 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
                             .commit();
                 }
 
-            }else{
-                mTwoPane = false;
             }
-
+        }else{
+            mTwoPane = false;
         }
 
     }
@@ -68,29 +67,30 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
         super.onResume();
 
         String preference = Utility.getSharedPreference(this);
-        if(preference != null || !preference.equals(mPreference)){
-            MainMovieFragment mMF = (MainMovieFragment)getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
+        if (preference != null || !preference.equals(mPreference)) {
+            MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
 
-            if(mMF != null){
+            if (mMF != null) {
                 mMF.onSortPreferenceChanged();
             }
 
-            if(mTwoPane){
+            if (mTwoPane) {
                 //I only want to do this in a two pane scenario
-                MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
-                if(mDF != null){
-                    Uri prefUri = Utility.getFirstMovieFromPreference(this, preference);
-                    if(prefUri != null){
-                        mDF.updateDetailWithNewPreference(prefUri);
-                    }
+                MovieDetailFragment mDF = (MovieDetailFragment) getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+                if (mDF != null) {
+                    //Uri prefUri = Utility.getFirstMovieFromPreference(this, preference);
+                    //if(prefUri != null){
+                    //mDF.updateDetailWithNewPreference(mUri);
+                    //}
 
                 }
+
             }
 
+            mPreference = preference;
         }
-
-        mPreference = preference;
     }
+
     //I got this from the stack overflow link that was in the project implementation guild.
     public boolean isOnline() {
         ConnectivityManager cm =
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             args.putParcelable(MovieDetailFragment.DETAIL_URI, detailUri);
             MovieDetailFragment mDF = new MovieDetailFragment();
             mDF.setArguments(args);
-            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG).commit();
         }else{
             Intent intent = new Intent(this, DetailActivity.class).
             setData(detailUri);

@@ -65,7 +65,7 @@ public final class Utility {
         );
     }
 
-    public static Uri getFirstMovieFromPreference(Context context, String preference) {
+    private static Uri getFirstMovieFromPreference(Context context, String preference) {
 
         Cursor cur = null;
         switch(preference){

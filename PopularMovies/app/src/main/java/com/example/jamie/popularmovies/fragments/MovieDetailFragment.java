@@ -1,7 +1,6 @@
 package com.example.jamie.popularmovies.fragments;
 
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.jamie.popularmovies.MainActivity;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
@@ -99,19 +97,21 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private DetailTrailerAdapter trailerAdapter;
     private DetailReviewAdapter reviewAdapter;
 
-    private ListView reviewListView;
-    private LinearLayout movieLayout;
+    private ListView mReviewListView;
+    private LinearLayout mDetailLayout;
     private TextView mMovieTitle;
     private ImageView mMovieImage;
     private TextView mMovieRating;
     private TextView mReleaseDate;
     private TextView mMovieOverview;
-    private ListView trailerListView;
+    private ListView mTrailerListView;
     private boolean here = false;
     private Button favoriteButton;
     private Uri mMovieUri;
     private Uri mReviewUri;
     private Uri mTrailerUri;
+    private TextView mTrailerTitle;
+    private  TextView mReviewTitle;
 
     public MovieDetailFragment() {
 
@@ -136,10 +136,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-//        MovieDetailFragment tag = (MovieDetailFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.DETAIL_FRAGMENT_TAG);
-//        if(tag != null){
-//            //HERE
-//        }
         Bundle arguments = getArguments();
 
         if(arguments != null){
@@ -150,28 +146,21 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 setUris(movie_id);
             }
         }
-        else{
-            //mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
-            //if(mUri != null){
-                mUri = getActivity().getIntent().getData();
-            if(mUri != null) {
-                Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri) mUri));
-                setUris(movie_id);
-            }
-            //}
-        }
 
         View rootView = inflater.inflate(R.layout.activity_movie_detail_view, container, false);
 
-        movieLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
-        mMovieTitle = (TextView)  movieLayout.findViewById(R.id.movie_title);
-        mMovieImage = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
-        mMovieRating = (TextView) movieLayout.findViewById(R.id.movie_rating);
-        mReleaseDate = (TextView) movieLayout.findViewById(R.id.movie_release_date);
-        mMovieOverview = (TextView) movieLayout.findViewById(R.id.movie_overview);
-        trailerListView = (ListView) movieLayout.findViewById(R.id.trailer_list_view);
-        reviewListView = (ListView) movieLayout.findViewById(R.id.review_list_view);
-        favoriteButton = (Button) movieLayout.findViewById(R.id.favorite_button);
+        mDetailLayout = (LinearLayout) rootView.findViewById(R.id.movie_container);
+        mMovieTitle = (TextView)  mDetailLayout.findViewById(R.id.movie_title);
+        mMovieImage = (ImageView) mDetailLayout.findViewById(R.id.detail_movie_image);
+        mMovieRating = (TextView) mDetailLayout.findViewById(R.id.movie_rating);
+        mReleaseDate = (TextView) mDetailLayout.findViewById(R.id.movie_release_date);
+        mMovieOverview = (TextView) mDetailLayout.findViewById(R.id.movie_overview);
+        mTrailerListView = (ListView) mDetailLayout.findViewById(R.id.trailer_list_view);
+        mTrailerTitle = (TextView) mDetailLayout.findViewById(R.id.trailer_title);
+        mReviewListView = (ListView) mDetailLayout.findViewById(R.id.review_list_view);
+        mReviewTitle = (TextView) mDetailLayout.findViewById(R.id.review_title);
+        favoriteButton = (Button) mDetailLayout.findViewById(R.id.favorite_button);
+
 
         return rootView;
     }
@@ -246,25 +235,38 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         int id = loader.getId();
         switch (id){
             case TRAILER_LOADER:{
-                String holder = DatabaseUtils.dumpCursorToString(cursor);
+
+                if(cursor.moveToFirst()){
+                    mTrailerTitle.setVisibility(View.VISIBLE);
+                }else{
+                    mTrailerTitle.setVisibility(View.GONE);
+                }
                 trailerAdapter.swapCursor(cursor);
-                trailerListView.setAdapter(trailerAdapter);
+                mTrailerListView.setAdapter(trailerAdapter);
                 break;
             }
             case REVIEW_LOADER:{
 
+                if(cursor.moveToFirst()){
+                    mReviewTitle.setVisibility(View.VISIBLE);
+                }else{
+                    mReviewTitle.setVisibility(View.GONE);
+                }
                 reviewAdapter.swapCursor(cursor);
-                reviewListView.setAdapter(reviewAdapter);
+                mReviewListView.setAdapter(reviewAdapter);
                 break;
             }
+
             case MOVIE_LOADER:{
 
                 if(cursor.moveToFirst()){
+                    setViewsVisible();
                     mMovieTitle.setText(cursor.getString(COL_TITLE));
                     mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE)));
                     mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
                     mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
-                    ImageView imageItem = (ImageView) movieLayout.findViewById(R.id.detail_movie_image);
+                    ImageView imageItem = (ImageView) mDetailLayout.findViewById(R.id.detail_movie_image);
+
                     Picasso.with(getContext())
                             .load(Utility.getImagePath(cursor.getString(COL_BACKDROP_PATH)))
                             .into(imageItem);
@@ -295,6 +297,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 break;
             }
         }
+    }
+
+    private void setViewsVisible() {
+        mMovieTitle.setVisibility(View.VISIBLE);
+        favoriteButton.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -103,7 +103,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(MAIN_MOVIE_LOADER, null, this);
-        updateMovieData();
+        //updateMovieData();
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable

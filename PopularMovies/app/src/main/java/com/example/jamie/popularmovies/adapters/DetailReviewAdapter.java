@@ -11,6 +11,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.jamie.popularmovies.MainActivity;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.ReviewActivity;
 import com.example.jamie.popularmovies.data.MovieContract;

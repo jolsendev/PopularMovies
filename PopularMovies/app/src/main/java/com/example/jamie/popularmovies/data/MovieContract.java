@@ -40,6 +40,7 @@ public class MovieContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
         public static final String MOVIE_DETAIL = "detail";
+        public static final String POSITION = "position";
 
 
         //top_rated

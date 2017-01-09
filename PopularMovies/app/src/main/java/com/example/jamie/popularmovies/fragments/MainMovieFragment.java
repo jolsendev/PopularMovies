@@ -45,6 +45,15 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public GridView gridview;
     public MainMovieAdapter mAdapter;
     private Uri mPopularUri;
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if( mPosition != gridview.INVALID_POSITION){
+            outState.putInt(MovieContract.MovieEntry.POSITION, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
     private String sortValue;
     public static final int MAIN_MOVIE_LOADER = 0;
 
@@ -108,10 +117,15 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     }
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_movie,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
+
+        if(savedInstanceState != null){
+            mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
+        }
+
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -122,8 +136,12 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 mPosition = position;
             }
         });
-
         gridview.setAdapter(mAdapter);
+
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(MovieContract.MovieEntry.POSITION)){
+            mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
+        }
         return v;
     }
 
@@ -246,6 +264,9 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(mPosition != gridview.INVALID_POSITION){
+            gridview.setSelection(mPosition);
+        }
         mAdapter.swapCursor(data);
     }
 

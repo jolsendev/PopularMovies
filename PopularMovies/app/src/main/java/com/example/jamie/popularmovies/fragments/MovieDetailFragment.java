@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,6 +24,7 @@ import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
 import com.example.jamie.popularmovies.adapters.DetailTrailerAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
+import com.example.jamie.popularmovies.custom_views.CustomListView;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -97,16 +99,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private DetailTrailerAdapter trailerAdapter;
     private DetailReviewAdapter reviewAdapter;
 
-    private ListView mReviewListView;
+    private CustomListView mReviewListView;
     private LinearLayout mDetailLayout;
     private TextView mMovieTitle;
     private ImageView mMovieImage;
     private TextView mMovieRating;
     private TextView mReleaseDate;
     private TextView mMovieOverview;
-    private ListView mTrailerListView;
+    private CustomListView mTrailerListView;
     private boolean here = false;
-    private Button favoriteButton;
+    private CheckBox favoriteCheckbox;
     private Uri mMovieUri;
     private Uri mReviewUri;
     private Uri mTrailerUri;
@@ -155,11 +157,13 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mMovieRating = (TextView) mDetailLayout.findViewById(R.id.movie_rating);
         mReleaseDate = (TextView) mDetailLayout.findViewById(R.id.movie_release_date);
         mMovieOverview = (TextView) mDetailLayout.findViewById(R.id.movie_overview);
-        mTrailerListView = (ListView) mDetailLayout.findViewById(R.id.trailer_list_view);
+        mTrailerListView = (CustomListView) mDetailLayout.findViewById(R.id.trailer_list_view);
+        mTrailerListView.setExpanded(true);
         mTrailerTitle = (TextView) mDetailLayout.findViewById(R.id.trailer_title);
-        mReviewListView = (ListView) mDetailLayout.findViewById(R.id.review_list_view);
+        mReviewListView = (CustomListView) mDetailLayout.findViewById(R.id.review_list_view);
+        mReviewListView.setExpanded(true);
         mReviewTitle = (TextView) mDetailLayout.findViewById(R.id.review_title);
-        favoriteButton = (Button) mDetailLayout.findViewById(R.id.favorite_button);
+        favoriteCheckbox = (CheckBox) mDetailLayout.findViewById(R.id.favorite_checkbox);
 
 
         return rootView;
@@ -238,6 +242,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
                 if(cursor.moveToFirst()){
                     mTrailerTitle.setVisibility(View.VISIBLE);
+
                 }else{
                     mTrailerTitle.setVisibility(View.GONE);
                 }
@@ -274,21 +279,26 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     final int movie_id = cursor.getInt(COL_MOVIE_ID);
                     final int is_favorite = cursor.getInt(COL_FAVORITE);
                     if(is_favorite == 0){
-                        favoriteButton.setText("Add favorite");
-                    }else{
-                        favoriteButton.setText("Remove favorite");
+                        favoriteCheckbox.setText("Favorite");
+
+                        //checkbox
+                    }
+                    else{
+                        favoriteCheckbox.setText("Favorite");
+                        favoriteCheckbox.setChecked(true);
+                        //removecheck
                     }
 
-                    favoriteButton.setOnClickListener(new View.OnClickListener() {
+                    favoriteCheckbox.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             if(is_favorite == 0){
                                 Utility.addMovieToFavorite(getActivity(), movie_id);
-                                favoriteButton.setText("Remove favorite");
+                                favoriteCheckbox.setText("Remove favorite");
                             }else{
                                 Utility.removeMovieToFavorite(getActivity(), movie_id);
-                                favoriteButton.setText("Remove favorite");
+                                favoriteCheckbox.setText("Remove favorite");
                             }
                         }
                     });
@@ -301,7 +311,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     private void setViewsVisible() {
         mMovieTitle.setVisibility(View.VISIBLE);
-        favoriteButton.setVisibility(View.VISIBLE);
+        favoriteCheckbox.setVisibility(View.VISIBLE);
     }
 
     @Override

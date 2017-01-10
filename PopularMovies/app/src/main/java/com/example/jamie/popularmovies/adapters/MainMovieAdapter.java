@@ -35,7 +35,7 @@ public class MainMovieAdapter extends CursorAdapter {
         String path = cursor.getString(MainMovieFragment.COL_POSTER_PATH);
         ImageView imageItem = (ImageView) view.findViewById(R.id.thumbnail);
         Picasso.with(context)
-                .load(Utility.getImagePath(path))
+                .load(Utility.getImagePath(path)).placeholder(R.drawable.popcorntime)
                 .into(imageItem);
 
     }

@@ -1,12 +1,10 @@
 package com.example.jamie.popularmovies;
 
-import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 
 import com.example.jamie.popularmovies.data.MovieContract;
@@ -18,7 +16,10 @@ import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 public final class Utility {
     public static final String MOVIE_KEY = "movie";
     public static final String MOVIE_API_KEY = BuildConfig.API_KEY;
-    private static String IMAGE_BASE_PATH = "http://image.tmdb.org/t/p/w185/";
+    private static String BASE_PATH = "http://image.tmdb.org/t/p/";
+    private static String IMAGE_BASE_PATH = BASE_PATH+"/w185/";
+    private static String BACKDROP_PATH = BASE_PATH+"/w342/";
+
     
 
     public static String getImagePath(String imageID){
@@ -109,5 +110,9 @@ public final class Utility {
         }else{
             return null;
         }
+    }
+
+    public static String getImagePathBackDrop(String string) {
+        return BACKDROP_PATH + string;
     }
 }

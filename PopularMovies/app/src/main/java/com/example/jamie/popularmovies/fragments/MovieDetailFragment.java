@@ -12,19 +12,17 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
 import com.example.jamie.popularmovies.adapters.DetailTrailerAdapter;
-import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.custom_views.CustomListView;
+import com.example.jamie.popularmovies.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -273,7 +271,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     ImageView imageItem = (ImageView) mDetailLayout.findViewById(R.id.detail_movie_image);
 
                     Picasso.with(getContext())
-                            .load(Utility.getImagePath(cursor.getString(COL_BACKDROP_PATH)))
+                            .load(Utility.getImagePathBackDrop(cursor.getString(COL_BACKDROP_PATH)))
                             .into(imageItem);
 
                     final int movie_id = cursor.getInt(COL_MOVIE_ID);

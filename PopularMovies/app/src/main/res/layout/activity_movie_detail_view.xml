@@ -13,7 +13,7 @@
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
         android:id="@+id/movie_container"
-        android:weightSum="5"
+        android:weightSum="7"
         >
         <TextView
             android:layout_width="match_parent"
@@ -24,58 +24,61 @@
             android:id="@+id/movie_title"
             android:visibility="gone"
             android:layout_weight="1"
-            />
+
+            android:fontFamily="sans-serif" />
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1"
+
             >
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 >
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:id="@+id/detail_movie_image"
                     android:scaleType="fitXY"
+                    android:focusableInTouchMode="true"
                     />
             </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
                     >
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/movie_rating"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
                         />
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:id="@+id/movie_release_date"
                         />
+                    <CheckBox
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:id="@+id/favorite_checkbox"
+                        android:visibility="gone"
+                        />
                 </LinearLayout>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/favorite_checkbox"
-                    android:visibility="gone"
-                    />
-
-            </LinearLayout>
 
 
 
@@ -132,7 +135,8 @@
             <com.example.jamie.popularmovies.custom_views.CustomListView
                 android:id="@+id/review_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:requiresFadingEdge="horizontal">
             </com.example.jamie.popularmovies.custom_views.CustomListView>>
         </LinearLayout>
 

@@ -3,15 +3,12 @@ package com.example.jamie.popularmovies.extracting_json_data;
 import android.content.ContentValues;
 import android.content.Context;
 
-import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -43,6 +40,7 @@ public class ExtractJSONReviewData {
             int movieId = jsonData.getInt(MOVIE_ID);
             Vector<ContentValues> cVVector = new Vector(jsonData.length());
             JSONArray itemsArray = jsonData.getJSONArray(REVIEW_RESULTS);
+            int le = itemsArray.length();
             for(int i = 0; i < itemsArray.length(); i++){
                 ContentValues reviewValues = new ContentValues();
                 JSONObject jObj = itemsArray.getJSONObject(i);

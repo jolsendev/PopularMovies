@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import com.example.jamie.popularmovies.FetchMovieTask;
+import com.example.jamie.popularmovies.FetchReviewTask;
+import com.example.jamie.popularmovies.FetchTrailerTask;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -29,6 +31,8 @@ import com.example.jamie.popularmovies.data.MovieContract;
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     private int mPosition;
+    private Uri mReviewUri;
+    private Uri mTrailerUri;
 
 
     /**
@@ -112,7 +116,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(MAIN_MOVIE_LOADER, null, this);
-        //updateMovieData();
+        updateMovieData();
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
@@ -126,6 +130,8 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
             mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
         }
 
+
+
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,6 +139,8 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 ((Callback) getActivity()).onItemSelected(uri);
+                UpdateReview(movieId);
+                UpdateTrailer(movieId);
                 mPosition = position;
             }
         });
@@ -143,6 +151,18 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
             mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
         }
         return v;
+    }
+
+    private void UpdateReview(long movie_id){
+        mReviewUri = Utility.getUrlByIdForType(Long.toString(movie_id), MovieContract.ReviewEntry.TABLE_NAME);
+        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
+        reviewTask.execute(mReviewUri.toString());
+    }
+
+    private void UpdateTrailer(long movie_id){
+        mTrailerUri = Utility.getUrlByIdForType(Long.toString(movie_id), MovieContract.TrailerEntry.TABLE_NAME);
+        FetchTrailerTask trailerTask = new FetchTrailerTask(getContext());
+        trailerTask.execute(mTrailerUri.toString());
     }
 
     private void createAdapterWithCursor() {

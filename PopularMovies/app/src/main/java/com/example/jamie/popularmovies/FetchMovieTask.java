@@ -21,15 +21,6 @@ public class FetchMovieTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String movieJson) {
         super.onPostExecute(movieJson);
-
-
-        //Is this super weird....
-        FetchReviewTask reviewTask = new FetchReviewTask(mContext);
-        reviewTask.execute(movieJson);
-
-        FetchTrailerTask trailerTask = new FetchTrailerTask(mContext);
-        trailerTask.execute(movieJson);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

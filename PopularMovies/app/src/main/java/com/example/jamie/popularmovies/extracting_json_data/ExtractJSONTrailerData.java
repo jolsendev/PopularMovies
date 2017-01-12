@@ -31,11 +31,6 @@ public class ExtractJSONTrailerData {
         final String TRAILER_TYPE = "type";
         final String TRAILER_SOURCE = "source";
 
-//        "name": "Doctor Strange Official Trailer 2",
-//                "size": "HD",
-//                "source": "HSzx-zryEgM",
-//                "type": "Trailer"
-
         try {
 
             JSONObject jsonData = new JSONObject(jsonString);
@@ -64,6 +59,4 @@ public class ExtractJSONTrailerData {
             e.printStackTrace();
         }
     }
-
-
 }

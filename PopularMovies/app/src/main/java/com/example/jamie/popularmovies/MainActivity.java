@@ -18,12 +18,13 @@ import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 
 
-public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback {
+public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback{
 
 
     public static final String DETAIL_FRAGMENT_TAG = "DFT";
     private boolean mTwoPane;
     private String mPreference;
+    private MovieDetailFragment mDF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,18 +113,46 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     @Override
     public void onItemSelected(Uri detailUri) {
+
         if(mTwoPane){
             Bundle args = new Bundle();
             args.putParcelable(MovieDetailFragment.DETAIL_URI, detailUri);
-            MovieDetailFragment mDF = new MovieDetailFragment();
+            mDF = new MovieDetailFragment();
             mDF.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG).commit();
         }else{
             Intent intent = new Intent(this, DetailActivity.class).
+            setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).
             setData(detailUri);
             startActivity(intent);
         }
     }
+
+    @Override
+    public void RestartReviewLoader() {
+        if(mTwoPane){
+            mDF.RestartReviewLoader();
+        }
+    }
+
+    @Override
+    public void RestartTrailerLoader() {
+        if(mTwoPane){
+            mDF.RestartTrailerLoader();
+        }
+
+    }
+
+
+//    @Override
+//    public void RestartReviewLoader(Uri detailUri) {
+//        onItemSelected(detailUri);
+//    }
+//
+//    @Override
+//    public void RestartTrailerLoader(Uri detailUri) {
+//        onItemSelected(detailUri);
+//    }
 
     private class MyDumperPlugin implements DumperPlugin {
         @Override

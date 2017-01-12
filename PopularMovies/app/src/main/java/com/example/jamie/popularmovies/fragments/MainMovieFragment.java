@@ -139,8 +139,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 ((Callback) getActivity()).onItemSelected(uri);
-                UpdateReview(movieId);
-                UpdateTrailer(movieId);
                 mPosition = position;
             }
         });
@@ -153,17 +151,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         return v;
     }
 
-    private void UpdateReview(long movie_id){
-        mReviewUri = Utility.getUrlByIdForType(Long.toString(movie_id), MovieContract.ReviewEntry.TABLE_NAME);
-        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
-        reviewTask.execute(mReviewUri.toString());
-    }
 
-    private void UpdateTrailer(long movie_id){
-        mTrailerUri = Utility.getUrlByIdForType(Long.toString(movie_id), MovieContract.TrailerEntry.TABLE_NAME);
-        FetchTrailerTask trailerTask = new FetchTrailerTask(getContext());
-        trailerTask.execute(mTrailerUri.toString());
-    }
 
     private void createAdapterWithCursor() {
         String sortBy = Utility.getSharedPreference(getActivity());

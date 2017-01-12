@@ -115,4 +115,34 @@ public final class Utility {
     public static String getImagePathBackDrop(String string) {
         return BACKDROP_PATH + string;
     }
+
+    public static boolean isReviewInDatabase(int movieId, Context mContext) {
+        Cursor cur = mContext.getContentResolver().query(
+                MovieContract.MovieEntry.buildMovieReview(movieId),
+                null,
+                MovieContract.ReviewEntry.MOVIE_ID+" = "+movieId,
+                null,
+                null
+        );
+        if(cur.moveToFirst()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static boolean isTrailerInDatabase(long movieId, Context mContext) {
+        Cursor cur = mContext.getContentResolver().query(
+                MovieContract.MovieEntry.buildMovieTrailer(movieId),
+                null,
+                MovieContract.TrailerEntry.MOVIE_ID+" = "+movieId,
+                null,
+                null
+        );
+        if(cur.moveToFirst()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

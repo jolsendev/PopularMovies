@@ -3,6 +3,7 @@ package com.example.jamie.popularmovies.extracting_json_data;
 import android.content.ContentValues;
 import android.content.Context;
 
+import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.data.MovieContract.ReviewEntry;
 
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ public class ExtractJSONReviewData {
 
     String jsonString;
     Context mContext;
+    private int movieId;
 
 
     public ExtractJSONReviewData(String jsonString, Context mContext) {
@@ -37,29 +39,37 @@ public class ExtractJSONReviewData {
         try {
 
             JSONObject jsonData = new JSONObject(jsonString);
-            int movieId = jsonData.getInt(MOVIE_ID);
-            Vector<ContentValues> cVVector = new Vector(jsonData.length());
-            JSONArray itemsArray = jsonData.getJSONArray(REVIEW_RESULTS);
-            int le = itemsArray.length();
-            for(int i = 0; i < itemsArray.length(); i++){
-                ContentValues reviewValues = new ContentValues();
-                JSONObject jObj = itemsArray.getJSONObject(i);
-                reviewValues.put(ReviewEntry.MOVIE_ID, movieId);
-                reviewValues.put(ReviewEntry.REVIEW_AUTHOR, jObj.getString(REVIEW_AUTHOR));
-                reviewValues.put(ReviewEntry.REVIEW_CONTENT, jObj.getString(REVIEW_CONTENT));
-                reviewValues.put(ReviewEntry.REVIEW_URL, jObj.getString(REVIEW_URL));
-                cVVector.add(reviewValues);
+            movieId = jsonData.getInt(MOVIE_ID);
+            if(Utility.isReviewInDatabase(movieId, mContext)){
+                Vector<ContentValues> cVVector = new Vector(jsonData.length());
+                JSONArray itemsArray = jsonData.getJSONArray(REVIEW_RESULTS);
+                int le = itemsArray.length();
+                for(int i = 0; i < itemsArray.length(); i++){
+                    ContentValues reviewValues = new ContentValues();
+                    JSONObject jObj = itemsArray.getJSONObject(i);
+                    reviewValues.put(ReviewEntry.MOVIE_ID, movieId);
+                    reviewValues.put(ReviewEntry.REVIEW_AUTHOR, jObj.getString(REVIEW_AUTHOR));
+                    reviewValues.put(ReviewEntry.REVIEW_CONTENT, jObj.getString(REVIEW_CONTENT));
+                    reviewValues.put(ReviewEntry.REVIEW_URL, jObj.getString(REVIEW_URL));
+                    cVVector.add(reviewValues);
+                }
+
+                int inserted = 0;
+                //add to database
+                if ( cVVector.size() > 0 ) {
+                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                    cVVector.toArray(cvArray);
+                    mContext.getContentResolver().bulkInsert(ReviewEntry.CONTENT_URI, cvArray);
+                }
+
             }
 
-            int inserted = 0;
-            //add to database
-            if ( cVVector.size() > 0 ) {
-                ContentValues[] cvArray = new ContentValues[cVVector.size()];
-                cVVector.toArray(cvArray);
-                mContext.getContentResolver().bulkInsert(ReviewEntry.CONTENT_URI, cvArray);
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public long getMovieId() {
+        return movieId;
     }
 }

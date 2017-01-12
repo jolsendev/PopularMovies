@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.jamie.popularmovies.FetchReviewTask;
+import com.example.jamie.popularmovies.FetchTrailerTask;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.DetailReviewAdapter;
@@ -32,9 +34,9 @@ import com.squareup.picasso.Picasso;
 public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String DETAIL_URI = "detail_uri";
     private static ImageView imageItem;
-    private static final int MOVIE_LOADER = 0;
-    private static final int REVIEW_LOADER = 1;
-    private static final int TRAILER_LOADER = 2;
+    public static final int MOVIE_LOADER = 0;
+    public static final int REVIEW_LOADER = 1;
+    public final int TRAILER_LOADER = 2;
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry.TABLE_NAME+"."+ MovieContract.MovieEntry.MOVIE_ID,
@@ -143,6 +145,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             if(mUri != null){
                 String movie_id_string = MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri);
                 long movie_id = Long.parseLong(movie_id_string);
+                UpdateReview(movie_id);
+                UpdateTrailer(movie_id);
                 setUris(movie_id);
             }
         }
@@ -318,18 +322,41 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         trailerAdapter.swapCursor(null);
     }
 
-    public void updateDetailWithNewPreference(Uri prefUri) {
-        if(mUri != null){
-            mUri = prefUri;
-            getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
-            getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
-            getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
-        }
-    }
+//    public void restartDetailLoaders(){
+//        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
+//        getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
+//        getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
+//    }
+//    public void updateDetailWithNewPreference(Uri prefUri) {
+//        if(mUri != null){
+//            mUri = prefUri;
+//            //restartDetailLoaders();
+//        }
+//    }
 
     public void setUris(long movie_id) {
         mMovieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
         mTrailerUri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
         mReviewUri = MovieContract.MovieEntry.buildMovieReview(movie_id);
+    }
+
+    private void UpdateReview(long movie_id){
+        mReviewUri = Utility.getUrlByIdForType(Long.toString(movie_id), MovieContract.ReviewEntry.TABLE_NAME);
+        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
+        reviewTask.execute(mReviewUri.toString());
+    }
+
+    private void UpdateTrailer(long movie_id){
+        mTrailerUri = Utility.getUrlByIdForType(Long.toString(movie_id), MovieContract.TrailerEntry.TABLE_NAME);
+        FetchTrailerTask trailerTask = new FetchTrailerTask(getContext());
+        trailerTask.execute(mTrailerUri.toString());
+    }
+
+    public void RestartTrailerLoader() {
+        getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
+    }
+
+    public void RestartReviewLoader() {
+        getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
     }
 }

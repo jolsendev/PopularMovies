@@ -1,31 +1,42 @@
 package com.example.jamie.popularmovies;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.example.jamie.popularmovies.data.FetchRawData;
+import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.extracting_json_data.ExtractJSONReviewData;
 
 /**
  * Created by jamie on 12/4/16.
  */
 
-public class FetchReviewTask extends AsyncTask<String, Void, Void> {
+public class FetchReviewTask extends AsyncTask<String, Void, Uri>{
     Context mContext;
-
-
-    String rawData;
 
     public FetchReviewTask(Context mContext) {
         this.mContext = mContext;
     }
-    final String MOVIE_RESULTS = "results";
-    final String MOVIE_ID = "id";
+
+    public interface Callback {
+
+    void RestartReviewLoader();
+
+    }
     @Override
-    protected Void doInBackground(String... params) {
+    protected void onPostExecute(Uri uri) {
+        super.onPostExecute(uri);
+       ((Callback) mContext).RestartReviewLoader();
+
+    }
+
+    @Override
+    protected Uri doInBackground(String... params) {
         FetchRawData mRawData = new FetchRawData(params[0]);
         ExtractJSONReviewData mData = new ExtractJSONReviewData(mRawData.fetch(), mContext);
         mData.getReviewDataFromJsonAndPutInDatabase();
-        return null;
+        long movie_id = mData.getMovieId();
+        return MovieContract.MovieEntry.buildMovieUri(movie_id);
     }
 }

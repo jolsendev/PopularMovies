@@ -3,6 +3,7 @@ package com.example.jamie.popularmovies.extracting_json_data;
 import android.content.ContentValues;
 import android.content.Context;
 
+import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 
 import org.json.JSONArray;
@@ -17,6 +18,8 @@ import java.util.Vector;
 public class ExtractJSONTrailerData {
     String jsonString;
     Context mContext;
+    private long movie_id;
+
     public ExtractJSONTrailerData(String jsonString, Context mContext){
         this.mContext = mContext;
         this.jsonString = jsonString;
@@ -35,28 +38,36 @@ public class ExtractJSONTrailerData {
 
             JSONObject jsonData = new JSONObject(jsonString);
             Vector<ContentValues> cVVector = new Vector(jsonData.length());
-            long movie_id = jsonData.getLong(MOVIE_ID);
-            JSONArray itemsArray = jsonData.getJSONArray(TRAILER_YOUTUBE);
-            for(int i = 0; i < itemsArray.length(); i++){
-                ContentValues trailerValues = new ContentValues();
-                JSONObject jObj = itemsArray.getJSONObject(i);
-                trailerValues.put(TrailerEntry.MOVIE_ID, movie_id);
-                trailerValues.put(TrailerEntry.TRAILER_NAME, jObj.getString(TRAILER_NAME));
-                trailerValues.put(TrailerEntry.TRAILER_SIZE, jObj.getString(TRAILER_SIZE));
-                trailerValues.put(TrailerEntry.TRAILER_SOURCE, jObj.getString(TRAILER_SOURCE));
-                trailerValues.put(TrailerEntry.TRAILER_TYPE, jObj.getString(TRAILER_TYPE));
-                cVVector.add(trailerValues);
+            movie_id = jsonData.getLong(MOVIE_ID);
+            if(Utility.isTrailerInDatabase(movie_id, mContext)){
+                JSONArray itemsArray = jsonData.getJSONArray(TRAILER_YOUTUBE);
+                for(int i = 0; i < itemsArray.length(); i++){
+                    ContentValues trailerValues = new ContentValues();
+                    JSONObject jObj = itemsArray.getJSONObject(i);
+                    trailerValues.put(TrailerEntry.MOVIE_ID, movie_id);
+                    trailerValues.put(TrailerEntry.TRAILER_NAME, jObj.getString(TRAILER_NAME));
+                    trailerValues.put(TrailerEntry.TRAILER_SIZE, jObj.getString(TRAILER_SIZE));
+                    trailerValues.put(TrailerEntry.TRAILER_SOURCE, jObj.getString(TRAILER_SOURCE));
+                    trailerValues.put(TrailerEntry.TRAILER_TYPE, jObj.getString(TRAILER_TYPE));
+                    cVVector.add(trailerValues);
+                }
+
+                int inserted = 0;
+                //add to database
+                if ( cVVector.size() > 0 ) {
+                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                    cVVector.toArray(cvArray);
+                    mContext.getContentResolver().bulkInsert(TrailerEntry.CONTENT_URI, cvArray);
+                }
+
             }
 
-            int inserted = 0;
-            //add to database
-            if ( cVVector.size() > 0 ) {
-                ContentValues[] cvArray = new ContentValues[cVVector.size()];
-                cVVector.toArray(cvArray);
-                mContext.getContentResolver().bulkInsert(TrailerEntry.CONTENT_URI, cvArray);
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public long getMovieId() {
+        return movie_id;
     }
 }

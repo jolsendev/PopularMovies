@@ -54,11 +54,12 @@ public class ExtractJSONMovieData {
             //if movie_id is in use.. update the top_rated and popular
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
             String sortBy = pref.getString(mContext.getString(R.string.pref_sort_key), mContext.getString(R.string.pref_default_sort_value));
-            JSONObject jsonData = new JSONObject(jsonString);
-            JSONArray itemsArray = jsonData.getJSONArray(MOVIE_RESULTS);
-            Vector<ContentValues> cVVector = new Vector(itemsArray.length());
+            if(!sortBy.equals("favorite")){
+                JSONObject jsonData = new JSONObject(jsonString);
+                JSONArray itemsArray = jsonData.getJSONArray(MOVIE_RESULTS);
+                Vector<ContentValues> cVVector = new Vector(itemsArray.length());
 
-            if(sortBy.equals("popular") || sortBy.equals("top_rated")){
+
                 for(int i = 0; i < itemsArray.length(); i++){
 
                     ContentValues movieValues = new ContentValues();

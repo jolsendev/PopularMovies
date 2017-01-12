@@ -114,6 +114,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private Uri mTrailerUri;
     private TextView mTrailerTitle;
     private  TextView mReviewTitle;
+    private String mPreference;
 
     public MovieDetailFragment() {
 
@@ -130,6 +131,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         getLoaderManager().initLoader(REVIEW_LOADER, null, this);
         getLoaderManager().initLoader(TRAILER_LOADER, null, this);
+
         super.onResume();
 
     }
@@ -139,14 +141,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Bundle arguments = getArguments();
-
+        mPreference = Utility.getSharedPreference(getActivity());
         if(arguments != null){
             mUri = arguments.getParcelable(DETAIL_URI);
             if(mUri != null){
                 String movie_id_string = MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri);
                 long movie_id = Long.parseLong(movie_id_string);
-                UpdateReview(movie_id);
-                UpdateTrailer(movie_id);
+                if(mPreference.equals("popular")||mPreference.equals("top_rated")){
+                    UpdateReview(movie_id);
+                    UpdateTrailer(movie_id);
+                }
                 setUris(movie_id);
             }
         }
@@ -358,5 +362,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     public void RestartReviewLoader() {
         getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
+    }
+
+    public interface Callback {
+
+        void ReplaceActivity(Uri uri);
+
     }
 }

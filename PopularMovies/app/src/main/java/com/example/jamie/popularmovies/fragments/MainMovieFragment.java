@@ -19,9 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
 import com.example.jamie.popularmovies.FetchMovieTask;
-import com.example.jamie.popularmovies.FetchReviewTask;
-import com.example.jamie.popularmovies.FetchTrailerTask;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -102,9 +101,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
 
     public void onSortPreferenceChanged() {
-        //updateMovieData();
         getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
-
     }
 
     @Override
@@ -130,8 +127,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
             mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
         }
 
-
-
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -143,7 +138,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
             }
         });
         gridview.setAdapter(mAdapter);
-
 
         if(savedInstanceState != null && savedInstanceState.containsKey(MovieContract.MovieEntry.POSITION)){
             mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
@@ -210,18 +204,18 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-        if(sortValue != sortBy ) {
-            //updateMovieData();
-        } else {
-            // do nothing
-        }
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+//        if(sortValue != sortBy ) {
+//            //updateMovieData();
+//        } else {
+//            // do nothing
+//        }
+//    }
 
     private void updateMovieData() {
         //http://api.themoviedb.org/3/movie/top_rated/API_KEY="02a6d79992ed3e3da1f638dec4c74770";

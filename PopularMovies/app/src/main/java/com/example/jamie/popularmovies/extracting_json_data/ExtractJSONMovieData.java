@@ -58,33 +58,13 @@ public class ExtractJSONMovieData {
             JSONArray itemsArray = jsonData.getJSONArray(MOVIE_RESULTS);
             Vector<ContentValues> cVVector = new Vector(itemsArray.length());
 
+            if(sortBy.equals("popular") || sortBy.equals("top_rated")){
+                for(int i = 0; i < itemsArray.length(); i++){
 
-            for(int i = 0; i < itemsArray.length(); i++){//
+                    ContentValues movieValues = new ContentValues();
 
-                ContentValues movieValues = new ContentValues();
+                    JSONObject jsonMovieData = itemsArray.getJSONObject(i);
 
-                JSONObject jsonMovieData = itemsArray.getJSONObject(i);
-
-//                int movie_id = jsonMovieData.getInt(MOVIE_ID);
-
-                //if movie exists and is both popular and top_rated, update movie
-//                Uri uri = MovieEntry.buildMovieUri(movie_id);
-//                if(MovieEntry.isMovieIdInDB(uri, mContext)){
-//
-//                    if(sortBy.compareTo("popular")==0){
-//                        //update popular
-//                        movieValues.put(MovieEntry.IS_MOST_POPULAR, (sortBy.compareTo("popular")==0)?1:0);
-//
-//                    }else if(sortBy.compareTo("top_rated")==0){
-//                        //update top_rated
-//                        movieValues.put(MovieEntry.IS_TOP_RATED, (sortBy.compareTo("top_rated")==0)?1:0);
-//                    }
-//
-//                    mContext.getContentResolver().update(
-//                            uri,movieValues, MovieEntry._ID + "= ?",
-//                            new String[] { Long.toString(movie_id)});
-//                }
-//                else{
                     movieValues.put(MovieEntry.POSTER_PATH, jsonMovieData.getString(MOVIE_POSTER_PATH));
                     boolean isAdult = jsonMovieData.getBoolean(MOVIE_ADULT);
                     movieValues.put(MovieEntry.IS_ADULT,(isAdult == true)?1:0 );
@@ -104,17 +84,20 @@ public class ExtractJSONMovieData {
                     movieValues.put(MovieEntry.IS_TOP_RATED, (sortBy.compareTo("top_rated")==0)?1:0);
 
                     cVVector.add(movieValues);
-                //}
 
-                int inserted = 0;
-                //add to database
-                if ( cVVector.size() > 0 ) {
-                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                    int inserted = 0;
+                    //add to database
+                    if ( cVVector.size() > 0 ) {
+                        ContentValues[] cvArray = new ContentValues[cVVector.size()];
 
-                    cVVector.toArray(cvArray);
-                    mContext.getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
+                        cVVector.toArray(cvArray);
+                        mContext.getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
+                    }
                 }
+
             }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

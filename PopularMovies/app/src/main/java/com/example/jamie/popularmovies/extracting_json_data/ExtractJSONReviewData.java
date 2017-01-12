@@ -40,7 +40,7 @@ public class ExtractJSONReviewData {
 
             JSONObject jsonData = new JSONObject(jsonString);
             movieId = jsonData.getInt(MOVIE_ID);
-            if(Utility.isReviewInDatabase(movieId, mContext)){
+            if(!Utility.isReviewInDatabase(movieId, mContext)){
                 Vector<ContentValues> cVVector = new Vector(jsonData.length());
                 JSONArray itemsArray = jsonData.getJSONArray(REVIEW_RESULTS);
                 int le = itemsArray.length();

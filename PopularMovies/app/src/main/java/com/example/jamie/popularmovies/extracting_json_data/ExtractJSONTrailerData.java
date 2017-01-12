@@ -39,7 +39,7 @@ public class ExtractJSONTrailerData {
             JSONObject jsonData = new JSONObject(jsonString);
             Vector<ContentValues> cVVector = new Vector(jsonData.length());
             movie_id = jsonData.getLong(MOVIE_ID);
-            if(Utility.isTrailerInDatabase(movie_id, mContext)){
+            if(!Utility.isTrailerInDatabase(movie_id, mContext)){
                 JSONArray itemsArray = jsonData.getJSONArray(TRAILER_YOUTUBE);
                 for(int i = 0; i < itemsArray.length(); i++){
                     ContentValues trailerValues = new ContentValues();

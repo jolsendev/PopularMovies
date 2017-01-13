@@ -75,4 +75,6 @@
     <string name="pref_default_sort_value">popular</string>
     <string name="settings_title">Settings</string>
     <string name="favorite_button_text">Mark As Favorite</string>
+    <string name="reviews">Reviews</string>
+    <string name="trailers">Trailers</string>
 </resources>

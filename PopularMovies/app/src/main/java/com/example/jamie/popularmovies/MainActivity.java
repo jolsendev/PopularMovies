@@ -18,7 +18,7 @@ import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 
 
-public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback, MovieDetailFragment.Callback{
+public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback{
 
 
     public static final String DETAIL_FRAGMENT_TAG = "DFT";
@@ -143,10 +143,10 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     }
 
-    @Override
-    public void ReplaceActivity(Uri uri) {
-        onItemSelected(uri);
-    }
+//    @Override
+//    public void ReplaceActivity(Uri uri) {
+//        onItemSelected(uri);
+//    }
 
 
     private class MyDumperPlugin implements DumperPlugin {

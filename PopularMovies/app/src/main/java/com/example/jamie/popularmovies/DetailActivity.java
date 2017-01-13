@@ -11,7 +11,6 @@ import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 
 public class DetailActivity extends AppCompatActivity implements FetchReviewTask.Callback, FetchTrailerTask.Callback  {
 
-
     private MovieDetailFragment mDF;
 
     @Override
@@ -33,15 +32,11 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
 
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, MainActivity.DETAIL_FRAGMENT_TAG)
                     .commit();
-
         }
-
     }
 
     @Override
-    public void RestartReviewLoader() {
-        mDF.RestartReviewLoader();
-    }
+    public void RestartReviewLoader() { mDF.RestartReviewLoader(); }
 
     @Override
     public void RestartTrailerLoader() {

@@ -45,15 +45,10 @@ public class DetailTrailerAdapter extends CursorAdapter {
         trailerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + video_source));
-                Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(BASE_URL+ video_source));
-                        try {
-                            mContext.startActivity(appIntent);
-                        } catch (ActivityNotFoundException ex) {
-                            mContext.startActivity(webIntent);
-                        }
-
+                Intent intent = new  Intent(Intent.ACTION_VIEW);
+                intent.setPackage("com.google.android.youtube");
+                intent.setData(Uri.parse(BASE_URL+ video_source));
+                mContext.startActivity(intent);
             }
         });
     }

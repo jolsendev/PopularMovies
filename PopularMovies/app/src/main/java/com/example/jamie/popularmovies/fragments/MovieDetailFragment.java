@@ -273,8 +273,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 if(cursor.moveToFirst()){
                     setViewsVisible();
                     mMovieTitle.setText(cursor.getString(COL_TITLE));
-                    mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE)));
-                    mReleaseDate.setText(cursor.getString(COL_RELEASE_DATE));
+                    mMovieRating.setText(Double.toString(cursor.getDouble(COL_VOTE_AVERAGE))+"/10");
+                    String date = cursor.getString(COL_RELEASE_DATE);
+                    String[] year = date.split("-");
+                    mReleaseDate.setText(year[0]);
                     mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
                     ImageView imageItem = (ImageView) mDetailLayout.findViewById(R.id.detail_movie_image);
 
@@ -301,10 +303,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
                             if(is_favorite == 0){
                                 Utility.addMovieToFavorite(getActivity(), movie_id);
-                                favoriteCheckbox.setText("Remove favorite");
+                                favoriteCheckbox.setText("Favorite");
                             }else{
                                 Utility.removeMovieToFavorite(getActivity(), movie_id);
-                                favoriteCheckbox.setText("Remove favorite");
+                                favoriteCheckbox.setText("Favorite");
                             }
                         }
                     });
@@ -362,11 +364,5 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     public void RestartReviewLoader() {
         getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
-    }
-
-    public interface Callback {
-
-        void ReplaceActivity(Uri uri);
-
     }
 }

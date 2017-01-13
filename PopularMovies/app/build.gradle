@@ -30,6 +30,7 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
 
 repositories {

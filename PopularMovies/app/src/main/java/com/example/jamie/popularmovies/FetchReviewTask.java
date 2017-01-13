@@ -21,7 +21,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, Uri>{
 
     public interface Callback {
 
-    void RestartReviewLoader();
+        void RestartReviewLoader();
 
     }
     @Override

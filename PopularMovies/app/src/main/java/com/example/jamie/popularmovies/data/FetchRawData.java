@@ -1,17 +1,11 @@
 package com.example.jamie.popularmovies.data;
 
-import com.example.jamie.popularmovies.MainActivity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by a5w5nzz on 9/16/2016.
@@ -57,9 +51,6 @@ public class FetchRawData {
         } catch(IOException e) {
             return null;
 
-            /**
-             * This finally cleans up by disconnecting the url connection and closing the BuferedReader
-             */
         } finally {
             if(urlConnection != null) {
                 urlConnection.disconnect();

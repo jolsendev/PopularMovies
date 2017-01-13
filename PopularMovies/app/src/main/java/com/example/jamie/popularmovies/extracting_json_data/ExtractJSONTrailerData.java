@@ -45,6 +45,7 @@ public class ExtractJSONTrailerData {
                     ContentValues trailerValues = new ContentValues();
                     JSONObject jObj = itemsArray.getJSONObject(i);
                     trailerValues.put(TrailerEntry.MOVIE_ID, movie_id);
+                    trailerValues.put(TrailerEntry.INDEX, i);
                     trailerValues.put(TrailerEntry.TRAILER_NAME, jObj.getString(TRAILER_NAME));
                     trailerValues.put(TrailerEntry.TRAILER_SIZE, jObj.getString(TRAILER_SIZE));
                     trailerValues.put(TrailerEntry.TRAILER_SOURCE, jObj.getString(TRAILER_SOURCE));
@@ -52,8 +53,6 @@ public class ExtractJSONTrailerData {
                     cVVector.add(trailerValues);
                 }
 
-                int inserted = 0;
-                //add to database
                 if ( cVVector.size() > 0 ) {
                     ContentValues[] cvArray = new ContentValues[cVVector.size()];
                     cVVector.toArray(cvArray);

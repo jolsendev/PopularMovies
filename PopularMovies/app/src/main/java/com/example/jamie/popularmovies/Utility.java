@@ -8,13 +8,11 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.example.jamie.popularmovies.data.MovieContract;
-import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 
 /**
  * Created by a5w5nzz on 9/16/2016.
  */
 public final class Utility {
-    public static final String MOVIE_KEY = "movie";
     public static final String MOVIE_API_KEY = BuildConfig.API_KEY;
     private static String BASE_PATH = "http://image.tmdb.org/t/p/";
     private static String IMAGE_BASE_PATH = BASE_PATH+"/w185/";
@@ -32,7 +30,6 @@ public final class Utility {
         return sortBy;
     }
     public static Uri getUrlByIdForType(String movieID, String type) {
-        //http://api.themoviedb.org/3/movie/284052/reviews?&api_key=02a6d79992ed3e3da1f638dec4c74770
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+movieID+"/"+type;
 
         String MOVIE_API_KEY = "api_key";
@@ -67,75 +64,42 @@ public final class Utility {
         );
     }
 
-    private static Uri getFirstMovieFromPreference(Context context, String preference) {
-
-        Cursor cur = null;
-        switch(preference){
-            case MovieContract.MovieEntry.TOP_RATED:{
-                cur = context.getContentResolver().query(
-                        MovieContract.MovieEntry.buildTopRatedUri(),
-                        null,
-                        MovieContract.MovieEntry.TOP_RATED+" = 1",
-                        null,
-                        null
-                );
-                break;
-            }
-            case MovieContract.MovieEntry.FAVORITE:{
-                cur = context.getContentResolver().query(
-                        MovieContract.MovieEntry.buildFavoriteUri(),
-                        null,
-                        MovieContract.MovieEntry.FAVORITE+" = 1",
-                        null,
-                        null
-                );
-                break;
-            }
-            case MovieContract.MovieEntry.MOST_POPULAR: {
-                cur = context.getContentResolver().query(
-                        MovieContract.MovieEntry.buildPopularUri(),
-                        null,
-                        MovieContract.MovieEntry.MOST_POPULAR + " = 1",
-                        null,
-                        null
-                );
-                break;
-            }
-            default:
-                return null;
-        }
-
-        if(cur.moveToFirst()){
-            return MovieContract.MovieEntry.buildMovieUri(cur.getInt(MainMovieFragment.COL_MOVIE_ID));
-        }else{
-            return null;
-        }
-    }
-
     public static String getImagePathBackDrop(String string) {
         return BACKDROP_PATH + string;
     }
 
     public static boolean isReviewInDatabase(int movieId, Context mContext) {
-        Cursor cur = mContext.getContentResolver().query(
-                MovieContract.MovieEntry.buildMovieReview(movieId),
-                null,
-                MovieContract.ReviewEntry.MOVIE_ID+" = "+movieId,
-                null,
-                null
-        );
-        if(cur.moveToFirst()){
-            return true;
-        }else{
-            return false;
-        }
+        return isInDataBase(MovieContract.ReviewEntry.TABLE_NAME, movieId, mContext);
     }
 
     public static boolean isTrailerInDatabase(long movieId, Context mContext) {
+        return isInDataBase(MovieContract.TrailerEntry.TABLE_NAME, movieId, mContext);
+    }
+
+    public static boolean isMovieInDatabase(long movie_id, Context mContext) {
+        return isInDataBase(MovieContract.MovieEntry.TABLE_NAME, movie_id,mContext);
+    }
+
+    private static boolean isInDataBase(String tableName, long movie_id, Context mContext) {
+        Uri uri = null;
+        switch (tableName){
+            case MovieContract.MovieEntry.TABLE_NAME:{
+                uri = MovieContract.MovieEntry.buildMovieUri(movie_id);
+                break;
+            }
+            case MovieContract.ReviewEntry.TABLE_NAME:{
+                uri = MovieContract.MovieEntry.buildMovieReview(movie_id);
+                break;
+            }
+            case MovieContract.TrailerEntry.TABLE_NAME:{
+                uri = MovieContract.MovieEntry.buildMovieTrailer(movie_id);
+                break;
+            }
+        }
         Cursor cur = mContext.getContentResolver().query(
-                MovieContract.MovieEntry.buildMovieTrailer(movieId),
+                uri,
                 null,
-                MovieContract.TrailerEntry.MOVIE_ID+" = "+movieId,
+                MovieContract.MovieEntry.MOVIE_ID+" = "+movie_id,
                 null,
                 null
         );

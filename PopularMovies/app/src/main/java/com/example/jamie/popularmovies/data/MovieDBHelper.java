@@ -15,7 +15,7 @@ import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 5;
+    private static final int VERSION_ID = 7;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);
@@ -28,7 +28,6 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry._ID + " INTEGER PRIMARY KEY," +
                 MovieEntry.MOVIE_ID + " INTEGER UNIQUE NOT NULL, "+
                 MovieEntry.POSTER_PATH + " TEXT NOT NULL, " +
-                // 1 if true 0 if false
                 MovieEntry.IS_ADULT + " INTEGER NOT NULL, " +
                 MovieEntry.OVERVIEW + " TEXT NOT NULL, " +
                 MovieEntry.RELEASE_DATE + " TEXT NOT NULL, " +
@@ -38,17 +37,13 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.BACKDROP_PATH + " TEXT NOT NULL, " +
                 MovieEntry.POPULARITY + " REAL NOT NULL, " +
                 MovieEntry.VOTE_COUNT + " REAL NOT NULL, " +
-                // 1 if true 0 if false
                 MovieEntry.IS_VIDEO + " INTEGER NOT NULL, " +
-                // 1 if true 0 if false
                 MovieEntry.IS_FAVORITE + " INTEGER , " +
                 MovieEntry.IS_TOP_RATED + " INTEGER, " +
                 MovieEntry.IS_MOST_POPULAR + " INTEGER, " +
                 MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, "+
-                // Set up the review column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
                 ReviewEntry.TABLE_NAME + " (" + ReviewEntry.MOVIE_ID + "), " +
-                // Set up the video column as a foreign key to location table.
                 " FOREIGN KEY (" + MovieEntry.MOVIE_ID  + ") REFERENCES " +
                 TrailerEntry.TABLE_NAME + " (" + TrailerEntry.MOVIE_ID + ")" +
                 ")" +";";
@@ -57,6 +52,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         final String CREATE_TRAILER_DATABASE = "CREATE TABLE " + TrailerEntry.TABLE_NAME+" ("+
                 TrailerEntry._ID + " INTEGER PRIMARY KEY," +
                 TrailerEntry.MOVIE_ID + " INTEGER NOT NULL, "+
+                TrailerEntry.INDEX + " INTEGER NOT NULL, "+
                 TrailerEntry.TRAILER_NAME + " TEXT NOT NULL, " +
                 TrailerEntry.TRAILER_SIZE + " TEXT NOT NULL, "+
                 TrailerEntry.TRAILER_SOURCE + " TEXT UNIQUE NOT NULL, " +

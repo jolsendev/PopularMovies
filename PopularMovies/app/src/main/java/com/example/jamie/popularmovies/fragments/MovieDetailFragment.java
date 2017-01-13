@@ -64,7 +64,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_NAME,
             MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_SIZE,
             MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_SOURCE,
-            MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_TYPE
+            MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.TRAILER_TYPE,
+            MovieContract.TrailerEntry.TABLE_NAME+"."+MovieContract.TrailerEntry.INDEX
 
     };
 
@@ -91,6 +92,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public static final int COL_TRAILER_SIZE = 3;
     public static final int COL_TRAILER_SOURCE = 4;
     public static final int COL_TRAILER_TYPE = 5;
+    public static final int COL_TRAILER_INDEX = 6;
 
 
     private static DetailReviewAdapter mAdapter;

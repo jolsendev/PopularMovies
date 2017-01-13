@@ -43,7 +43,6 @@ public class ExtractJSONReviewData {
             if(!Utility.isReviewInDatabase(movieId, mContext)){
                 Vector<ContentValues> cVVector = new Vector(jsonData.length());
                 JSONArray itemsArray = jsonData.getJSONArray(REVIEW_RESULTS);
-                int le = itemsArray.length();
                 for(int i = 0; i < itemsArray.length(); i++){
                     ContentValues reviewValues = new ContentValues();
                     JSONObject jObj = itemsArray.getJSONObject(i);
@@ -54,8 +53,6 @@ public class ExtractJSONReviewData {
                     cVVector.add(reviewValues);
                 }
 
-                int inserted = 0;
-                //add to database
                 if ( cVVector.size() > 0 ) {
                     ContentValues[] cvArray = new ContentValues[cVVector.size()];
                     cVVector.toArray(cvArray);

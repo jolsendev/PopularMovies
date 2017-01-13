@@ -9,6 +9,7 @@ import android.widget.ListView;
  * Created by jamie on 1/9/17.
  */
 
+//This was taken from a stack overflow thread
 public class CustomListView extends ListView
 {
 
@@ -37,12 +38,8 @@ public class CustomListView extends ListView
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        // HACK! TAKE THAT ANDROID!
         if (isExpanded())
         {
-            // Calculate entire height by providing a very large height hint.
-            // But do not use the highest 2 bits of this integer; those are
-            // reserved for the MeasureSpec mode.
             int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
             super.onMeasure(widthMeasureSpec, expandSpec);
 

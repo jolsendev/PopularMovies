@@ -34,26 +34,14 @@ public class MovieContract {
 
         private static final String LOG_TAG = MovieEntry.class.getSimpleName();
 
-        // MovieEntry.CONTENT_URI = content://com.example.jamie.popularmovies/movie
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_MOVIE;
-        public static final String MOVIE_DETAIL = "detail";
         public static final String POSITION = "position";
-
-
-        //top_rated
         public static final String TOP_RATED = "top_rated";
-
-        //most_popular
         public static final String MOST_POPULAR = "popular";
-
-        //favorite
-
         public static final String FAVORITE = "favorite";
-
-        //table name;
         public static final String TABLE_NAME = PATH_MOVIE;
         public static final String MOVIE_ID = "movie_id";
         public static final String POSTER_PATH = "poster_path";
@@ -72,10 +60,6 @@ public class MovieContract {
         public static final String IS_MOST_POPULAR = MOST_POPULAR;
         public static final String IS_TOP_RATED = TOP_RATED;
 
-        public static Uri buildAddFavoriteToDBUri(int movie_id){String _id = String.valueOf(movie_id);
-            Uri retUri = CONTENT_URI.buildUpon().appendPath(_id).appendPath(FAVORITE).build();
-            return retUri;
-        }
         public static Uri buildFavoriteUri(){
             return CONTENT_URI.buildUpon().appendPath(IS_FAVORITE).build();
         }
@@ -119,29 +103,16 @@ public class MovieContract {
 
 
         private static final String LOG_TAG = TrailerEntry.class.getSimpleName();
-        //CONTENT_URI = content://com.example.jamie.popularmovies/video
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRAILER).build();
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_TRAILER;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_TRAILER;
-
         public static final String TABLE_NAME = PATH_TRAILER;
         public static final String MOVIE_ID = "movie_id";
         public static final String TRAILER_NAME = "trailer_name";
         public static final String TRAILER_SIZE = "trailer_size";
         public static final String TRAILER_TYPE = "trailer_type";
         public static final String TRAILER_SOURCE = "trailer_source";
-
-
-
-
-//        public static Uri buildVideoUri(long id){
-//            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);
-//            retURI.withAppendedPath(retURI, "videos");
-//
-//            return retURI;
-//        }
-
+        public static final String INDEX = "trailer_index";
     }
 
     /**********************
@@ -150,23 +121,13 @@ public class MovieContract {
     public static final class ReviewEntry implements BaseColumns{
 
         private static final String LOG_TAG = ReviewEntry.class.getSimpleName();
-        //CONTENT_URI = content://com.example.jamie.popularmovies/review
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEW).build();
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_REVIEW;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+ PATH_REVIEW;
-
-
         public static final String TABLE_NAME = PATH_REVIEW;
         public static final String MOVIE_ID = "movie_id";
         public static final String REVIEW_AUTHOR = "review_author";
         public static final String REVIEW_CONTENT = "review_content";
         public static final String REVIEW_URL = "review_url";
-
-//        public static Uri buildReviewUri(long id){
-//            Uri retURI = ContentUris.withAppendedId(CONTENT_URI, id);
-//            retURI.withAppendedPath(retURI, "reviews");
-//            return retURI;
-//        }
     }
 }

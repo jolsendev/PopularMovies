@@ -32,11 +32,7 @@ public class MovieProvider extends ContentProvider{
     public static final int FAVORITE = 800;
     public static final int POPULAR = 900;
     public static final int UPDATE_FAVORITE = 850;
-    //static final int FAVORITE_MOVIES = 500;
-
     public MovieDBHelper movieDBHelper;
-
-
     private static final String sMovieWithId =
             MovieEntry.TABLE_NAME+"."+ReviewEntry.MOVIE_ID+" = ?";
     private static final String sMovieWithReviewsSelection =
@@ -59,7 +55,6 @@ public class MovieProvider extends ContentProvider{
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
-
         final String PATH_TO_ALL_MOVIES = MovieEntry.TABLE_NAME;
         final String PATH_TO_MOVIE = MovieEntry.TABLE_NAME+"/#";
         final String PATH_TO_MOVIE_WITH_VIDEOS = PATH_TO_MOVIE+"/"+MovieContract.PATH_TRAILER;
@@ -71,7 +66,6 @@ public class MovieProvider extends ContentProvider{
         final String PATH_TO_ALL_TRAILERS = TrailerEntry.TABLE_NAME;
         final String PATH_TO_UPDATE_FAVORITE = PATH_TO_MOVIE+"/"+MovieEntry.FAVORITE;
 
-
         matcher.addURI(authority, PATH_TO_UPDATE_FAVORITE, UPDATE_FAVORITE);
         matcher.addURI(authority, PATH_TO_ALL_MOVIES, ALL_MOVIES);
         matcher.addURI(authority, PATH_TO_MOVIE , MOVIE);
@@ -82,7 +76,6 @@ public class MovieProvider extends ContentProvider{
         matcher.addURI(authority, PATH_TO_TOP_RATED, TOP_RATED);
         matcher.addURI(authority, PATH_TO_ALL_REVIEWS, ALL_REVIEWS);
         matcher.addURI(authority, PATH_TO_ALL_TRAILERS, ALL_TRAILERS);
-
 
         return matcher;
     }
@@ -195,12 +188,12 @@ public class MovieProvider extends ContentProvider{
             case MOVIE_WITH_REVIEWS:{
                 String movie_id = MovieEntry.getMovieIdFromPath(uri);
                 retCurser = movieDBHelper.getReadableDatabase().query(
-                        ReviewEntry.TABLE_NAME, //table name
-                        projection,            //columns
-                        sMovieWithReviewsSelection,             //where
-                        new String[]{movie_id},         //you may include a ? in 'selection' these are the args
-                        null,                  //Group by
-                        null,                  //Having
+                        ReviewEntry.TABLE_NAME,     //table name
+                        projection,                 //columns
+                        sMovieWithReviewsSelection, //where
+                        new String[]{movie_id},     //you may include a ? in 'selection' these are the args
+                        null,                       //Group by
+                        null,                       //Having
                         sortOrder
                 );
                 //retCurser = getMovieWithReviews(uri, projection, sortOrder);
@@ -210,16 +203,14 @@ public class MovieProvider extends ContentProvider{
             case MOVIE_WITH_TRAILERS:{
                 String movie_id = MovieEntry.getMovieIdFromPath(uri);
                 retCurser = movieDBHelper.getReadableDatabase().query(
-                        TrailerEntry.TABLE_NAME, //table name
-                        projection,            //columns
-                        sMovieWithTrailersSelection,             //where
-                        new String[]{movie_id},         //you may include a ? in 'selection' these are the args
-                        null,                  //Group by
-                        null,                  //Having
+                        TrailerEntry.TABLE_NAME,    //table name
+                        projection,                 //columns
+                        sMovieWithTrailersSelection,//where
+                        new String[]{movie_id},     //you may include a ? in 'selection' these are the args
+                        null,                       //Group by
+                        null,                       //Having
                         sortOrder
                 );
-                //retCurser = getMovieWithTrailers(uri, projection, sortOrder);
-                String holder = DatabaseUtils.dumpCursorToString(retCurser);
                 break;
             }
         }
@@ -269,10 +260,8 @@ public class MovieProvider extends ContentProvider{
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-//        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowDeleted = 0;
-        // this makes delete all rows return the number of rows deleted
         if ( null == selection ) selection = "1";
         switch (match){
             case ALL_MOVIES: {
@@ -287,7 +276,6 @@ public class MovieProvider extends ContentProvider{
                 rowDeleted = movieDBHelper.getWritableDatabase().delete(ReviewEntry.TABLE_NAME, selection, selectionArgs);
             }
         }
-        // Because a null deletes all rows
         if (rowDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -319,7 +307,6 @@ public class MovieProvider extends ContentProvider{
                 rowUpdated = movieDBHelper.getWritableDatabase().update(MovieEntry.TABLE_NAME, values, selection, selectionArgs);
             }
         }
-
         getContext().getContentResolver().notifyChange(uri, null);
         return rowUpdated;
     }
@@ -362,7 +349,6 @@ public class MovieProvider extends ContentProvider{
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
-
             }
             case ALL_TRAILERS:{
                 db.beginTransaction();
@@ -380,7 +366,6 @@ public class MovieProvider extends ContentProvider{
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
-
             }
             default:
                 return super.bulkInsert(uri, values);

@@ -29,9 +29,11 @@ import com.example.jamie.popularmovies.data.MovieContract;
 
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
-    private int mPosition;
+    private static int mPosition;
     private Uri mReviewUri;
     private Uri mTrailerUri;
+    private SharedPreferences pref;
+    private String sortValue;
 
 
     /**
@@ -42,7 +44,11 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public interface Callback {        /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        void onItemSelected(Uri detailUri);
+        void onItemSelected(Uri detailUri, int mPosition);
+    }
+
+    public interface  SetPostionCallBack{
+        void setPosition(int Position);
     }
 
     public GridView gridview;
@@ -53,14 +59,12 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void onSaveInstanceState(Bundle outState) {
         if( mPosition != gridview.INVALID_POSITION){
             outState.putInt(MovieContract.MovieEntry.POSITION, mPosition);
+            ((SetPostionCallBack) getActivity()).setPosition(mPosition);
         }
         super.onSaveInstanceState(outState);
     }
 
-    private String sortValue;
     public static final int MAIN_MOVIE_LOADER = 0;
-
-
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.TABLE_NAME+"."+MovieContract.MovieEntry.MOVIE_ID,
@@ -119,7 +123,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.activity_movie,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
 
@@ -133,8 +136,8 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
-                ((Callback) getActivity()).onItemSelected(uri);
                 mPosition = position;
+                ((Callback) getActivity()).onItemSelected(uri, mPosition);
             }
         });
         gridview.setAdapter(mAdapter);
@@ -180,7 +183,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         createAdapterWithCursor();
         setHasOptionsMenu(true);
@@ -198,27 +201,11 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     }
     @Override
     public void onStart() {
-
-        //updateMovieData();
         super.onStart();
 
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-//        if(sortValue != sortBy ) {
-//            //updateMovieData();
-//        } else {
-//            // do nothing
-//        }
-//    }
-
     private void updateMovieData() {
-        //http://api.themoviedb.org/3/movie/top_rated/API_KEY="02a6d79992ed3e3da1f638dec4c74770";
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
@@ -266,10 +253,14 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(mPosition != gridview.INVALID_POSITION){
-            gridview.setSelection(mPosition);
-        }
+        setSelection(mPosition);
         mAdapter.swapCursor(data);
+    }
+
+    public void setSelection(int position) {
+        if(position != gridview.INVALID_POSITION){
+            gridview.setSelection(position);
+        }
     }
 
     @Override

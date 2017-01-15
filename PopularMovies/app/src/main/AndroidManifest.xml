@@ -40,7 +40,10 @@
             android:exported="false"
             android:syncable="true" />
 
-        <activity android:name=".ReviewActivity"></activity>
+        <activity android:name=".ReviewActivity" />
+        <activity android:name=".YouTubeActivity">
+
+        </activity>
     </application>
 
 </manifest>

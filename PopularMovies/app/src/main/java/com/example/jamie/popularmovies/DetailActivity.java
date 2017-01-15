@@ -1,5 +1,6 @@
 package com.example.jamie.popularmovies;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,19 @@ import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 public class DetailActivity extends AppCompatActivity implements FetchReviewTask.Callback, FetchTrailerTask.Callback  {
 
     private MovieDetailFragment mDF;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+//    private void SavePreferences(){
+//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean(POSITION, );
+//        editor.commit();   // I missed to save the data to preference here,.
+//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,10 +50,16 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
     }
 
     @Override
-    public void RestartReviewLoader() { mDF.RestartReviewLoader(); }
+    public void RestartReviewLoader() {
+        if(mDF != null){
+            mDF.RestartReviewLoader();
+        }
+    }
 
     @Override
     public void RestartTrailerLoader() {
-        mDF.RestartTrailerLoader();
+        if(mDF != null){
+            mDF.RestartTrailerLoader();
+        }
     }
 }

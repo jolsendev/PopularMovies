@@ -1,5 +1,6 @@
 package com.example.jamie.popularmovies.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,7 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jamie.popularmovies.R;
+import com.example.jamie.popularmovies.YouTubeActivity;
+import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -24,6 +29,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
     public DetailTrailerAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
+    private static final String GOOGLE_API_KEY = "AIzaSyD9o3UnBfzorYsBE2AeBURlSmqK7Wk8nV4";
 
     private final String BASE_URL= "http://www.youtube.com/watch?v=" ;
     @Override
@@ -48,16 +54,17 @@ public class DetailTrailerAdapter extends CursorAdapter {
 
         ImageView imageItem = (ImageView) view.findViewById(R.id.trailer_thumbnail);
         Picasso.with(context)
-                .load(path).placeholder(R.drawable.popcorntime)
+                .load(path).placeholder(R.drawable.playbutton)
                 .into(imageItem);
 
-        trailerView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new  Intent(Intent.ACTION_VIEW);
-                intent.setPackage("com.google.android.youtube");
-                intent.setData(Uri.parse(BASE_URL+ video_source));
-                mContext.startActivity(intent);
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) mContext, GOOGLE_API_KEY, video_source);
+                if(intent != null){
+                    mContext.startActivity(intent);
+                }
+
             }
         });
     }

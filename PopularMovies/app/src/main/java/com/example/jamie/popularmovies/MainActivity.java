@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 import com.facebook.stetho.DumperPluginsProvider;
@@ -18,13 +19,14 @@ import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 
 
-public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback{
+public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback, MainMovieFragment.SetPostionCallBack{
 
 
     public static final String DETAIL_FRAGMENT_TAG = "DFT";
     private boolean mTwoPane;
     private String mPreference;
     private MovieDetailFragment mDF;
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,36 +65,34 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+
+    }
+
+    @Override
     protected void onResume() {
 
         super.onResume();
-
+        MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
         String preference = Utility.getSharedPreference(this);
-        if (preference != null || !preference.equals(mPreference)) {
-            MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
-
-            if (mMF != null) {
+        mMF.setSelection(mPosition);
+        if (mMF != null) {
+            if (preference != null || !preference.equals(mPreference)) {
                 mMF.onSortPreferenceChanged();
+                mPreference = preference;
             }
-
-            if (mTwoPane) {
-                //I only want to do this in a two pane scenario
-                MovieDetailFragment mDF = (MovieDetailFragment) getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
-                if (mDF != null) {
-                    //Uri prefUri = Utility.getFirstMovieFromPreference(this, preference);
-                    //if(prefUri != null){
-                    //mDF.updateDetailWithNewPreference(mUri);
-                    //}
-
-                }
-
-            }
-
-            mPreference = preference;
         }
+
     }
 
-    //I got this from the stack overflow link that was in the project implementation guild.
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     }
 
     @Override
-    public void onItemSelected(Uri detailUri) {
+    public void onItemSelected(Uri detailUri, int position) {
+        mPosition = position;
 
         if(mTwoPane){
             Bundle args = new Bundle();
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             Intent intent = new Intent(this, DetailActivity.class).
             setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).
             setData(detailUri);
+//            intent.putExtra(MovieContract.MovieEntry.POSITION, position);
             startActivity(intent);
         }
     }
@@ -143,11 +145,10 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     }
 
-//    @Override
-//    public void ReplaceActivity(Uri uri) {
-//        onItemSelected(uri);
-//    }
-
+    @Override
+    public void setPosition(int Position) {
+        mPosition = Position;
+    }
 
     private class MyDumperPlugin implements DumperPlugin {
         @Override

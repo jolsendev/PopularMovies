@@ -13,10 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jamie.popularmovies.R;
-import com.example.jamie.popularmovies.YouTubeActivity;
-import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
-import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeApiServiceUtil;
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +30,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
     }
     private static final String GOOGLE_API_KEY = "AIzaSyD9o3UnBfzorYsBE2AeBURlSmqK7Wk8nV4";
 
-    private final String BASE_URL= "http://www.youtube.com/watch?v=" ;
+    private final String BASE_URL= "http://www.youtube.com/watch?v=";
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.trailer_list_item, parent, false);
@@ -61,9 +60,15 @@ public class DetailTrailerAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) mContext, GOOGLE_API_KEY, video_source);
-                if(intent != null){
+                if(YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(mContext) == YouTubeInitializationResult.SUCCESS){
                     mContext.startActivity(intent);
+                }else{
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://www.youtube.com/watch?v=" + video_source));
+                    mContext.startActivity(webIntent);
                 }
+
+
             }
         });
     }

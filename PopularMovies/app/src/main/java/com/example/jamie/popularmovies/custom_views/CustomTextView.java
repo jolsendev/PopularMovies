@@ -7,8 +7,6 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.example.jamie.popularmovies.R;
-
 /**
  * Created by jamie on 1/14/17.
  */
@@ -36,7 +34,7 @@ public class CustomTextView extends TextView {
 
     private void init(AttributeSet attrs) {
         // Just Change your font name
-        Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/BungeeShade-Regular.ttf");
+        Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "assets/fonts/BungeeShade-Regular.ttf");
         setTypeface(myTypeface);
     }
 }

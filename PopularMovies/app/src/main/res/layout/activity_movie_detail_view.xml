@@ -107,11 +107,12 @@
             android:layout_height="0dp"
             android:layout_weight="3"
             >
-            <com.example.jamie.popularmovies.custom_views.CustomTextView
+            <TextView
                 android:id="@+id/trailer_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
+                android:fontFamily="sans-serif-condensed"
                 android:text="@string/trailers"/>
 
             <com.example.jamie.popularmovies.custom_views.CustomListView
@@ -139,7 +140,8 @@
                 android:id="@+id/review_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:requiresFadingEdge="horizontal">
+                android:requiresFadingEdge="horizontal"
+                >
             </com.example.jamie.popularmovies.custom_views.CustomListView>
         </LinearLayout>
 

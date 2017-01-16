@@ -64,7 +64,6 @@ public class DetailTrailerAdapter extends CursorAdapter {
                 if(intent != null){
                     mContext.startActivity(intent);
                 }
-
             }
         });
     }

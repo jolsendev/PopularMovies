@@ -94,21 +94,6 @@ public static void watchYoutubeVideo(String id){
         public static final String REVIEW_URL = "review_url";
 
 
-SELECT
-  movie.movie_id,
-  movie.title,
-  movie.backdrop_path,
-  movie.release_date,
-  movie.vote_average,
-  movie.favorite,
-  trailers.trailer_key,
-  trailers.trailer_name,
-  reviews.review_author,
-  reviews.review_content,
-  reviews.review_url
-  FROM
-  movie
-  LEFT JOIN movie ON movie.movie_id = trailers.movie_id
-  LEFT JOIN review ON movie.movie_is = review.movie_id
+
 
 

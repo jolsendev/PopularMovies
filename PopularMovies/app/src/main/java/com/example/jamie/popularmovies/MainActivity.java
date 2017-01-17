@@ -45,7 +45,10 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
 
-        setContentView(R.layout.activity_main);
+        if(isOnline()){
+            setContentView(R.layout.activity_main);
+        }
+
 
         if(findViewById(R.id.movie_detail_container) != null){
             mTwoPane = true;
@@ -83,8 +86,9 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
         super.onResume();
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
         String preference = Utility.getSharedPreference(this);
-        mMF.setSelection(mPosition);
+
         if (mMF != null) {
+            mMF.setSelection(mPosition);
             if (preference != null || !preference.equals(mPreference)) {
                 mMF.onSortPreferenceChanged();
                 mPreference = preference;
@@ -132,16 +136,19 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     @Override
     public void RestartReviewLoader() {
         if(mTwoPane){
-            mDF.RestartReviewLoader();
+            if(mDF != null){
+                mDF.RestartReviewLoader();
+            }
         }
     }
 
     @Override
     public void RestartTrailerLoader() {
         if(mTwoPane){
-            mDF.RestartTrailerLoader();
+            if(mDF != null){
+                mDF.RestartTrailerLoader();
+            }
         }
-
     }
 
     @Override

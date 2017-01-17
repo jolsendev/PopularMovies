@@ -36,10 +36,12 @@ public class DetailReviewAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         final Context mContext = context;
-        TextView trailerView = (TextView) view.findViewById(R.id.movie_review);
+        TextView reviewView = (TextView) view.findViewById(R.id.movie_review);
+        TextView reviewAuthor= (TextView) view.findViewById(R.id.review_author);
+        reviewAuthor.setText("By: "+cursor.getString(MovieDetailFragment.COL_REVIEW_AUTHOR));
         final String reviewContent = cursor.getString(MovieDetailFragment.COL_REVIEW_CONTENT);
 
-        trailerView.setOnClickListener(new View.OnClickListener() {
+        reviewView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
@@ -50,6 +52,6 @@ public class DetailReviewAdapter extends CursorAdapter {
                 mContext.startActivity(intent);
             }
         });
-        trailerView.setText(reviewContent);
+        reviewView.setText(reviewContent);
     }
 }

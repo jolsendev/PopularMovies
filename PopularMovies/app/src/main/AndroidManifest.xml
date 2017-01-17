@@ -19,8 +19,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ReviewActivity"
+            android:label="@string/movie_review"
+            android:parentActivityName=".DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jamie.popularmovies.DetailActivity" />
+        </activity>
+        <activity
             android:name=".DetailActivity"
-            android:label="MovieDetail"
+            android:label="@string/movie_detail"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -40,10 +48,10 @@
             android:exported="false"
             android:syncable="true" />
 
-        <activity android:name=".ReviewActivity" />
         <activity android:name=".YouTubeActivity">
 
         </activity>
+        <!--<service android:name="com.example.jamie.popularmovies.service.MovieService"/>-->
     </application>
 
 </manifest>

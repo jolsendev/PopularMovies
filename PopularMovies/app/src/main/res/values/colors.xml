@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/md_grey_900</color>
-    <color name="colorPrimaryDark">@color/md_black_1000</color>
-    <color name="colorAccent">@color/md_red_500</color>
+    <color name="colorPrimaryDark">#373F51</color>
+    <color name="colorPrimary">#1B1B1E</color>
+    <color name="colorAccent">#58A4B0</color>
+    <color name="textColor">#D8DBE2</color>
 
     <!--Found these values here: https://gist.github.com/daniellevass/b0b8cfa773488e138037-->
     <!--reds-->

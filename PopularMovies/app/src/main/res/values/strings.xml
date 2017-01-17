@@ -77,4 +77,7 @@
     <string name="favorite_button_text">Mark As Favorite</string>
     <string name="reviews">Reviews</string>
     <string name="trailers">Trailers</string>
+    <string name="synposys">Synopsis</string>
+    <string name="movie_review">Movie Review</string>
+    <string name="movie_detail">Movie Detail</string>
 </resources>

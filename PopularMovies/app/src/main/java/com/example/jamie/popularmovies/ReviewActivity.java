@@ -16,6 +16,6 @@ public class ReviewActivity extends AppCompatActivity {
         TextView fullReviewTextView = (TextView) findViewById(R.id.full_review_view);
         String review = getIntent().getExtras().getString(MovieContract.ReviewEntry.REVIEW_CONTENT);
         fullReviewTextView.setText(review);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }

@@ -104,7 +104,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private CustomListView mReviewListView;
     private LinearLayout mDetailLayout;
     private TextView mMovieTitle;
-    private ImageView mMovieImage;
+
     private TextView mMovieRating;
     private TextView mReleaseDate;
     private TextView mMovieOverview;
@@ -117,6 +117,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private TextView mTrailerTitle;
     private  TextView mReviewTitle;
     private String mPreference;
+    private TextView mMovieOverviewTitle;
+    private ImageView mMovieImage;
 
     public MovieDetailFragment() {
 
@@ -125,7 +127,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -165,6 +166,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mMovieRating = (TextView) mDetailLayout.findViewById(R.id.movie_rating);
         mReleaseDate = (TextView) mDetailLayout.findViewById(R.id.movie_release_date);
         mMovieOverview = (TextView) mDetailLayout.findViewById(R.id.movie_overview);
+        mMovieOverviewTitle = (TextView) mDetailLayout.findViewById(R.id.synopsys_title);
         mTrailerListView = (CustomListView) mDetailLayout.findViewById(R.id.trailer_list_view);
         mTrailerListView.setExpanded(true);
         mTrailerTitle = (TextView) mDetailLayout.findViewById(R.id.trailer_title);
@@ -172,7 +174,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mReviewListView.setExpanded(true);
         mReviewTitle = (TextView) mDetailLayout.findViewById(R.id.review_title);
         favoriteCheckbox = (CheckBox) mDetailLayout.findViewById(R.id.favorite_checkbox);
-
 
         return rootView;
     }
@@ -279,29 +280,24 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     String[] year = date.split("-");
                     mReleaseDate.setText(year[0]);
                     mMovieOverview.setText(cursor.getString(COL_OVERVIEW));
-                    ImageView imageItem = (ImageView) mDetailLayout.findViewById(R.id.detail_movie_image);
 
                     Picasso.with(getContext())
                             .load(Utility.getImagePathBackDrop(cursor.getString(COL_BACKDROP_PATH)))
-                            .into(imageItem);
+                            .into(mMovieImage);
 
                     final int movie_id = cursor.getInt(COL_MOVIE_ID);
                     final int is_favorite = cursor.getInt(COL_FAVORITE);
                     if(is_favorite == 0){
                         favoriteCheckbox.setText("Favorite");
-
-                        //checkbox
                     }
                     else{
                         favoriteCheckbox.setText("Favorite");
                         favoriteCheckbox.setChecked(true);
-                        //removecheck
                     }
 
                     favoriteCheckbox.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                             if(is_favorite == 0){
                                 Utility.addMovieToFavorite(getActivity(), movie_id);
                                 favoriteCheckbox.setText("Favorite");
@@ -319,8 +315,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     private void setViewsVisible() {
+        mMovieOverviewTitle.setVisibility(View.VISIBLE);
+        mDetailLayout.setVisibility(View.VISIBLE);
         mMovieTitle.setVisibility(View.VISIBLE);
         favoriteCheckbox.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -328,18 +327,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         reviewAdapter.swapCursor(null);
         trailerAdapter.swapCursor(null);
     }
-
-//    public void restartDetailLoaders(){
-//        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
-//        getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
-//        getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
-//    }
-//    public void updateDetailWithNewPreference(Uri prefUri) {
-//        if(mUri != null){
-//            mUri = prefUri;
-//            //restartDetailLoaders();
-//        }
-//    }
 
     public void setUris(long movie_id) {
         mMovieUri = MovieContract.MovieEntry.buildMovieUri(movie_id);
@@ -360,10 +347,14 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     public void RestartTrailerLoader() {
-        getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
+        if(getLoaderManager().getLoader(TRAILER_LOADER) != null){
+            getLoaderManager().restartLoader(TRAILER_LOADER, null, this);
+        }
     }
 
     public void RestartReviewLoader() {
-        getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
+        if(getLoaderManager().getLoader(REVIEW_LOADER) != null){
+            getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
+        }
     }
 }

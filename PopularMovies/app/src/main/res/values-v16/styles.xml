@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="CustomFontStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">15pt</item>
+        <item name="android:textColor">@color/textColor</item>
+</style>
+<!--<style name="textFontColor">-->
+        <!--<item name="android:textColor">@color/textColor</item>-->
+<!--</style>-->
+</resources>

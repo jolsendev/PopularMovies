@@ -4,15 +4,25 @@
     android:layout_height="wrap_content"
     android:id="@+id/review_layout_items">
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:textSize="5pt"
+        android:textColor="@color/textColor"
+        android:id="@+id/review_author"/>
+    <TextView
         android:id="@+id/movie_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="3"
+        android:textColor="@color/textColor"
         />
 
 </LinearLayout>

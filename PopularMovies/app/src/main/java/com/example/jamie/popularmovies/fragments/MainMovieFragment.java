@@ -26,6 +26,7 @@ import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.MainMovieAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
+//import com.example.jamie.popularmovies.service.MovieService;
 
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
@@ -148,8 +149,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         return v;
     }
 
-
-
     private void createAdapterWithCursor() {
         String sortBy = Utility.getSharedPreference(getActivity());
         Uri uri = null;
@@ -215,7 +214,9 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
         mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
-
+//        Intent intent = new Intent(getActivity(), MovieService.class);
+//        intent.putExtra("URI", mPopularUri);
+//        getActivity().startService(intent);
         FetchMovieTask moviesTask = new FetchMovieTask(getContext());
         moviesTask.execute(mPopularUri.toString());
     }

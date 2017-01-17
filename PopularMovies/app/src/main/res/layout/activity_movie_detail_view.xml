@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginBottom="7dp"
     android:layout_marginTop="7dp"
     android:layout_marginLeft="7dp"
     android:layout_marginRight="7dp"
-    android:background="@color/md_grey_800"
+    android:background="@color/colorPrimary"
     >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,18 +19,15 @@
         android:layout_marginBottom="1dp"
         android:id="@+id/movie_container"
         android:weightSum="7"
-        android:background="@color/md_grey_800"
+        android:background="@color/colorPrimary"
+        android:visibility="gone"
         >
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            style="@style/CustomFontStyle"
             android:gravity="center"
-            android:background="@color/md_cyan_400"
             android:id="@+id/movie_title"
             android:visibility="gone"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif" />
+            android:layout_weight="1" />
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -43,46 +40,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:id="@+id/image_layout"
+
                 >
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
                     android:id="@+id/detail_movie_image"
                     android:scaleType="fitXY"
                     android:focusableInTouchMode="true"
                     />
             </FrameLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                >
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/movie_rating"
-                        android:textSize="100sp"
+                        android:textSize="15sp"
                         android:fontFamily="sans-serif-light"
+                        android:textColor="@color/textColor"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/movie_release_date"
-                        android:textSize="50sp"
+                        android:textSize="15sp"
                         android:fontFamily="sans-serif-light"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/favorite_checkbox"
-                        android:visibility="gone"
-                        android:textSize="50sp"
-                        android:fontFamily="sans-serif-light"
+                        android:textColor="@color/textColor"
                         />
                 </LinearLayout>
+
+                <CheckBox
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/favorite_checkbox"
+                    android:visibility="gone"
+                    android:textSize="25sp"
+                    android:textColor="@color/textColor"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -92,14 +101,20 @@
             android:layout_height="wrap_content"
             >
             <TextView
+                android:id="@+id/synopsys_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Synposys"/>
+                style="@style/CustomFontStyle"
+                android:visibility="gone"
+                android:text="@string/synposys"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:id="@+id/movie_overview"
+                android:textColor="@color/textColor"
                 />
         </LinearLayout>
 
@@ -111,10 +126,8 @@
             >
             <TextView
                 android:id="@+id/trailer_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/CustomFontStyle"
                 android:visibility="gone"
-                android:fontFamily="sans-serif-condensed"
                 android:text="@string/trailers"/>
 
             <com.example.jamie.popularmovies.custom_views.CustomListView
@@ -133,8 +146,7 @@
             >
             <TextView
                 android:id="@+id/review_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/CustomFontStyle"
                 android:visibility="gone"
                 android:text="@string/reviews"/>
 
@@ -146,9 +158,5 @@
                 >
             </com.example.jamie.popularmovies.custom_views.CustomListView>
         </LinearLayout>
-
     </LinearLayout>
-
-
-
 </ScrollView>

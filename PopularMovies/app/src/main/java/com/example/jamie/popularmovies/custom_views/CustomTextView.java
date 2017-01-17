@@ -34,7 +34,7 @@ public class CustomTextView extends TextView {
 
     private void init(AttributeSet attrs) {
         // Just Change your font name
-        Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "assets/fonts/BungeeShade-Regular.ttf");
+        Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/bungeeshade-regular.ttf");
         setTypeface(myTypeface);
     }
 }

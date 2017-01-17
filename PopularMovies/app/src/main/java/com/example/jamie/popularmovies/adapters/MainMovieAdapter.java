@@ -37,6 +37,5 @@ public class MainMovieAdapter extends CursorAdapter {
         Picasso.with(context)
                 .load(Utility.getImagePath(path)).placeholder(R.drawable.popcorntime)
                 .into(imageItem);
-
     }
 }

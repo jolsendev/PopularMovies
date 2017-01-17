@@ -206,7 +206,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         null, //this was what I was missing
                         null
                 );
-                //String holder = DatabaseUtils.dumpCursorToString(cursor);
                 break;
             }
             case REVIEW_LOADER:{

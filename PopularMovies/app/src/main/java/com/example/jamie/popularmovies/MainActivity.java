@@ -31,11 +31,13 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     private int mPosition;
     private Uri mUri;
     private boolean prefChange = false;
+    private boolean mFirstTimelaunch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //set the preference
         mPreference = Utility.getSharedPreference(this);
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
@@ -54,9 +56,12 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             setContentView(R.layout.activity_main);
         }
 
+        //check for detail pane in memory
         if(findViewById(R.id.movie_detail_container) != null){
             mTwoPane = true;
-            if (savedInstanceState != null) {
+            //When is savedIntanceState not null?
+            //What values are in it?
+            if (savedInstanceState != null) {// if null it is safe to assume it is the first time launching
                 if(isOnline()){
                     MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
                     if(mDF != null){
@@ -64,14 +69,15 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
                         String potentialUri = args.getString(DETAIL_URI);
                         if(potentialUri != null){
                             Uri uri = Uri.parse(potentialUri);
-                            onItemSelected(uri);
-                        }
+                            onItemSelected(uri);                        }
 
                     }else{
                         Uri uri = Utility.getFirstMovieFromPreference(this, mPreference);
                         onItemSelected(uri);
                     }
                 }
+            }else{
+                mFirstTimelaunch = true;
             }
         }else{
             mTwoPane = false;
@@ -98,9 +104,8 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
         String preference = Utility.getSharedPreference(this);
 
         if (mMF != null) {
-            if (preference != null && mTwoPane){
-                mMF.onSortPreferenceChanged();
-                mPreference = preference;
+            if(mFirstTimelaunch){
+                mMF.addFirstMovieToDetail();
             }
         }
 

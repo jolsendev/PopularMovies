@@ -109,7 +109,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public static final int COL_IS_TOP_RATED = 16;
 
 
-    public void onSortPreferenceChanged() {
+    public void addFirstMovieToDetail() {
         Uri stringUri = Utility.getFirstMovieFromPreference(getContext(), Utility.getSharedPreference(getContext()));
         ((Callback)getContext()).onItemSelected(stringUri);
         getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);

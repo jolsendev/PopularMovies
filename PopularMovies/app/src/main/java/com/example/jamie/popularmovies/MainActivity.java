@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             Intent intent = new Intent(this, DetailActivity.class).
             setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).
             setData(detailUri);
+            intent.putExtra(MovieContract.MovieEntry.POSITION, mPosition);
             startActivity(intent);
         }
     }

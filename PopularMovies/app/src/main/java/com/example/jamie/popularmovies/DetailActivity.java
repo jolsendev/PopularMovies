@@ -1,14 +1,11 @@
 package com.example.jamie.popularmovies;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.widget.LinearLayout;
 
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
@@ -34,6 +31,8 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(MovieDetailFragment.DETAIL_URI, arguments.getString(MovieDetailFragment.DETAIL_URI));
+            int position = getIntent().getIntExtra(MovieContract.MovieEntry.POSITION, 0);
+            intent.putExtra(MovieContract.MovieEntry.POSITION, position);
             this.startActivity(intent);
         }
     }

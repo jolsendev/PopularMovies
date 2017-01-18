@@ -155,6 +155,18 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     UpdateTrailer(movie_id);
                 }
                 setUris(movie_id);
+            }else{
+                Uri uri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
+                if(uri != null){
+                    Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath(uri));
+                }
+                mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
+                if(mUri != null){
+                    Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri));
+                    setUris(movie_id);
+                    restartLoader();
+
+                }
             }
         }
 
@@ -176,6 +188,12 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         favoriteCheckbox = (CheckBox) mDetailLayout.findViewById(R.id.favorite_checkbox);
 
         return rootView;
+    }
+
+    private void restartLoader() {
+        RestartTrailerLoader();
+        RestartReviewLoader();
+        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 
     @Override

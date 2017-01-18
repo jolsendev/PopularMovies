@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
+import com.example.jamie.popularmovies.FetchReviewTask;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -45,7 +47,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public interface Callback {        /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        void onItemSelected(Uri detailUri, int mPosition);
+        void onItemSelected(Uri detailUri);
     }
 
     public interface  SetPostionCallBack{
@@ -106,6 +108,8 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
 
     public void onSortPreferenceChanged() {
+        Uri stringUri = Utility.getFirstMovieFromPreference(getContext(), Utility.getSharedPreference(getContext()));
+        ((Callback)getContext()).onItemSelected(stringUri);
         getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
     }
 
@@ -118,7 +122,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(MAIN_MOVIE_LOADER, null, this);
-        updateMovieData();
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
@@ -138,7 +141,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 mPosition = position;
-                ((Callback) getActivity()).onItemSelected(uri, mPosition);
+                ((Callback) getActivity()).onItemSelected(uri);
             }
         });
         gridview.setAdapter(mAdapter);
@@ -186,6 +189,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         createAdapterWithCursor();
         setHasOptionsMenu(true);
+        updateMovieData();
         super.onCreate(savedInstanceState);
     }
 

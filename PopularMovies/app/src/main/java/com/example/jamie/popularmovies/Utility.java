@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.example.jamie.popularmovies.data.MovieContract;
+import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 
 /**
  * Created by a5w5nzz on 9/16/2016.
@@ -107,6 +108,51 @@ public final class Utility {
             return true;
         }else{
             return false;
+        }
+
+    }
+    public static Uri getFirstMovieFromPreference(Context context, String preference) {
+
+        Cursor cur = null;
+        switch(preference){
+            case MovieContract.MovieEntry.TOP_RATED:{
+                cur = context.getContentResolver().query(
+                        MovieContract.MovieEntry.buildTopRatedUri(),
+                        null,
+                        MovieContract.MovieEntry.TOP_RATED+" = 1",
+                        null,
+                        null
+                );
+                break;
+            }
+            case MovieContract.MovieEntry.FAVORITE:{
+                cur = context.getContentResolver().query(
+                        MovieContract.MovieEntry.buildFavoriteUri(),
+                        null,
+                        MovieContract.MovieEntry.FAVORITE+" = 1",
+                        null,
+                        null
+                );
+                break;
+            }
+            case MovieContract.MovieEntry.MOST_POPULAR: {
+                cur = context.getContentResolver().query(
+                        MovieContract.MovieEntry.buildPopularUri(),
+                        null,
+                        MovieContract.MovieEntry.MOST_POPULAR + " = 1",
+                        null,
+                        null
+                );
+                break;
+            }
+            default:
+                return null;
+        }
+
+        if(cur.moveToFirst()){
+            return MovieContract.MovieEntry.buildMovieUri(cur.getInt(MainMovieFragment.COL_MOVIE_ID));
+        }else{
+            return null;
         }
     }
 }

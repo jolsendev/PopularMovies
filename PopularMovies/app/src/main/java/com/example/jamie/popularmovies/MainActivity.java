@@ -18,6 +18,8 @@ import com.facebook.stetho.dumpapp.DumpException;
 import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 
+import static com.example.jamie.popularmovies.fragments.MovieDetailFragment.DETAIL_URI;
+
 
 public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback, MainMovieFragment.SetPostionCallBack{
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     private String mPreference;
     private MovieDetailFragment mDF;
     private int mPosition;
+    private Uri mUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +52,28 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             setContentView(R.layout.activity_main);
         }
 
-
         if(findViewById(R.id.movie_detail_container) != null){
             mTwoPane = true;
-            if (savedInstanceState == null) {
-
+            if (savedInstanceState != null) {
                 if(isOnline()){
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.movie_detail_container, new MovieDetailFragment(),DETAIL_FRAGMENT_TAG)
-                            .commit();
-                }
+                    MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+                    if(mDF != null){
+                        Bundle args = mDF.getArguments();
+                        String potentialUri = args.getString(DETAIL_URI);
+                        if(potentialUri != null){
+                            Uri uri = Uri.parse(potentialUri);
+                            onItemSelected(uri);
+                        }
 
+                    }else{
+                        Uri uri = Utility.getFirstMovieFromPreference(this, mPreference);
+                        onItemSelected(uri);
+                    }
+                }
             }
         }else{
             mTwoPane = false;
         }
-
     }
 
     @Override
@@ -89,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
         if (mMF != null) {
             mMF.setSelection(mPosition);
-            if (preference != null || !preference.equals(mPreference)) {
+            if (preference != null && mTwoPane){
                 mMF.onSortPreferenceChanged();
                 mPreference = preference;
             }
@@ -116,12 +125,13 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     }
 
     @Override
-    public void onItemSelected(Uri detailUri, int position) {
-        mPosition = position;
+    public void onItemSelected(Uri detailUri) {
+
+        mUri = detailUri;
 
         if(mTwoPane){
             Bundle args = new Bundle();
-            args.putParcelable(MovieDetailFragment.DETAIL_URI, detailUri);
+            args.putParcelable(DETAIL_URI, detailUri);
             mDF = new MovieDetailFragment();
             mDF.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, mDF, DETAIL_FRAGMENT_TAG).commit();

@@ -32,7 +32,6 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             String yay = "I made it!";
         }
-
     }
 
     @Override
@@ -41,6 +40,7 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
         setContentView(R.layout.activity_detail);
 
         if(savedInstanceState != null){
+            String stop = "stop";
 
         }
         if(savedInstanceState == null){

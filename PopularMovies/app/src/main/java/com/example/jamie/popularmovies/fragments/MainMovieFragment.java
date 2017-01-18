@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
-import com.example.jamie.popularmovies.FetchReviewTask;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -50,7 +48,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         void onItemSelected(Uri detailUri);
     }
 
-    public interface  SetPostionCallBack{
+    public interface SetPositionCallBack {
         void setPosition(int Position);
     }
 
@@ -62,7 +60,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void onSaveInstanceState(Bundle outState) {
         if( mPosition != gridview.INVALID_POSITION){
             outState.putInt(MovieContract.MovieEntry.POSITION, mPosition);
-            ((SetPostionCallBack) getActivity()).setPosition(mPosition);
+            ((SetPositionCallBack) getActivity()).setPosition(mPosition);
         }
         super.onSaveInstanceState(outState);
     }

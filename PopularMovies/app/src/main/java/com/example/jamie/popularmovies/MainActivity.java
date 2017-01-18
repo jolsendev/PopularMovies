@@ -21,7 +21,7 @@ import com.facebook.stetho.dumpapp.DumperPlugin;
 import static com.example.jamie.popularmovies.fragments.MovieDetailFragment.DETAIL_URI;
 
 
-public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback, MainMovieFragment.SetPostionCallBack{
+public class MainActivity extends AppCompatActivity implements MainMovieFragment.Callback ,FetchReviewTask.Callback, FetchTrailerTask.Callback, MainMovieFragment.SetPositionCallBack {
 
 
     public static final String DETAIL_FRAGMENT_TAG = "DFT";

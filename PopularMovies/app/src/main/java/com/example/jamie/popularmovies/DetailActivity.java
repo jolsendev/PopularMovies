@@ -1,5 +1,6 @@
 package com.example.jamie.popularmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 public class DetailActivity extends AppCompatActivity implements FetchReviewTask.Callback, FetchTrailerTask.Callback  {
 
     private MovieDetailFragment mDF;
+    private Bundle arguments;
 
     @Override
     public void onBackPressed() {
@@ -30,7 +32,9 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            String yay = "I made it!";
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(MovieDetailFragment.DETAIL_URI, arguments.getString(MovieDetailFragment.DETAIL_URI));
+            this.startActivity(intent);
         }
     }
 
@@ -45,7 +49,7 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
         }
         if(savedInstanceState == null){
 
-            Bundle arguments = new Bundle();
+            arguments = new Bundle();
             arguments.putParcelable(MovieDetailFragment.DETAIL_URI, getIntent().getData());
 
             mDF = new MovieDetailFragment();

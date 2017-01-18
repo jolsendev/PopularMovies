@@ -97,5 +97,5 @@ public static void watchYoutubeVideo(String id){
 
 When I go into landscape from detail I need to see 2 pane UI
 When i go back to the main activity from detail I want the grid view state to be the same
-
+Efficient Android Threading
 

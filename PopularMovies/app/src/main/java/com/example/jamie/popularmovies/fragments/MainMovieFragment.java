@@ -36,6 +36,11 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     private SharedPreferences pref;
     private String sortValue;
 
+    public void onDetailLayout(Uri mUri) {
+        ((Callback)getActivity()).onItemSelected(mUri);
+        getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
+    }
+
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -51,7 +56,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public interface SetPositionCallBack {
         void setPosition(int Position);
     }
-
     public GridView gridview;
     public MainMovieAdapter mAdapter;
     private Uri mPopularUri;
@@ -120,6 +124,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(MAIN_MOVIE_LOADER, null, this);
+        mPosition = getActivity().getIntent().getIntExtra(MovieContract.MovieEntry.POSITION, 0);
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
@@ -139,7 +144,10 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 mPosition = position;
+                ((SetPositionCallBack)getActivity()).setPosition(mPosition);
                 ((Callback) getActivity()).onItemSelected(uri);
+
+
             }
         });
         gridview.setAdapter(mAdapter);

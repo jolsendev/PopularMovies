@@ -26,16 +26,18 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     public static final String DETAIL_FRAGMENT_TAG = "DFT";
     private boolean mTwoPane;
-    private String mPreference;
+    private String mPreference = null;
     private MovieDetailFragment mDF;
     private int mPosition;
     private Uri mUri;
+    private boolean prefChange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mPreference = Utility.getSharedPreference(this);
+
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(new DumperPluginsProvider() {
                     @Override
@@ -75,29 +77,27 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             mTwoPane = false;
         }
     }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
-    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
+//    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-
-
     }
 
     @Override
     protected void onResume() {
 
+        //This is broken - need another way of getting and handling preferences.
         super.onResume();
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
         String preference = Utility.getSharedPreference(this);
 
         if (mMF != null) {
-            mMF.setSelection(mPosition);
             if (preference != null && mTwoPane){
                 mMF.onSortPreferenceChanged();
                 mPreference = preference;

@@ -2,6 +2,7 @@ package com.example.jamie.popularmovies;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,10 +30,12 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Intent detailIntent = getIntent();
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(MovieDetailFragment.DETAIL_URI, arguments.getString(MovieDetailFragment.DETAIL_URI));
-            int position = getIntent().getIntExtra(MovieContract.MovieEntry.POSITION, 0);
-            intent.putExtra(MovieContract.MovieEntry.POSITION, position);
+            Uri uri = detailIntent.getData();
+            int position = detailIntent.getIntExtra(MovieContract.MovieEntry.POSITION, 0);
+            intent.putExtra(MovieDetailFragment.DETAIL_URI,uri);
+            intent.putExtra(MovieContract.MovieEntry.POSITION,position);
             this.startActivity(intent);
         }
     }

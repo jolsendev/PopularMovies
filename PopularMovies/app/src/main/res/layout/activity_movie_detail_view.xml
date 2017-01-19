@@ -134,6 +134,7 @@
                 android:id="@+id/trailer_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
                 >
             </com.example.jamie.popularmovies.custom_views.CustomListView>
 
@@ -155,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:requiresFadingEdge="horizontal"
+                android:focusable="false"
                 >
             </com.example.jamie.popularmovies.custom_views.CustomListView>
         </LinearLayout>

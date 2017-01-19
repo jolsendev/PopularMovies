@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     private Uri mUri;
     private boolean prefChange = false;
     private boolean mFirstTimelaunch = false;
+    private boolean mPrefChanged = false;
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -109,15 +109,29 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     @Override
     protected void onResume() {
 
+        String preference = Utility.getSharedPreference(this);
+        if(!preference.equals(mPreference)){
+            mPrefChanged = true;
+
+        }
         //This is broken - need another way of getting and handling preferences.
         super.onResume();
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
         if(mUri != null && mTwoPane){
             onItemSelected(mUri);
         }
-        else if(mTwoPane){
+        if(mTwoPane && mUri == null){
             Uri uri = Utility.getFirstMovieFromPreference(this, mPreference);
             onItemSelected(uri);
+        }if(mPrefChanged && mTwoPane){
+            if(mMF != null){
+                mMF.setSelection(mPosition);
+                mMF.addFirstMovieToDetail();
+            }
+        }else if(mPrefChanged){
+            if(mMF != null){
+                mMF.restartLoader();
+            }
         }
     }
 

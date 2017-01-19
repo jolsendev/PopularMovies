@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -100,7 +99,11 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void addFirstMovieToDetail() {
         Uri stringUri = Utility.getFirstMovieFromPreference(getContext(), Utility.getSharedPreference(getContext()));
         ((Callback)getContext()).onItemSelected(stringUri);
+        restartLoader();
 
+    }
+
+    public void restartLoader() {
         getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
     }
 

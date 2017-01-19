@@ -99,3 +99,17 @@ When I go into landscape from detail I need to see 2 pane UI
 When i go back to the main activity from detail I want the grid view state to be the same
 Efficient Android Threading
 
+
+Things to debug
+
+- launch activity
+- click on review
+- click up button
+- Should return to proper detail view
+
+- launch activity
+- click on review
+- rotate DUT
+- click up button
+- Should return to proper master/detail view
+

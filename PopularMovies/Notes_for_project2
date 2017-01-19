@@ -113,3 +113,12 @@ Things to debug
 - click up button
 - Should return to proper master/detail view
 
+
+
+sync needs
+MovieAuthenticator - extends AbstractAccountAuthenticator
+MovieAuthenticatorService
+MovieSyncService
+MovieSyncAdapter - extends AbstractThreadedSyncAdapter
+
+

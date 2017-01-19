@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,10 +35,32 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     private boolean mFirstTimelaunch = false;
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            String uri = savedInstanceState.getString(DETAIL_URI);
+            if(uri != null){
+                mUri = Uri.parse(uri);
+            }
+        }
+
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(mUri != null){
+            String uri = String.valueOf(mUri);
+            outState.putString(DETAIL_URI, uri);
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set the preference\
 
-        //set the preference
         mPreference = Utility.getSharedPreference(this);
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
@@ -52,48 +75,36 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
 
-        if(isOnline()){
+        if (isOnline()) {
             setContentView(R.layout.activity_main);
         }
 
         //check for detail pane in memory
-        if(findViewById(R.id.movie_detail_container) != null){
+        if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
             //When is savedIntanceState not null?
             //What values are in it?
-            if (savedInstanceState != null) {// if null it is safe to assume it is the first time launching
-                if(isOnline()){
-                    MovieDetailFragment mDF = (MovieDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
-                    if(mDF != null){
-                        Bundle args = mDF.getArguments();
-                        String potentialUri = args.getString(DETAIL_URI);
-                        if(potentialUri != null){
-                            Uri uri = Uri.parse(potentialUri);
-                            onItemSelected(uri);                        }
-
-                    }else{
-                        Uri uri = Utility.getFirstMovieFromPreference(this, mPreference);
-                        onItemSelected(uri);
+            if (savedInstanceState == null) {
+                if (isOnline()) {
+                    Intent detailArgs = getIntent();
+                    if(detailArgs.getData()!= null){
+                        mUri = detailArgs.getData();
+                        mPosition = detailArgs.getIntExtra(MovieContract.MovieEntry.POSITION, 0);
+                        setPosition(mPosition);
                     }
                 }
-            }else{
-                mFirstTimelaunch = true;
             }
-        }else{
+        } else {
             mTwoPane = false;
         }
     }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
-//    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
     }
+
+
 
     @Override
     protected void onResume() {
@@ -101,14 +112,13 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
         //This is broken - need another way of getting and handling preferences.
         super.onResume();
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
-        String preference = Utility.getSharedPreference(this);
-
-        if (mMF != null) {
-            if(mFirstTimelaunch){
-                mMF.addFirstMovieToDetail();
-            }
+        if(mUri != null && mTwoPane){
+            onItemSelected(mUri);
         }
-
+        else if(mTwoPane){
+            Uri uri = Utility.getFirstMovieFromPreference(this, mPreference);
+            onItemSelected(uri);
+        }
     }
 
     public boolean isOnline() {

@@ -33,8 +33,9 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
             Intent detailIntent = getIntent();
             Intent intent = new Intent(this, MainActivity.class);
             Uri uri = detailIntent.getData();
+            intent.setData(uri);
             int position = detailIntent.getIntExtra(MovieContract.MovieEntry.POSITION, 0);
-            intent.putExtra(MovieDetailFragment.DETAIL_URI,uri);
+            //intent.putExtra(MovieDetailFragment.DETAIL_URI,uri);
             intent.putExtra(MovieContract.MovieEntry.POSITION,position);
             this.startActivity(intent);
         }
@@ -44,11 +45,6 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        if(savedInstanceState != null){
-            String stop = "stop";
-
-        }
         if(savedInstanceState == null){
 
             arguments = new Bundle();

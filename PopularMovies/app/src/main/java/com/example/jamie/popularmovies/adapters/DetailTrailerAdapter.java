@@ -53,7 +53,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
 
         ImageView imageItem = (ImageView) view.findViewById(R.id.trailer_thumbnail);
         Picasso.with(context)
-                .load(path).placeholder(R.drawable.playbutton)
+                .load(path).placeholder(R.drawable.frame)
                 .into(imageItem);
 
         view.setOnClickListener(new View.OnClickListener() {

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,10 +37,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     private SharedPreferences pref;
     private String sortValue;
 
-    public void onDetailLayout(Uri mUri) {
-        ((Callback)getActivity()).onItemSelected(mUri);
-        getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
-    }
 
 
     /**
@@ -59,15 +56,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public GridView gridview;
     public MainMovieAdapter mAdapter;
     private Uri mPopularUri;
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if( mPosition != gridview.INVALID_POSITION){
-            outState.putInt(MovieContract.MovieEntry.POSITION, mPosition);
-            ((SetPositionCallBack) getActivity()).setPosition(mPosition);
-        }
-        super.onSaveInstanceState(outState);
-    }
 
     public static final int MAIN_MOVIE_LOADER = 0;
     private static final String[] MOVIE_COLUMNS = {
@@ -112,6 +100,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void addFirstMovieToDetail() {
         Uri stringUri = Utility.getFirstMovieFromPreference(getContext(), Utility.getSharedPreference(getContext()));
         ((Callback)getContext()).onItemSelected(stringUri);
+
         getLoaderManager().restartLoader(MAIN_MOVIE_LOADER, null, this);
     }
 
@@ -124,7 +113,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(MAIN_MOVIE_LOADER, null, this);
-        mPosition = getActivity().getIntent().getIntExtra(MovieContract.MovieEntry.POSITION, 0);
         super.onActivityCreated(savedInstanceState);
     }
     @Nullable
@@ -133,10 +121,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         View v = inflater.inflate(R.layout.activity_movie,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
 
-        if(savedInstanceState != null){
-            mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
-        }
-
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -144,7 +128,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 mPosition = position;
-                ((SetPositionCallBack)getActivity()).setPosition(mPosition);
+                //((SetPositionCallBack)getActivity()).setPosition(mPosition);
                 ((Callback) getActivity()).onItemSelected(uri);
 
 
@@ -152,9 +136,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         });
         gridview.setAdapter(mAdapter);
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(MovieContract.MovieEntry.POSITION)){
-            mPosition = savedInstanceState.getInt(MovieContract.MovieEntry.POSITION);
-        }
         return v;
     }
 

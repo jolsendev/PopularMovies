@@ -16,6 +16,7 @@ import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.ReviewActivity;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
+import com.facebook.stetho.common.Util;
 
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
@@ -42,13 +43,13 @@ public class DetailReviewAdapter extends CursorAdapter {
         TextView reviewAuthor= (TextView) view.findViewById(R.id.review_author);
         reviewAuthor.setText("By: "+cursor.getString(MovieDetailFragment.COL_REVIEW_AUTHOR));
         final String reviewContent = cursor.getString(MovieDetailFragment.COL_REVIEW_CONTENT);
-
+        final long movieId = cursor.getLong(MovieDetailFragment.COL_MOVIE_ID);
         reviewView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent(mContext, ReviewActivity.class);
-
+                intent.setData(MovieContract.MovieEntry.buildMovieUri(movieId));
                 Bundle mBundle = new Bundle();
                 mBundle.putString(MovieContract.ReviewEntry.REVIEW_CONTENT, reviewContent);
                 intent.putExtras(mBundle);

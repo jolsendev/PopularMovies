@@ -128,6 +128,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -146,9 +147,13 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Bundle arguments = getArguments();
+//155
         mPreference = Utility.getSharedPreference(getActivity());
         if(arguments != null){
             mUri = arguments.getParcelable(DETAIL_URI);
+            if(mUri == null){
+                mUri = getActivity().getIntent().getData();
+            }
             if(mUri != null){
                 String movie_id_string = MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri);
                 long movie_id = Long.parseLong(movie_id_string);
@@ -376,5 +381,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if(getLoaderManager().getLoader(REVIEW_LOADER) != null){
             getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
         }
+    }
+
+    public void setUri(Uri uri) {
+        this.mUri = uri;
     }
 }

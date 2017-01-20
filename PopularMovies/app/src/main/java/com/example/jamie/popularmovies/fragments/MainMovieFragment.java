@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.jamie.popularmovies.FetchMovieTask;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
@@ -37,6 +36,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     private SharedPreferences pref;
     private String sortValue;
 
+    private Menu mMenu;
 
 
     /**
@@ -48,6 +48,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
          * DetailFragmentCallback for when an item has been selected.
          */
         void onItemSelected(Uri detailUri);
+        void setMenuItem(Menu menu);
     }
 
     public interface SetPositionCallBack {
@@ -110,7 +111,14 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        mMenu = menu;
         inflater.inflate(R.menu.main, menu);
+        if(menu != null){
+            ((Callback)getActivity()).setMenuItem(menu);
+            if(menu.findItem(R.id.action_share) != null){
+                menu.findItem(R.id.action_share).setVisible(false);
+            }
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -122,6 +130,8 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.activity_movie,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
 
@@ -179,7 +189,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         createAdapterWithCursor();
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(false);
         updateMovieData();
         super.onCreate(savedInstanceState);
     }
@@ -252,6 +262,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         setSelection(mPosition);
         mAdapter.swapCursor(data);
+        mAdapter.swapCursor(data);
     }
 
     public void setSelection(int position) {
@@ -264,5 +275,11 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
+
+    public Menu getMenu() {
+        return mMenu;
+    }
+
+
 
 }

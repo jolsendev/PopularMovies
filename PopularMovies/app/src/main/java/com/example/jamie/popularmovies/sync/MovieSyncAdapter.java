@@ -2,47 +2,20 @@ package com.example.jamie.popularmovies.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.text.format.Time;
 import android.util.Log;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
-import com.example.jamie.popularmovies.data.MovieContract;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Vector;
 
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 //    public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
@@ -68,16 +41,16 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String MOVIE_API_KEY = "api_key";
         String API_KEY = Utility.MOVIE_API_KEY;
-        fetch(MOVIE_BASE_URL_POPULAR, MOVIE_API_KEY, API_KEY);
-        fetch(MOVIE_BASE_URL_TOPRATED, MOVIE_API_KEY, API_KEY);
+        fetch(MOVIE_BASE_URL_POPULAR, MOVIE_API_KEY, API_KEY, "popular");
+        fetch(MOVIE_BASE_URL_TOPRATED, MOVIE_API_KEY, API_KEY, "top_rated");
 
 
     }
 
-    private void fetch(String uri, String key, String value){
+    private void fetch(String uri, String key, String value, String sortBy){
         mPopularUri = Uri.parse(uri).buildUpon()
                 .appendQueryParameter(key, value).build();
-        FetchMovieTask moviesTask = new FetchMovieTask(getContext());
+        FetchMovieTask moviesTask = new FetchMovieTask(getContext(), sortBy);
         moviesTask.execute(mPopularUri.toString());
     }
 

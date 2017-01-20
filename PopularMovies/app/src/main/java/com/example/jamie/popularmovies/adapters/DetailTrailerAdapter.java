@@ -19,8 +19,6 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-
 /**
  * Created by a5w5nzz on 11/30/2016.
  */
@@ -62,12 +60,13 @@ public class DetailTrailerAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) mContext, GOOGLE_API_KEY, video_source);
-
+                intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
                 if(YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(mContext) == YouTubeInitializationResult.SUCCESS){
                     mContext.startActivity(intent);
                 }else{
                     Intent webIntent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("http://www.youtube.com/watch?v=" + video_source));
+                    intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 
                     mContext.startActivity(webIntent);
                 }

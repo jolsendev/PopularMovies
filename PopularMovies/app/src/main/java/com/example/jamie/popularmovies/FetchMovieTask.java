@@ -13,8 +13,10 @@ import com.example.jamie.popularmovies.extracting_json_data.ExtractJSONMovieData
  */
 public class FetchMovieTask extends AsyncTask<String, Void, String> {
 
+    private final String sortBy;
     Context mContext;
-        public FetchMovieTask(Context mContext){
+        public FetchMovieTask(Context mContext, String sortBy){
+            this.sortBy = sortBy;
             this.mContext = mContext;
         }
 
@@ -27,7 +29,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, String> {
     @Override
         protected String doInBackground(String... params) {
             FetchRawData mRawData = new FetchRawData(params[0]);
-            ExtractJSONMovieData mData = new ExtractJSONMovieData(mRawData.fetch(), mContext);
+            ExtractJSONMovieData mData = new ExtractJSONMovieData(mRawData.fetch(),sortBy, mContext);
             mData.extractMovieAndPlaceInDatabase();
             return mRawData.getJsonData();
         }

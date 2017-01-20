@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     private boolean prefChange = false;
     private boolean mFirstTimelaunch = false;
     private boolean mPrefChanged = false;
+    private Menu mMenu;
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //set the preference\
 
         mPreference = Utility.getSharedPreference(this);
 
@@ -79,11 +79,8 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             setContentView(R.layout.activity_main);
         }
 
-        //check for detail pane in memory
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
-            //When is savedIntanceState not null?
-            //What values are in it?
             if (savedInstanceState == null) {
                 if (isOnline()) {
                     Intent detailArgs = getIntent();
@@ -108,15 +105,20 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     @Override
     protected void onResume() {
-
-        String preference = Utility.getSharedPreference(this);
-        if(!preference.equals(mPreference)){
-            mPrefChanged = true;
-
-        }
-        //This is broken - need another way of getting and handling preferences.
         super.onResume();
+        //String preference = Utility.getSharedPreference(this);
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
+        mMF.restartLoader();
+
+        if(!mTwoPane){
+            if(mMF != null){
+                if(mMenu != null){
+                    if(mMenu.findItem(R.id.action_share) != null){
+                        mMenu.findItem(R.id.action_share).setVisible(false);
+                    }
+                }
+            }
+        }
         if(mUri != null && mTwoPane){
             onItemSelected(mUri);
         }
@@ -172,6 +174,12 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             intent.putExtra(MovieContract.MovieEntry.POSITION, mPosition);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void setMenuItem(Menu menu) {
+        mMenu = menu;
+        //onItemSelected(mUri);
     }
 
     @Override

@@ -2,12 +2,9 @@ package com.example.jamie.popularmovies.extracting_json_data;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 
-import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
 
@@ -22,14 +19,16 @@ import java.util.Vector;
  * Created by a5w5nzz on 9/16/2016
  */
 public class ExtractJSONMovieData {
+    private final String preference;
     String jsonString;
     Context mContext;
     private ArrayList<ContentValues> mMovieContentValues;
     private String jsonData;
 
-    public ExtractJSONMovieData(String jsonString, Context mContext) {
+    public ExtractJSONMovieData(String fetch, String sortBy, Context mContext) {
         this.mContext = mContext;
-        this.jsonString = jsonString;
+        this.jsonString = fetch;
+        this.preference = sortBy;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -52,9 +51,8 @@ public class ExtractJSONMovieData {
 
         try {
 
-            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-            String sortBy = pref.getString(mContext.getString(R.string.pref_sort_key), mContext.getString(R.string.pref_default_sort_value));
-            if(!sortBy.equals("favorite")){
+            //String sortBy = Utility.getSharedPreference(mContext);
+            if(!preference.equals("favorite")){
                 JSONObject jsonData = new JSONObject(jsonString);
                 JSONArray itemsArray = jsonData.getJSONArray(MOVIE_RESULTS);
                 Vector<ContentValues> cVVector = new Vector(itemsArray.length());
@@ -82,8 +80,8 @@ public class ExtractJSONMovieData {
                         boolean isMovie = jsonMovieData.getBoolean(MOVIE_VIDEO);
                         movieValues.put(MovieEntry.IS_VIDEO, (isMovie == true)?1:0);
                         movieValues.put(MovieEntry.VOTE_AVERAGE, jsonMovieData.getDouble(MOVIE_VOTE_AVERAGE));
-                        movieValues.put(MovieEntry.IS_MOST_POPULAR, (sortBy.compareTo("popular")==0)?1:0);
-                        movieValues.put(MovieEntry.IS_TOP_RATED, (sortBy.compareTo("top_rated")==0)?1:0);
+                        movieValues.put(MovieEntry.IS_MOST_POPULAR, (preference.compareTo("popular")==0)?1:0);
+                        movieValues.put(MovieEntry.IS_TOP_RATED, (preference.compareTo("top_rated")==0)?1:0);
 
                         cVVector.add(movieValues);
                         if ( cVVector.size() > 0 ) {

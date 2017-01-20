@@ -1,5 +1,6 @@
 package com.example.jamie.popularmovies.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -11,7 +12,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -121,6 +127,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private String mPreference;
     private TextView mMovieOverviewTitle;
     private ImageView mMovieImage;
+    private ShareActionProvider mShareActionProvider;
+    private String youTubeLink;
 
     public MovieDetailFragment() {
 
@@ -145,7 +153,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        setHasOptionsMenu(true);
         Bundle arguments = getArguments();
 //155
         mPreference = Utility.getSharedPreference(getActivity());
@@ -272,8 +280,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         int id = loader.getId();
         switch (id){
             case TRAILER_LOADER:{
-
                 if(cursor.moveToFirst()){
+                    String base = "http://www.youtube.com/watch?v=";
+                    youTubeLink = base+cursor.getString(COL_TRAILER_SOURCE);
                     mTrailerTitle.setVisibility(View.VISIBLE);
 
                 }else{
@@ -381,6 +390,32 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if(getLoaderManager().getLoader(REVIEW_LOADER) != null){
             getLoaderManager().restartLoader(REVIEW_LOADER, null, this);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.detail_fragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+
+        if(youTubeLink != null){
+            mShareActionProvider.setShareIntent(createShareMovieIntent());
+        }
+    }
+
+    private Intent createShareMovieIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Yo! check out this trailer! \n"+youTubeLink);
+        return shareIntent;
     }
 
     public void setUri(Uri uri) {

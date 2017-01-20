@@ -15,11 +15,7 @@ import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "movie.db";
-    private static final int VERSION_ID = 8
-
-
-
-            ;
+    private static final int VERSION_ID = 1;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION_ID);

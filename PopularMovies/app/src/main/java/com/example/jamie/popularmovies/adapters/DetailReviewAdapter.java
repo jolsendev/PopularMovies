@@ -17,6 +17,8 @@ import com.example.jamie.popularmovies.ReviewActivity;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 
+import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+
 /**
  * Created by a5w5nzz on 11/30/2016.
  */
@@ -46,6 +48,7 @@ public class DetailReviewAdapter extends CursorAdapter {
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent(mContext, ReviewActivity.class);
+
                 Bundle mBundle = new Bundle();
                 mBundle.putString(MovieContract.ReviewEntry.REVIEW_CONTENT, reviewContent);
                 intent.putExtras(mBundle);

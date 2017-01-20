@@ -26,6 +26,7 @@ import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.MainMovieAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
+import com.example.jamie.popularmovies.sync.MovieSyncAdapter;
 //import com.example.jamie.popularmovies.service.MovieService;
 
 
@@ -199,20 +200,21 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     }
 
     private void updateMovieData() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-        String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
-
-        String MOVIE_API_KEY = "api_key";
-        String API_KEY = Utility.MOVIE_API_KEY;
-
-        mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
-//        Intent intent = new Intent(getActivity(), MovieService.class);
-//        intent.putExtra("URI", mPopularUri);
-//        getActivity().startService(intent);
-        FetchMovieTask moviesTask = new FetchMovieTask(getContext());
-        moviesTask.execute(mPopularUri.toString());
+        MovieSyncAdapter.syncImmediately(getActivity());
+//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
+//        String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
+//
+//        String MOVIE_API_KEY = "api_key";
+//        String API_KEY = Utility.MOVIE_API_KEY;
+//
+//        mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+//                .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
+////        Intent intent = new Intent(getActivity(), MovieService.class);
+////        intent.putExtra("URI", mPopularUri);
+////        getActivity().startService(intent);
+//        FetchMovieTask moviesTask = new FetchMovieTask(getContext());
+//        moviesTask.execute(mPopularUri.toString());
     }
 
     @Override

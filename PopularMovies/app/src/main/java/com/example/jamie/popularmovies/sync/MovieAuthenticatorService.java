@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.IBinder;
 
 /**
- * Created by a5w5nzz on 1/19/2017.
+ * The service which allows the sync adapter framework to access the authenticator.
  */
-
 public class MovieAuthenticatorService extends Service {
+    // Instance field that stores the authenticator object
     private MovieAuthenticator mAuthenticator;
 
     @Override

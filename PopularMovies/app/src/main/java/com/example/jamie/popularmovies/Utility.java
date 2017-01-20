@@ -104,11 +104,14 @@ public final class Utility {
                 null,
                 null
         );
-        if(cur.moveToFirst()){
-            return true;
-        }else{
+        if(cur != null){
+            if(cur.moveToFirst()){
+                return true;
+            }else{
+                return false;
+            }
+        }else
             return false;
-        }
 
     }
     public static Uri getFirstMovieFromPreference(Context context, String preference) {

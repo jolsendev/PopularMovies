@@ -80,4 +80,6 @@
     <string name="synposys">Synopsis</string>
     <string name="movie_review">Movie Review</string>
     <string name="movie_detail">Movie Detail</string>
+    <string name="sync_account_type">jamie.example.com</string>
+    <string name="content_authority">com.example.jamie.popularmovies</string>
 </resources>

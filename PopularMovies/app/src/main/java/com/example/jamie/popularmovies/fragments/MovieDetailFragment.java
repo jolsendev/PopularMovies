@@ -2,9 +2,11 @@ package com.example.jamie.popularmovies.fragments;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -156,10 +158,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 }
                 setUris(movie_id);
             }else{
-                Uri uri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
-                if(uri != null){
-                    Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath(uri));
-                }
                 mUri = Utility.getFirstMovieFromPreference(getActivity(),Utility.getSharedPreference(getActivity()));
                 if(mUri != null){
                     Long movie_id = Long.parseLong(MovieContract.MovieEntry.getMovieIdFromPath((Uri)mUri));
@@ -201,6 +199,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
         reviewAdapter = new DetailReviewAdapter(getContext(), null, 0);
         trailerAdapter = new DetailTrailerAdapter(getContext(), null, 0);
+        if(savedInstanceState != null){
+            mUri = savedInstanceState.getParcelable(DETAIL_URI);
+        }
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -258,6 +259,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
@@ -337,9 +339,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mDetailLayout.setVisibility(View.VISIBLE);
         mMovieTitle.setVisibility(View.VISIBLE);
         favoriteCheckbox.setVisibility(View.VISIBLE);
-
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         reviewAdapter.swapCursor(null);

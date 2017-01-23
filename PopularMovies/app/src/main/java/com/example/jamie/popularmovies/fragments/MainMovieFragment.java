@@ -96,7 +96,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         Uri stringUri = Utility.getFirstMovieFromPreference(getContext(), Utility.getSharedPreference(getContext()));
         ((Callback)getContext()).onItemSelected(stringUri);
         restartLoader();
-
     }
 
     public void restartLoader() {

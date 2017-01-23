@@ -135,7 +135,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -149,10 +149,20 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()){
+//            case R.id.action_share:{
+//                String x = "wtf"
+//            }
+//        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+
         Bundle arguments = getArguments();
 //155
         mPreference = Utility.getSharedPreference(getActivity());
@@ -407,6 +417,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if(youTubeLink != null){
             mShareActionProvider.setShareIntent(createShareMovieIntent());
         }
+
+
     }
 
     private Intent createShareMovieIntent() {

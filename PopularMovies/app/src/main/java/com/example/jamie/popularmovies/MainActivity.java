@@ -106,16 +106,16 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
         super.onResume();
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
         mMF.restartLoader();
-
-        if(!mTwoPane){
-            if(mMF != null){
-                if(mMenu != null){
-                    if(mMenu.findItem(R.id.action_share) != null){
-                        mMenu.findItem(R.id.action_share).setVisible(false);
-                    }
-                }
-            }
-        }
+//
+//        if(!mTwoPane){
+//            if(mMF != null){
+//                if(mMenu != null){
+//                    if(mMenu.findItem(R.id.action_share) != null){
+//                        mMenu.findItem(R.id.action_share).setVisible(false);
+//                    }
+//                }
+//            }
+//        }
         if(mUri != null && mTwoPane){
             onItemSelected(mUri);
         }

@@ -42,10 +42,10 @@ public class MainMovieAdapter extends CursorAdapter {
         String [] year = date.split("-");
         dateView.setText(year[0]);
         TextView titleView = (TextView) view.findViewById(R.id.gridview_title);
-        titleView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+//        titleView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         titleView.setText(title);
-        titleView.setSelected(true);
-        titleView.setSingleLine(true);
+//        titleView.setSelected(true);
+//        titleView.setSingleLine(true);
         ImageView imageItem = (ImageView) view.findViewById(R.id.thumbnail);
         Picasso.with(context)
                 .load(Utility.getImagePath(path)).placeholder(R.drawable.popcorntime)

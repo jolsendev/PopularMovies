@@ -5,7 +5,8 @@ review http://api.themoviedb.org/3/movie/284052/reviews?&api_key=02a6d79992ed3e3
 
 video http://api.themoviedb.org/3/movie/284052/videos?&api_key=02a6d79992ed3e3da1f638dec4c74770
 
-
+API_KEY="02a6d79992ed3e3da1f638dec4c74770"
+GOOGLE_API_KEY = "AIzaSyD9o3UnBfzorYsBE2AeBURlSmqK7Wk8nV4"
 
 
 Project Overview

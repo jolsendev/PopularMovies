@@ -2,14 +2,11 @@ package com.example.jamie.popularmovies.extracting_json_data;
 
 import android.content.ContentValues;
 import android.content.Context;
-
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.data.MovieContract.TrailerEntry;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Vector;
 
 /**

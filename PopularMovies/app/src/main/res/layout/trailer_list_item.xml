@@ -4,6 +4,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="75dp"
     android:weightSum="5"
+    android:focusable="false"
     >
     <ImageView
         android:id="@+id/trailer_thumbnail"

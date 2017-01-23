@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     private MovieDetailFragment mDF;
     private int mPosition;
     private Uri mUri;
-    private boolean prefChange = false;
-    private boolean mFirstTimelaunch = false;
     private boolean mPrefChanged = false;
     private Menu mMenu;
 
@@ -106,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     @Override
     protected void onResume() {
         super.onResume();
-        //String preference = Utility.getSharedPreference(this);
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
         mMF.restartLoader();
 
@@ -123,8 +120,12 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             onItemSelected(mUri);
         }
         if(mTwoPane && mUri == null){
+
             Uri uri = Utility.getFirstMovieFromPreference(this, mPreference);
-            onItemSelected(uri);
+            if(uri != null){
+                onItemSelected(uri);
+            }
+
         }if(mPrefChanged && mTwoPane){
             if(mMF != null){
                 mMF.setSelection(mPosition);
@@ -151,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -174,12 +174,6 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
             intent.putExtra(MovieContract.MovieEntry.POSITION, mPosition);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void setMenuItem(Menu menu) {
-        mMenu = menu;
-        //onItemSelected(mUri);
     }
 
     @Override

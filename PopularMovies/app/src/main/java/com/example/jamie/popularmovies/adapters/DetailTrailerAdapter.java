@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jamie.popularmovies.R;
+import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -28,9 +29,10 @@ public class DetailTrailerAdapter extends CursorAdapter {
     public DetailTrailerAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
-    private static final String GOOGLE_API_KEY = "AIzaSyD9o3UnBfzorYsBE2AeBURlSmqK7Wk8nV4";
+    private static final String GOOGLE_API_KEY = Utility.GOOGLE_API_KEY;
 
     private final String BASE_URL= "http://www.youtube.com/watch?v=";
+    private final String BASE_IMAGE_URL = "https://img.youtube.com/vi/";
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.trailer_list_item, parent, false);
@@ -44,7 +46,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
         String source = cursor.getString(MovieDetailFragment.COL_TRAILER_SOURCE);
         int intIndex = cursor.getInt(MovieDetailFragment.COL_TRAILER_INDEX);
         String index = Integer.toString(intIndex);
-        String path = "https://img.youtube.com/vi/"+source+"/"+index+".jpg";
+        String path = BASE_IMAGE_URL+source+"/"+index+".jpg";
 
         TextView trailerView = (TextView) view.findViewById(R.id.movie_trailer);
         String detail = cursor.getString(MovieDetailFragment.COL_TRAILER_NAME);
@@ -65,7 +67,7 @@ public class DetailTrailerAdapter extends CursorAdapter {
                     mContext.startActivity(intent);
                 }else{
                     Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://www.youtube.com/watch?v=" + video_source));
+                            Uri.parse(BASE_URL + video_source));
                     intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 
                     mContext.startActivity(webIntent);

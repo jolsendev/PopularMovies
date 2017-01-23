@@ -18,7 +18,6 @@ public class MovieContract {
     //BASE_CONTENT_URI = content://com.example.jamie.popularmovies
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://"+ CONTENT_AUTHORITY);
 
-    //possible paths
     public static final String PATH_MOVIE = "movie";
     public static final String PATH_TRAILER = "trailers";
     public static final String PATH_REVIEW = "reviews";

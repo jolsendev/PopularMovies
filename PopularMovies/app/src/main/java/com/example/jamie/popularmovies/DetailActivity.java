@@ -27,14 +27,6 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
         super.onSaveInstanceState(outState);
     }
 
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        if(savedInstanceState != null){
-//            Uri mUri = savedInstanceState.getParcelable(MovieDetailFragment.DETAIL_URI);
-//        }
-//        super.onRestoreInstanceState(savedInstanceState);
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
@@ -49,7 +41,6 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
             Uri uri = detailIntent.getData();
             intent.setData(uri);
             int position = detailIntent.getIntExtra(MovieContract.MovieEntry.POSITION, 0);
-            //intent.putExtra(MovieDetailFragment.DETAIL_URI,uri);
             intent.putExtra(MovieContract.MovieEntry.POSITION,position);
             this.startActivity(intent);
         }

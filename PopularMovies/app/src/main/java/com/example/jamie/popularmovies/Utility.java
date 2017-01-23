@@ -15,6 +15,7 @@ import com.example.jamie.popularmovies.fragments.MainMovieFragment;
  */
 public final class Utility {
     public static final String MOVIE_API_KEY = BuildConfig.API_KEY;
+    public static final String GOOGLE_API_KEY = BuildConfig.GOOGLE_API_KEY;
     private static String BASE_PATH = "http://image.tmdb.org/t/p/";
     private static String IMAGE_BASE_PATH = BASE_PATH+"/w185/";
     private static String BACKDROP_PATH = BASE_PATH+"/w342/";

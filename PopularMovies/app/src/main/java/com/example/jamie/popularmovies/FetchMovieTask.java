@@ -1,12 +1,14 @@
 package com.example.jamie.popularmovies;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.example.jamie.popularmovies.data.FetchRawData;
 import com.example.jamie.popularmovies.extracting_json_data.ExtractJSONMovieData;
+import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 
 /**
  * Created by Jamie Olsen on 11/26/2016.

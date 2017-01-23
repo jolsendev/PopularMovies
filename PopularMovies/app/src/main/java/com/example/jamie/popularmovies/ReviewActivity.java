@@ -18,7 +18,6 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-
         TextView fullReviewTextView = (TextView) findViewById(R.id.full_review_view);
         String review = getIntent().getExtras().getString(MovieContract.ReviewEntry.REVIEW_CONTENT);
         mUri = getIntent().getData();
@@ -29,8 +28,6 @@ public class ReviewActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int menuId = R.menu.main;
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 }

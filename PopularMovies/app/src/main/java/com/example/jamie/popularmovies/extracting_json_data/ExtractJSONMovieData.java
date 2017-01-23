@@ -4,15 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.data.MovieContract.MovieEntry;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -22,9 +18,6 @@ public class ExtractJSONMovieData {
     private final String preference;
     String jsonString;
     Context mContext;
-    private ArrayList<ContentValues> mMovieContentValues;
-    private String jsonData;
-
     public ExtractJSONMovieData(String fetch, String sortBy, Context mContext) {
         this.mContext = mContext;
         this.jsonString = fetch;

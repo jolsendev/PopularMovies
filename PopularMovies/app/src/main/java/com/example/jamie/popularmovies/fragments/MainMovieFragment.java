@@ -19,20 +19,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.MainMovieAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.sync.MovieSyncAdapter;
-//import com.example.jamie.popularmovies.service.MovieService;
 
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
     private static int mPosition;
-    private Uri mReviewUri;
-    private Uri mTrailerUri;
     private SharedPreferences pref;
     private String sortValue;
 
@@ -48,7 +44,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
          * DetailFragmentCallback for when an item has been selected.
          */
         void onItemSelected(Uri detailUri);
-        void setMenuItem(Menu menu);
     }
 
     public interface SetPositionCallBack {
@@ -56,7 +51,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     }
     public GridView gridview;
     public MainMovieAdapter mAdapter;
-    private Uri mPopularUri;
 
     public static final int MAIN_MOVIE_LOADER = 0;
     private static final String[] MOVIE_COLUMNS = {
@@ -114,7 +108,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         mMenu = menu;
         inflater.inflate(R.menu.main, menu);
         if(menu != null){
-            ((Callback)getActivity()).setMenuItem(menu);
             if(menu.findItem(R.id.action_share) != null){
                 menu.findItem(R.id.action_share).setVisible(false);
             }
@@ -132,6 +125,11 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+        if(mMenu != null){
+            if(mMenu.findItem(R.id.action_share) != null){
+                mMenu.findItem(R.id.action_share).setVisible(false);
+            }
+        }
         View v = inflater.inflate(R.layout.activity_movie,container, false);
         gridview = (GridView) v.findViewById(R.id.gridview);
 
@@ -142,7 +140,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 int movieId = cursor.getInt(COL_MOVIE_ID);
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 mPosition = position;
-                //((SetPositionCallBack)getActivity()).setPosition(mPosition);
                 ((Callback) getActivity()).onItemSelected(uri);
 
 
@@ -189,7 +186,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortValue = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
         createAdapterWithCursor();
-        //setHasOptionsMenu(false);
         updateMovieData();
         super.onCreate(savedInstanceState);
     }
@@ -211,20 +207,6 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
 
     private void updateMovieData() {
         MovieSyncAdapter.syncImmediately(getActivity());
-//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        String sortBy = pref.getString(getString(R.string.pref_sort_key), getString(R.string.pref_default_sort_value));
-//        String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/"+sortBy;
-//
-//        String MOVIE_API_KEY = "api_key";
-//        String API_KEY = Utility.MOVIE_API_KEY;
-//
-//        mPopularUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
-//                .appendQueryParameter(MOVIE_API_KEY, API_KEY).build();
-////        Intent intent = new Intent(getActivity(), MovieService.class);
-////        intent.putExtra("URI", mPopularUri);
-////        getActivity().startService(intent);
-//        FetchMovieTask moviesTask = new FetchMovieTask(getContext());
-//        moviesTask.execute(mPopularUri.toString());
     }
 
     @Override

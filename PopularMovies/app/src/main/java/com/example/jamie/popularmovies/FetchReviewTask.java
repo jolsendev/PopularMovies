@@ -28,7 +28,6 @@ public class FetchReviewTask extends AsyncTask<String, Void, Uri>{
     protected void onPostExecute(Uri uri) {
         super.onPostExecute(uri);
        ((Callback) mContext).RestartReviewLoader();
-
     }
 
     @Override

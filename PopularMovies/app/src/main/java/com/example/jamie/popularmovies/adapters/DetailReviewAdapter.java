@@ -8,17 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.jamie.popularmovies.MainActivity;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.ReviewActivity;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MovieDetailFragment;
-import com.facebook.stetho.common.Util;
-
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 /**
  * Created by a5w5nzz on 11/30/2016.

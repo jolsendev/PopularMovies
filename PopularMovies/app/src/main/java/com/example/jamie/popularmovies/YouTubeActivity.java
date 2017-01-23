@@ -9,7 +9,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 public class YouTubeActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener{
 
-    private static final String GOOGLE_API_KEY = "AIzaSyD9o3UnBfzorYsBE2AeBURlSmqK7Wk8nV4";
+    private static final String GOOGLE_API_KEY = Utility.GOOGLE_API_KEY;
     private static String VIDEO_ID = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -41,7 +41,6 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String DETAIL_URI = "detail_uri";
-    private static ImageView imageItem;
     public static final int MOVIE_LOADER = 0;
     public static final int REVIEW_LOADER = 1;
     public final int TRAILER_LOADER = 2;

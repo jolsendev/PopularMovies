@@ -415,7 +415,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
         // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-
+        if(youTubeLink == null){
+            youTubeLink = "This Popular Movie App is the best!";
+        }
         if(youTubeLink != null){
             mShareActionProvider.setShareIntent(createShareMovieIntent());
         }

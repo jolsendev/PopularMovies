@@ -49,6 +49,12 @@ public class DetailActivity extends AppCompatActivity implements FetchReviewTask
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(findViewById(R.id.movie_detail_container) != null){
+            getSupportFragmentManager().beginTransaction().detach(getSupportFragmentManager().findFragmentByTag(MainActivity.DETAIL_FRAGMENT_TAG))
+                    .commit();
+        }
+
         setContentView(R.layout.activity_detail);
 
         if(savedInstanceState == null){

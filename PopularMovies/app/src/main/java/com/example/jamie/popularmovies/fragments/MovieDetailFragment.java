@@ -298,6 +298,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     mTrailerTitle.setVisibility(View.GONE);
                 }
                 trailerAdapter.swapCursor(cursor);
+                mTrailerTitle.setFocusable(false);
                 mTrailerListView.setAdapter(trailerAdapter);
                 break;
             }
@@ -309,6 +310,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     mReviewTitle.setVisibility(View.GONE);
                 }
                 reviewAdapter.swapCursor(cursor);
+                mReviewListView.setFocusable(false);
                 mReviewListView.setAdapter(reviewAdapter);
                 break;
             }

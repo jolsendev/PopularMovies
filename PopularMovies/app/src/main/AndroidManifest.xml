@@ -42,7 +42,7 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/movie_detail"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:configChanges="orientation|screenSize"
             >

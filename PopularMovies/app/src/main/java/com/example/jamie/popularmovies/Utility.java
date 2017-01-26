@@ -7,13 +7,18 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MainMovieFragment;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Created by a5w5nzz on 9/16/2016.
  */
+
 public final class Utility {
     public static final String MOVIE_API_KEY = BuildConfig.API_KEY;
     public static final String GOOGLE_API_KEY = BuildConfig.GOOGLE_API_KEY;
@@ -21,7 +26,15 @@ public final class Utility {
     private static String IMAGE_BASE_PATH = BASE_PATH+"/w185/";
     private static String BACKDROP_PATH = BASE_PATH+"/w342/";
 
-    
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({MOVIE_STATUS_OK, MOVIE_STATUS_INVALID, MOVIE_STATUS_DOWN, MOVIE_STATUS_UNKNOWN})
+    public @interface movieStatus{}
+
+    public static final int MOVIE_STATUS_OK = 0;
+    public static final int MOVIE_STATUS_DOWN = 1;
+    public static final int MOVIE_STATUS_INVALID = 2;
+    public static final int MOVIE_STATUS_UNKNOWN= 3;
+
 
     public static String getImagePath(String imageID){
         return IMAGE_BASE_PATH+imageID;
@@ -171,4 +184,10 @@ public final class Utility {
         }
     }
 
+    public static void setMovieStatus(Context context, @movieStatus int status){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor sPrefEditor = sharedPreferences.edit();
+        sPrefEditor.putInt(context.getString(R.string.pref_enable_notification_default), status);
+        sPrefEditor.commit();
+    }
 }

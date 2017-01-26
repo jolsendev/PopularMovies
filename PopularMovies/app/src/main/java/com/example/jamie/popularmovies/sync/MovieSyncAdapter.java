@@ -21,7 +21,7 @@ import com.example.jamie.popularmovies.Utility;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
+public class MovieSyncAdapter extends AbstractThreadedSyncAdapter{
 //    public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
 //    // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
@@ -31,14 +31,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final int MOVIE_NOTIFICATION_ID = 3004;
     private Uri mPopularUri;
 
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({MOVIE_STATUS_OK, MOVIE_STATUS_INVALID, MOVIE_STATUS_DOWN, MOVIE_STATUS_UNKNOWN})
-    public @interface movieStatus{}
 
-    public static final int MOVIE_STATUS_OK = 0;
-    public static final int MOVIE_STATUS_DOWN = 1;
-    public static final int MOVIE_STATUS_INVALID = 2;
-    public static final int MOVIE_STATUS_UNKNOWN= 3;
 
 
     public MovieSyncAdapter(Context context, boolean autoInitialize) {
@@ -154,5 +147,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
          */
         syncImmediately(context);
     }
+
 
 }

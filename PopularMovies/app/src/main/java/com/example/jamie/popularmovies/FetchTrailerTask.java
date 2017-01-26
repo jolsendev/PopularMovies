@@ -31,7 +31,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Uri> {
     }
     @Override
     protected Uri doInBackground(String... params) {
-        FetchRawData mRawData = new FetchRawData(params[0]);
+        FetchRawData mRawData = new FetchRawData(params[0], mContext);
         ExtractJSONTrailerData mData = new ExtractJSONTrailerData(mRawData.fetch(), mContext);
         mData.putTrailersInDatabase();
         long movie_id = mData.getMovieId();

@@ -90,19 +90,12 @@ public class ExtractJSONMovieData {
                                 cVVector.toArray(cvArray);
                                 mContext.getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
                             }
-
                         }
-
                     }
-
-                }else{
-                    Utility.setMovieStatus(mContext, Utility.MOVIE_STATUS_DOWN);
                 }
             }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }catch (JSONException e){
+            Utility.setMovieStatus(mContext, Utility.MOVIE_STATUS_INVALID);
         }
     }
 }

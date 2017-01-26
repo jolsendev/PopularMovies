@@ -1,5 +1,9 @@
 package com.example.jamie.popularmovies.data;
 
+import android.content.Context;
+
+import com.example.jamie.popularmovies.Utility;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,9 +17,11 @@ import java.net.URL;
 public class FetchRawData {
     String urlString;
     String jsonData;
+    Context mContext;
 
-    public FetchRawData(String url) {
+    public FetchRawData(String url, Context mContext) {
         this.urlString = url;
+        this.mContext = mContext;
     }
 
     public String fetch(){
@@ -46,9 +52,11 @@ public class FetchRawData {
                 buffer.append(line + "\n");
             }
             setJsonData(buffer.toString());
+            Utility.setMovieStatus(mContext, Utility.MOVIE_STATUS_OK);
             return getJsonData();
 
         } catch(IOException e) {
+            Utility.setMovieStatus(mContext, Utility.MOVIE_STATUS_DOWN);
             return null;
 
         } finally {

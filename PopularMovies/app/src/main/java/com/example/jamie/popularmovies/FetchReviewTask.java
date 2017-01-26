@@ -32,7 +32,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, Uri>{
 
     @Override
     protected Uri doInBackground(String... params) {
-        FetchRawData mRawData = new FetchRawData(params[0]);
+        FetchRawData mRawData = new FetchRawData(params[0], mContext);
         ExtractJSONReviewData mData = new ExtractJSONReviewData(mRawData.fetch(), mContext);
         mData.getReviewDataFromJsonAndPutInDatabase();
         long movie_id = mData.getMovieId();

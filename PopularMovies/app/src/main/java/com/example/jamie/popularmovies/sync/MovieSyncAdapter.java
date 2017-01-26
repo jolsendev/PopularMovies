@@ -11,11 +11,15 @@ import android.content.SyncResult;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.example.jamie.popularmovies.FetchMovieTask;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 //    public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
@@ -26,6 +30,15 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final int MOVIE_NOTIFICATION_ID = 3004;
     private Uri mPopularUri;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({MOVIE_STATUS_OK, MOVIE_STATUS_INVALID, MOVIE_STATUS_DOWN, MOVIE_STATUS_UNKNOWN})
+    public @interface movieStatus{}
+
+    public static final int MOVIE_STATUS_OK = 0;
+    public static final int MOVIE_STATUS_DOWN = 1;
+    public static final int MOVIE_STATUS_INVALID = 2;
+    public static final int MOVIE_STATUS_UNKNOWN= 3;
 
 
     public MovieSyncAdapter(Context context, boolean autoInitialize) {

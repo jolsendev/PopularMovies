@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.fragments.MainMovieFragment;
@@ -73,21 +74,21 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
 
-        if (isOnline()) {
+        //if (isOnline()) {
             setContentView(R.layout.activity_main);
-        }
+        //}
 
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
-                if (isOnline()) {
+                //if (isOnline()) {
                     Intent detailArgs = getIntent();
                     if(detailArgs.getData()!= null){
                         mUri = detailArgs.getData();
                         mPosition = detailArgs.getIntExtra(MovieContract.MovieEntry.POSITION, 0);
                         setPosition(mPosition);
                     }
-                }
+                //}
             }
         } else {
             mTwoPane = false;
@@ -105,17 +106,10 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
     protected void onResume() {
         super.onResume();
         MainMovieFragment mMF = (MainMovieFragment) getSupportFragmentManager().findFragmentById(R.id.movie_fragment);
-        mMF.restartLoader();
-//
-//        if(!mTwoPane){
-//            if(mMF != null){
-//                if(mMenu != null){
-//                    if(mMenu.findItem(R.id.action_share) != null){
-//                        mMenu.findItem(R.id.action_share).setVisible(false);
-//                    }
-//                }
-//            }
-//        }
+        if(mMF != null){
+            mMF.restartLoader();
+        }
+
         if(mUri != null && mTwoPane){
             onItemSelected(mUri);
         }
@@ -138,13 +132,6 @@ public class MainActivity extends AppCompatActivity implements MainMovieFragment
         }
     }
 
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null &&
-                cm.getActiveNetworkInfo().isConnectedOrConnecting();
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);

@@ -45,49 +45,51 @@ public class ExtractJSONMovieData {
         try {
 
             //String sortBy = Utility.getSharedPreference(mContext);
-            if(!preference.equals("favorite")){
-                JSONObject jsonData = new JSONObject(jsonString);
-                JSONArray itemsArray = jsonData.getJSONArray(MOVIE_RESULTS);
-                Vector<ContentValues> cVVector = new Vector(itemsArray.length());
+            if(!preference.equals("favorite")) {
+                if (jsonString != null) {
+                    JSONObject jsonData = new JSONObject(jsonString);
+                    JSONArray itemsArray = jsonData.getJSONArray(MOVIE_RESULTS);
+                    Vector<ContentValues> cVVector = new Vector(itemsArray.length());
 
 
-                for(int i = 0; i < itemsArray.length(); i++){
+                    for (int i = 0; i < itemsArray.length(); i++) {
 
-                    ContentValues movieValues = new ContentValues();
-                    JSONObject jsonMovieData = itemsArray.getJSONObject(i);
-                    long movie_id = jsonMovieData.getInt(MOVIE_ID);
-                    if(!Utility.isMovieInDatabase(movie_id, mContext)){
+                        ContentValues movieValues = new ContentValues();
+                        JSONObject jsonMovieData = itemsArray.getJSONObject(i);
+                        long movie_id = jsonMovieData.getInt(MOVIE_ID);
+                        if (!Utility.isMovieInDatabase(movie_id, mContext)) {
 
-                        movieValues.put(MovieEntry.MOVIE_ID,movie_id);
-                        movieValues.put(MovieEntry.POSTER_PATH, jsonMovieData.getString(MOVIE_POSTER_PATH));
-                        boolean isAdult = jsonMovieData.getBoolean(MOVIE_ADULT);
-                        movieValues.put(MovieEntry.IS_ADULT,(isAdult == true)?1:0 );
-                        movieValues.put(MovieEntry.OVERVIEW, jsonMovieData.getString(MOVIE_OVERVIEW));
-                        movieValues.put(MovieEntry.RELEASE_DATE, jsonMovieData.getString(MOVIE_RELEASE_DATE));
-                        movieValues.put(MovieEntry.ORIGINAL_TITLE, jsonMovieData.getString(MOVIE_ORIGINAL__TITLE));
-                        movieValues.put(MovieEntry.ORIGINAL_LANGUAGE, jsonMovieData.getString(MOVIE_ORIGINAL_LANGUAGE));
-                        movieValues.put(MovieEntry.TITLE, jsonMovieData.getString(MOVIE_TITLE));
-                        movieValues.put(MovieEntry.BACKDROP_PATH, jsonMovieData.getString(MOVIE_BACKDROP_PATH));
-                        movieValues.put(MovieEntry.POPULARITY, jsonMovieData.getDouble(MOVIE_POPULARITY));
-                        movieValues.put(MovieEntry.VOTE_COUNT, jsonMovieData.getDouble(MOVIE_VOTE_COUNT));
-                        boolean isMovie = jsonMovieData.getBoolean(MOVIE_VIDEO);
-                        movieValues.put(MovieEntry.IS_VIDEO, (isMovie == true)?1:0);
-                        movieValues.put(MovieEntry.VOTE_AVERAGE, jsonMovieData.getDouble(MOVIE_VOTE_AVERAGE));
-                        movieValues.put(MovieEntry.IS_MOST_POPULAR, (preference.compareTo("popular")==0)?1:0);
-                        movieValues.put(MovieEntry.IS_TOP_RATED, (preference.compareTo("top_rated")==0)?1:0);
+                            movieValues.put(MovieEntry.MOVIE_ID, movie_id);
+                            movieValues.put(MovieEntry.POSTER_PATH, jsonMovieData.getString(MOVIE_POSTER_PATH));
+                            boolean isAdult = jsonMovieData.getBoolean(MOVIE_ADULT);
+                            movieValues.put(MovieEntry.IS_ADULT, (isAdult == true) ? 1 : 0);
+                            movieValues.put(MovieEntry.OVERVIEW, jsonMovieData.getString(MOVIE_OVERVIEW));
+                            movieValues.put(MovieEntry.RELEASE_DATE, jsonMovieData.getString(MOVIE_RELEASE_DATE));
+                            movieValues.put(MovieEntry.ORIGINAL_TITLE, jsonMovieData.getString(MOVIE_ORIGINAL__TITLE));
+                            movieValues.put(MovieEntry.ORIGINAL_LANGUAGE, jsonMovieData.getString(MOVIE_ORIGINAL_LANGUAGE));
+                            movieValues.put(MovieEntry.TITLE, jsonMovieData.getString(MOVIE_TITLE));
+                            movieValues.put(MovieEntry.BACKDROP_PATH, jsonMovieData.getString(MOVIE_BACKDROP_PATH));
+                            movieValues.put(MovieEntry.POPULARITY, jsonMovieData.getDouble(MOVIE_POPULARITY));
+                            movieValues.put(MovieEntry.VOTE_COUNT, jsonMovieData.getDouble(MOVIE_VOTE_COUNT));
+                            boolean isMovie = jsonMovieData.getBoolean(MOVIE_VIDEO);
+                            movieValues.put(MovieEntry.IS_VIDEO, (isMovie == true) ? 1 : 0);
+                            movieValues.put(MovieEntry.VOTE_AVERAGE, jsonMovieData.getDouble(MOVIE_VOTE_AVERAGE));
+                            movieValues.put(MovieEntry.IS_MOST_POPULAR, (preference.compareTo("popular") == 0) ? 1 : 0);
+                            movieValues.put(MovieEntry.IS_TOP_RATED, (preference.compareTo("top_rated") == 0) ? 1 : 0);
 
-                        cVVector.add(movieValues);
-                        if ( cVVector.size() > 0 ) {
-                            ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                            cVVector.add(movieValues);
+                            if (cVVector.size() > 0) {
+                                ContentValues[] cvArray = new ContentValues[cVVector.size()];
 
-                            cVVector.toArray(cvArray);
-                            mContext.getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
+                                cVVector.toArray(cvArray);
+                                mContext.getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
+                            }
+
                         }
 
                     }
 
                 }
-
             }
 
 

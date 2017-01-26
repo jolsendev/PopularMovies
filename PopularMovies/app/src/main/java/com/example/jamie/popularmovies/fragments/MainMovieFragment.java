@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -19,12 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
+
+import com.example.jamie.popularmovies.MainActivity;
 import com.example.jamie.popularmovies.MovieSettings;
 import com.example.jamie.popularmovies.R;
 import com.example.jamie.popularmovies.Utility;
 import com.example.jamie.popularmovies.adapters.MainMovieAdapter;
 import com.example.jamie.popularmovies.data.MovieContract;
 import com.example.jamie.popularmovies.sync.MovieSyncAdapter;
+import com.facebook.stetho.common.Util;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 
 public class MainMovieFragment extends Fragment implements LoaderCallbacks<Cursor>{
@@ -92,6 +100,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
     public static final int COL_IS_TOP_RATED = 16;
 
 
+
     public void addFirstMovieToDetail() {
         Uri stringUri = Utility.getFirstMovieFromPreference(getContext(), Utility.getSharedPreference(getContext()));
         ((Callback)getContext()).onItemSelected(stringUri);
@@ -130,6 +139,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
             }
         }
         View v = inflater.inflate(R.layout.activity_movie,container, false);
+        TextView emptyView = (TextView) v.findViewById(R.id.movie_empty_view);
         gridview = (GridView) v.findViewById(R.id.gridview);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,10 +150,10 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
                 Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                 mPosition = position;
                 ((Callback) getActivity()).onItemSelected(uri);
-
-
             }
         });
+
+        gridview.setEmptyView(emptyView);
         gridview.setAdapter(mAdapter);
 
         return v;
@@ -244,6 +254,7 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         setSelection(mPosition);
         mAdapter.swapCursor(data);
         mAdapter.swapCursor(data);
+        updateEmptyView();
     }
 
     public void setSelection(int position) {
@@ -261,6 +272,17 @@ public class MainMovieFragment extends Fragment implements LoaderCallbacks<Curso
         return mMenu;
     }
 
+    public void updateEmptyView(){
 
-
+        if(mAdapter.getCount() == 0){
+            TextView emptyView = (TextView) getView().findViewById(R.id.movie_empty_view);
+            if(emptyView != null){
+                int message = R.string.movie_empty_text;
+                if(!Utility.isOnline(getContext())){
+                    message = R.string.movie_empty_text_no_network_data;
+                }
+                emptyView.setText(message);
+            }
+        }
+    }
 }

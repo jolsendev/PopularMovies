@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
@@ -115,6 +116,16 @@ public final class Utility {
             return false;
 
     }
+
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
     public static Uri getFirstMovieFromPreference(Context context, String preference) {
 
         Cursor cur = null;
@@ -159,4 +170,5 @@ public final class Utility {
             return null;
         }
     }
+
 }

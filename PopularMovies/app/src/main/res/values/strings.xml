@@ -83,4 +83,6 @@
     <string name="sync_account_type">jamie.example.com</string>
     <string name="content_authority">com.example.jamie.popularmovies</string>
     <string name="action_share">Share</string>
+    <string name="movie_empty_text">No movie data available</string>
+    <string name="movie_empty_text_no_network_data">The network is not available. Cannot fetch the required data</string>
 </resources>
